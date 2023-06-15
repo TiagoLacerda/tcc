@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://github.com/doctest/doctest/releases/tag/v2.4.11
+HostUrl=https://objects.githubusercontent.com/github-production-release-asset-2e65be/22660515/ee61becf-bf41-47c0-a2ee-d1eaf512697c?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20230406%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230406T121744Z&X-Amz-Expires=300&X-Amz-Signature=9a1c100bcff88b8a8d2946352c8cd90ed4c87e355c838e435dfd266b14a12efb&X-Amz-SignedHeaders=host&actor_id=48408727&key_id=0&repo_id=22660515&response-content-disposition=attachment%3B%20filename%3Ddoctest.h&response-content-type=application%2Foctet-stream
