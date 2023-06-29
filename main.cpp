@@ -76,8 +76,6 @@ int main()
     // Generate a random spanning tree with n nodes
     auto graph = Graph::random_spanning_tree(n);
 
-    graph.to_file("graph.txt");
-
     // Add k cycle-inducing edges
 
     auto edges = Graph::inverse(graph).get_edges();
@@ -101,6 +99,8 @@ int main()
     }
 
     //
+
+    graph.to_file("graph.txt");
 
     auto t1 = std::chrono::high_resolution_clock::now();
 
