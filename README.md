@@ -14,3 +14,7 @@ https://google.github.io/styleguide/cppguide.html
 ### Dependencies
 
 + [doctest](https://github.com/doctest/doctest)
+
+### Useful links
+
++ [Graph visualization](https://csacademy.com/app/graph_editor/)

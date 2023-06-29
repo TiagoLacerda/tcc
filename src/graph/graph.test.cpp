@@ -5,6 +5,16 @@
 #include "../../include/doctest.h"
 #endif
 
+#ifndef SET
+#define SET
+#include <set>
+#endif
+
+#ifndef TUPLE
+#define TUPLE
+#include <tuple>
+#endif
+
 #ifndef GRAPH
 #define GRAPH
 #include "graph.hpp"
@@ -16,8 +26,10 @@ TEST_CASE("Graph::Graph()")
 
     REQUIRE(graph.get_n() == 0);
     REQUIRE(graph.get_m() == 0);
-    REQUIRE(graph.get_n() == 0);
-    REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 }
 
 TEST_CASE("Graph::Graph(Graph &graph)")
@@ -27,8 +39,13 @@ TEST_CASE("Graph::Graph(Graph &graph)")
 
     REQUIRE(graph.get_n() == 0);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+
     REQUIRE(clone.get_n() == 0);
     REQUIRE(clone.get_m() == 0);
+    REQUIRE(clone.get_minimum_degree() == 0);
+    REQUIRE(clone.get_maximum_degree() == 0);
 
     clone.insert_node();
     clone.insert_node();
@@ -36,8 +53,13 @@ TEST_CASE("Graph::Graph(Graph &graph)")
 
     REQUIRE(graph.get_n() == 0);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+
     REQUIRE(clone.get_n() == 2);
     REQUIRE(clone.get_m() == 1);
+    REQUIRE(clone.get_minimum_degree() == 1);
+    REQUIRE(clone.get_maximum_degree() == 1);
 
     clone.remove_node(0);
     clone.remove_node(0);
@@ -48,8 +70,93 @@ TEST_CASE("Graph::Graph(Graph &graph)")
 
     REQUIRE(graph.get_n() == 2);
     REQUIRE(graph.get_m() == 1);
+    REQUIRE(graph.get_minimum_degree() == 1);
+    REQUIRE(graph.get_maximum_degree() == 1);
+
     REQUIRE(clone.get_n() == 0);
     REQUIRE(clone.get_m() == 0);
+    REQUIRE(clone.get_minimum_degree() == 0);
+    REQUIRE(clone.get_maximum_degree() == 0);
+}
+
+TEST_CASE("Graph::Graph(unsigned int n)")
+{
+    Graph graph;
+
+    graph = Graph(0);
+
+    REQUIRE(graph.get_n() == 0);
+    REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
+
+    graph = Graph(1);
+
+    REQUIRE(graph.get_n() == 1);
+    REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
+
+    graph = Graph(2);
+
+    REQUIRE(graph.get_n() == 2);
+    REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == false);
+
+    graph.insert_edge(0, 1);
+
+    REQUIRE(graph.get_n() == 2);
+    REQUIRE(graph.get_m() == 1);
+    REQUIRE(graph.get_minimum_degree() == 1);
+    REQUIRE(graph.get_maximum_degree() == 1);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
+}
+
+TEST_CASE("Graph Graph::inverse(Graph &graph)")
+{
+    Graph graph = Graph::complete(5);
+
+    Graph other = Graph::inverse(graph);
+
+    REQUIRE(graph.get_n() == 5);
+    REQUIRE(graph.get_m() == 10);
+    REQUIRE(graph.get_minimum_degree() == 4);
+    REQUIRE(graph.get_maximum_degree() == 4);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
+
+    auto edges = graph.get_edges();
+
+    for (auto edge = edges.begin(); edge != edges.end(); edge++)
+    {
+        auto u = std::get<0>(*edge);
+        auto v = std::get<1>(*edge);
+        REQUIRE(other.has_edge(u, v) == false);
+    }
+
+    REQUIRE(other.get_n() == 5);
+    REQUIRE(other.get_m() == 0);
+    REQUIRE(other.get_minimum_degree() == 0);
+    REQUIRE(other.get_maximum_degree() == 0);
+    REQUIRE(other.is_cyclic() == false);
+    REQUIRE(other.is_connected() == false);
+
+    edges = other.get_edges();
+
+    for (auto edge = edges.begin(); edge != edges.end(); edge++)
+    {
+        auto u = std::get<0>(*edge);
+        auto v = std::get<1>(*edge);
+        REQUIRE(graph.has_edge(u, v) == false);
+    }
 }
 
 TEST_CASE("Graph Graph::complete(unsigned int n)")
@@ -60,31 +167,55 @@ TEST_CASE("Graph Graph::complete(unsigned int n)")
 
     REQUIRE(graph.get_n() == 0);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 
     graph = Graph::complete(1);
 
     REQUIRE(graph.get_n() == 1);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 
     graph = Graph::complete(2);
 
     REQUIRE(graph.get_n() == 2);
     REQUIRE(graph.get_m() == 1);
+    REQUIRE(graph.get_minimum_degree() == 1);
+    REQUIRE(graph.get_maximum_degree() == 1);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 
     graph = Graph::complete(3);
 
     REQUIRE(graph.get_n() == 3);
     REQUIRE(graph.get_m() == 3);
+    REQUIRE(graph.get_minimum_degree() == 2);
+    REQUIRE(graph.get_maximum_degree() == 2);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
 
     graph = Graph::complete(4);
 
     REQUIRE(graph.get_n() == 4);
     REQUIRE(graph.get_m() == 6);
+    REQUIRE(graph.get_minimum_degree() == 3);
+    REQUIRE(graph.get_maximum_degree() == 3);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
 
     graph = Graph::complete(5);
 
     REQUIRE(graph.get_n() == 5);
     REQUIRE(graph.get_m() == 10);
+    REQUIRE(graph.get_minimum_degree() == 4);
+    REQUIRE(graph.get_maximum_degree() == 4);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
 }
 
 TEST_CASE("void Graph::insert_node()")
@@ -93,16 +224,28 @@ TEST_CASE("void Graph::insert_node()")
 
     REQUIRE(graph.get_n() == 0);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 
     graph.insert_node();
 
     REQUIRE(graph.get_n() == 1);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 
     graph.insert_node();
 
     REQUIRE(graph.get_n() == 2);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == false);
 }
 
 TEST_CASE("void Graph::insert_edge(unsigned int u, unsigned int v)")
@@ -115,21 +258,37 @@ TEST_CASE("void Graph::insert_edge(unsigned int u, unsigned int v)")
 
     REQUIRE(graph.get_n() == 2);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == false);
 
     graph.insert_edge(0, 0);
 
     REQUIRE(graph.get_n() == 2);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == false);
 
     graph.insert_edge(0, 2);
 
     REQUIRE(graph.get_n() == 2);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == false);
 
     graph.insert_edge(0, 1);
 
     REQUIRE(graph.get_n() == 2);
     REQUIRE(graph.get_m() == 1);
+    REQUIRE(graph.get_minimum_degree() == 1);
+    REQUIRE(graph.get_maximum_degree() == 1);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 }
 
 TEST_CASE("void Graph::remove_node(unsigned int u)")
@@ -138,31 +297,55 @@ TEST_CASE("void Graph::remove_node(unsigned int u)")
 
     REQUIRE(graph.get_n() == 5);
     REQUIRE(graph.get_m() == 10);
+    REQUIRE(graph.get_minimum_degree() == 4);
+    REQUIRE(graph.get_maximum_degree() == 4);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
 
     graph.remove_node(0);
 
     REQUIRE(graph.get_n() == 4);
     REQUIRE(graph.get_m() == 6);
+    REQUIRE(graph.get_minimum_degree() == 3);
+    REQUIRE(graph.get_maximum_degree() == 3);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
 
     graph.remove_node(0);
 
     REQUIRE(graph.get_n() == 3);
     REQUIRE(graph.get_m() == 3);
+    REQUIRE(graph.get_minimum_degree() == 2);
+    REQUIRE(graph.get_maximum_degree() == 2);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
 
     graph.remove_node(0);
 
     REQUIRE(graph.get_n() == 2);
     REQUIRE(graph.get_m() == 1);
+    REQUIRE(graph.get_minimum_degree() == 1);
+    REQUIRE(graph.get_maximum_degree() == 1);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 
     graph.remove_node(0);
 
     REQUIRE(graph.get_n() == 1);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 
     graph.remove_node(0);
 
     REQUIRE(graph.get_n() == 0);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 }
 
 TEST_CASE("void Graph::remove_edge(unsigned int u, unsigned int v)")
@@ -172,31 +355,55 @@ TEST_CASE("void Graph::remove_edge(unsigned int u, unsigned int v)")
 
     REQUIRE(graph.get_n() == 3);
     REQUIRE(graph.get_m() == 3);
+    REQUIRE(graph.get_minimum_degree() == 2);
+    REQUIRE(graph.get_maximum_degree() == 2);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
 
     graph.remove_edge(0, 0);
 
     REQUIRE(graph.get_n() == 3);
     REQUIRE(graph.get_m() == 3);
+    REQUIRE(graph.get_minimum_degree() == 2);
+    REQUIRE(graph.get_maximum_degree() == 2);
+    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_connected() == true);
 
     graph.remove_edge(0, 1);
 
     REQUIRE(graph.get_n() == 3);
     REQUIRE(graph.get_m() == 2);
+    REQUIRE(graph.get_minimum_degree() == 1);
+    REQUIRE(graph.get_maximum_degree() == 2);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == true);
 
     graph.remove_edge(0, 2);
 
     REQUIRE(graph.get_n() == 3);
     REQUIRE(graph.get_m() == 1);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 1);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == false);
 
     graph.remove_edge(1, 2);
 
     REQUIRE(graph.get_n() == 3);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == false);
 
     graph.remove_edge(1, 2);
 
     REQUIRE(graph.get_n() == 3);
     REQUIRE(graph.get_m() == 0);
+    REQUIRE(graph.get_minimum_degree() == 0);
+    REQUIRE(graph.get_maximum_degree() == 0);
+    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_connected() == false);
 }
 
 TEST_CASE("int Graph::get_minimum_degree()")
@@ -234,6 +441,18 @@ TEST_CASE("int Graph::get_maximum_degree()")
     graph.insert_edge(0, 2);
 
     REQUIRE(graph.get_maximum_degree() == 2);
+}
+
+TEST_CASE("int Graph::has_edge(unsigned int u, unsigned int v)")
+{
+
+    Graph graph = Graph(2);
+
+    REQUIRE(graph.has_edge(0, 0) == false);
+
+    graph.insert_edge(0, 1);
+
+    REQUIRE(graph.has_edge(0, 1) == true);
 }
 
 TEST_CASE("bool Graph::is_cyclic()")
