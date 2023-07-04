@@ -53,6 +53,11 @@
 #include "graph.hpp"
 #endif
 
+#ifndef DISJOINT_SETS
+#define DISJOINT_SETS
+#include "../disjoint_sets/disjoint_sets.hpp"
+#endif
+
 #ifndef LOG
 #define LOG
 #include "../log.hpp"
@@ -63,14 +68,14 @@ Graph::Graph()
     this->adjacencies = std::vector<std::vector<unsigned int>>();
     this->n = 0;
     this->m = 0;
-};
+}
 
 Graph::Graph(Graph &graph)
 {
     this->adjacencies = graph.adjacencies;
     this->n = graph.n;
     this->m = graph.m;
-};
+}
 
 Graph::Graph(unsigned int n)
 {
@@ -82,12 +87,12 @@ Graph::Graph(unsigned int n)
     {
         this->adjacencies.push_back(std::vector<unsigned int>());
     }
-};
+}
 
 Graph Graph::inverse(Graph &graph)
 {
     auto other = Graph::complete(graph.n);
-    
+
     auto edges = graph.get_edges();
 
     for (auto i = edges.begin(); i != edges.end(); i++)
@@ -99,14 +104,14 @@ Graph Graph::inverse(Graph &graph)
     }
 
     return other;
-};
+}
 
 Graph::Graph(std::vector<std::vector<unsigned int>> adjacencies, unsigned int n, unsigned int m)
 {
     this->adjacencies = adjacencies;
     this->n = n;
     this->m = m;
-};
+}
 
 Graph Graph::complete(unsigned int n)
 {
@@ -125,7 +130,7 @@ Graph Graph::complete(unsigned int n)
     }
 
     return Graph(adjacencies, n, (n * (n - 1)) / 2);
-};
+}
 
 Graph Graph::random_spanning_tree(unsigned int n)
 {
@@ -179,7 +184,7 @@ void Graph::insert_node()
 {
     this->adjacencies.push_back(std::vector<unsigned int>());
     this->n++;
-};
+}
 
 void Graph::insert_edge(unsigned int u, unsigned int v)
 {
@@ -204,7 +209,7 @@ void Graph::insert_edge(unsigned int u, unsigned int v)
     this->adjacencies[u].push_back(v);
     this->adjacencies[v].push_back(u);
     this->m++;
-};
+}
 
 void Graph::remove_node(unsigned int u)
 {
@@ -234,7 +239,7 @@ void Graph::remove_node(unsigned int u)
             }
         }
     }
-};
+}
 
 void Graph::remove_edge(unsigned int u, unsigned int v)
 {
@@ -275,17 +280,17 @@ void Graph::remove_edge(unsigned int u, unsigned int v)
     {
         this->m--;
     }
-};
+}
 
 unsigned int Graph::get_n()
 {
     return this->n;
-};
+}
 
 unsigned int Graph::get_m()
 {
     return this->m;
-};
+}
 
 unsigned int Graph::get_minimum_degree()
 {
@@ -306,7 +311,7 @@ unsigned int Graph::get_minimum_degree()
     }
 
     return minimum;
-};
+}
 
 unsigned int Graph::get_maximum_degree()
 {
@@ -327,7 +332,7 @@ unsigned int Graph::get_maximum_degree()
     }
 
     return maximum;
-};
+}
 
 bool Graph::has_edge(unsigned int u, unsigned int v)
 {
@@ -351,7 +356,7 @@ bool Graph::has_edge(unsigned int u, unsigned int v)
     }
 
     return false;
-};
+}
 
 std::set<std::tuple<unsigned int, unsigned int>> Graph::get_edges()
 {
@@ -375,9 +380,14 @@ std::set<std::tuple<unsigned int, unsigned int>> Graph::get_edges()
     }
 
     return edges;
-};
+}
 
 bool Graph::is_cyclic()
+{
+    return this->is_cyclic_depth_first_search();
+}
+
+bool Graph::is_cyclic_depth_first_search()
 {
     auto visited = std::set<unsigned int>();
 
@@ -388,7 +398,7 @@ bool Graph::is_cyclic()
             continue; // Do not search a visited node again.
         }
 
-        if (is_cyclic_internal(i, -1, &visited))
+        if (is_cyclic_depth_first_search_internal(i, -1, &visited))
         {
             return true;
         }
@@ -397,7 +407,7 @@ bool Graph::is_cyclic()
     return false;
 }
 
-bool Graph::is_cyclic_internal(unsigned int node, unsigned int parent, std::set<unsigned int> *visited)
+bool Graph::is_cyclic_depth_first_search_internal(unsigned int node, unsigned int parent, std::set<unsigned int> *visited)
 {
     visited->insert(node);
 
@@ -413,10 +423,31 @@ bool Graph::is_cyclic_internal(unsigned int node, unsigned int parent, std::set<
             return true; // Found a visited node.
         }
 
-        if (is_cyclic_internal(neighbor, node, visited))
+        if (is_cyclic_depth_first_search_internal(neighbor, node, visited))
         {
             return true;
         }
+    }
+
+    return false;
+}
+
+bool Graph::is_cyclic_disjoint_sets()
+{
+    auto edges = this->get_edges();
+    auto sets = DisjointSets(this->get_n());
+
+    for (auto i = edges.begin(); i != edges.end(); i++)
+    {
+        auto u = std::get<0>(*i);
+        auto v = std::get<1>(*i);
+
+        if (!sets.disjoint(u, v))
+        {
+            return true;
+        }
+
+        sets.join(u, v);
     }
 
     return false;

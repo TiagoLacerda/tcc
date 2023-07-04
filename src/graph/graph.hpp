@@ -96,6 +96,14 @@ public:
     /// @return true if a cycle is found, false otherwise.
     bool is_cyclic();
 
+    /// @brief Check whether the graph contains cycles using a depth-first search tree.
+    /// @return true if a cycle is found, false otherwise.
+    bool is_cyclic_depth_first_search();
+
+    /// @brief Check whether the graph contains cycles using disjoint sets.
+    /// @return true if a cycle is found, false otherwise.
+    bool is_cyclic_disjoint_sets();
+
     /// @brief Check whether the graph is connected. The Null-Graph is said to be connected.
     /// @return true if the graph is connected, false otherwise.
     bool is_connected();
@@ -115,7 +123,7 @@ private:
 
     Graph(std::vector<std::vector<unsigned int>> adjacencies, unsigned int n, unsigned int m);
 
-    bool is_cyclic_internal(unsigned int node, unsigned int parent, std::set<unsigned int> *visited);
+    bool is_cyclic_depth_first_search_internal(unsigned int node, unsigned int parent, std::set<unsigned int> *visited);
 
     void is_connected_internal(unsigned int node, std::set<unsigned int> *visited);
 };

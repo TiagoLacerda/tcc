@@ -38,34 +38,6 @@
 #include "src/graph/graph.hpp"
 #endif
 
-#ifndef DISJOINT_SETS
-#define DISJOINT_SETS
-#include "src/disjoint_sets/disjoint_sets.hpp"
-#endif
-
-/// TODO: CREATE A FUNCION TO ADD K EDGES TO THIS TREE TO CREATE CYCLES. COMPARE CYCLE DETECTION ALGORITHMS WITH MANY VARIATIONS OF SPANNING TREES WITH K CYCLES.
-
-bool is_cyclic_disjoint_sets(Graph graph)
-{
-    auto edges = graph.get_edges();
-    auto sets = DisjointSets(graph.get_n());
-
-    for (auto i = edges.begin(); i != edges.end(); i++)
-    {
-        auto u = std::get<0>(*i);
-        auto v = std::get<1>(*i);
-
-        if (!sets.disjoint(u, v))
-        {
-            return true;
-        }
-
-        sets.join(u, v);
-    }
-
-    return false;
-}
-
 void add_cycle_inducing_edges(Graph *graph, unsigned int k)
 {
     auto edges = Graph::inverse(*graph).get_edges();
@@ -95,9 +67,12 @@ int main()
 
     std::ofstream file("data/data.txt");
 
-    for (unsigned int n = 10; n <= 500; n += 10)
+    for (unsigned int n = 100; n <= 100; n += 100)
     {
-        for (unsigned int k = 1; k <= 1; k++)
+        auto m = (n * (n - 1)) / 2;
+        auto d = m / 50;
+
+        for (unsigned int k = 0; k <= m - (n - 1); k += d)
         {
             for (unsigned int sample = 0; sample < 20; sample++)
             {
@@ -107,11 +82,11 @@ int main()
 
                 auto t1 = std::chrono::high_resolution_clock::now();
 
-                bool result1 = graph.is_cyclic();
+                bool result1 = graph.is_cyclic_depth_first_search();
 
                 auto t2 = std::chrono::high_resolution_clock::now();
 
-                bool result2 = is_cyclic_disjoint_sets(graph);
+                bool result2 = graph.is_cyclic_disjoint_sets();
 
                 auto t3 = std::chrono::high_resolution_clock::now();
 

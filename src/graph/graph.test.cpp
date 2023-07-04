@@ -455,34 +455,34 @@ TEST_CASE("int Graph::has_edge(unsigned int u, unsigned int v)")
     REQUIRE(graph.has_edge(0, 1) == true);
 }
 
-TEST_CASE("bool Graph::is_cyclic()")
+TEST_CASE("bool Graph::is_cyclic_depth_first_search()")
 {
 
     Graph graph;
 
     graph = Graph::complete(0);
 
-    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_cyclic_depth_first_search() == false);
 
     graph = Graph::complete(1);
 
-    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_cyclic_depth_first_search() == false);
 
     graph = Graph::complete(2);
 
-    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_cyclic_depth_first_search() == false);
 
     graph = Graph::complete(3);
 
-    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_cyclic_depth_first_search() == true);
 
     graph = Graph::complete(4);
 
-    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_cyclic_depth_first_search() == true);
 
     graph = Graph::complete(5);
 
-    REQUIRE(graph.is_cyclic() == true);
+    REQUIRE(graph.is_cyclic_depth_first_search() == true);
 
     graph = Graph();
 
@@ -495,7 +495,50 @@ TEST_CASE("bool Graph::is_cyclic()")
     graph.insert_edge(1, 2);
     graph.insert_edge(2, 3);
 
-    REQUIRE(graph.is_cyclic() == false);
+    REQUIRE(graph.is_cyclic_depth_first_search() == false);
+}
+
+TEST_CASE("bool Graph::is_cyclic_disjoint_sets()")
+{
+
+    Graph graph;
+
+    graph = Graph::complete(0);
+
+    REQUIRE(graph.is_cyclic_disjoint_sets() == false);
+
+    graph = Graph::complete(1);
+
+    REQUIRE(graph.is_cyclic_disjoint_sets() == false);
+
+    graph = Graph::complete(2);
+
+    REQUIRE(graph.is_cyclic_disjoint_sets() == false);
+
+    graph = Graph::complete(3);
+
+    REQUIRE(graph.is_cyclic_disjoint_sets() == true);
+
+    graph = Graph::complete(4);
+
+    REQUIRE(graph.is_cyclic_disjoint_sets() == true);
+
+    graph = Graph::complete(5);
+
+    REQUIRE(graph.is_cyclic_disjoint_sets() == true);
+
+    graph = Graph();
+
+    graph.insert_node();
+    graph.insert_node();
+    graph.insert_node();
+    graph.insert_node();
+
+    graph.insert_edge(0, 1);
+    graph.insert_edge(1, 2);
+    graph.insert_edge(2, 3);
+
+    REQUIRE(graph.is_cyclic_disjoint_sets() == false);
 }
 
 TEST_CASE("bool Graph::is_connected()")

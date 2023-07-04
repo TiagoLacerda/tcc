@@ -1,7 +1,7 @@
 SOURCE := $(wildcard *.cpp */*.cpp */*/*.cpp)
 OUTPUT := main.exe
 
-FLAGS := -Wall -O3
+FLAGS := -Wall -O3 -Wno-unused-variable
 
 build:
 	# g++ -g $(SOURCE) -o $(OUTPUT) $(FLAGS)
