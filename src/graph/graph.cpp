@@ -358,9 +358,9 @@ bool Graph::has_edge(unsigned int u, unsigned int v)
     return false;
 }
 
-std::set<std::tuple<unsigned int, unsigned int>> Graph::get_edges()
+std::vector<std::tuple<unsigned int, unsigned int>> Graph::get_edges()
 {
-    auto edges = std::set<std::tuple<unsigned int, unsigned int>>();
+    auto edges = std::vector<std::tuple<unsigned int, unsigned int>>();
 
     for (unsigned int u = 0; u < this->n; u++)
     {
@@ -370,11 +370,7 @@ std::set<std::tuple<unsigned int, unsigned int>> Graph::get_edges()
             // This ensures each edge is inserted only once
             if (u < v)
             {
-                edges.insert(std::tuple(u, v));
-            }
-            else
-            {
-                edges.insert(std::tuple(v, u));
+                edges.push_back(std::tuple(u, v));
             }
         }
     }

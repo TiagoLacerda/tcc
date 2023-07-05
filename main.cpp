@@ -50,10 +50,10 @@ void add_cycle_inducing_edges(Graph *graph, unsigned int k)
     {
         dis = std::uniform_int_distribution<>(0, edges.size() - 1);
 
-        auto edge = *std::next(edges.begin(), dis(rng));
+        auto edge = std::next(edges.begin(), dis(rng));
 
-        auto u = std::get<0>(edge);
-        auto v = std::get<1>(edge);
+        auto u = std::get<0>(*edge);
+        auto v = std::get<1>(*edge);
 
         edges.erase(edge);
 
@@ -67,14 +67,15 @@ int main()
 
     std::ofstream file("data/data.txt");
 
-    for (unsigned int n = 100; n <= 100; n += 100)
+    for (unsigned int n = 1000; n <= 10000; n += 100)
     {
-        auto m = (n * (n - 1)) / 2;
-        auto d = m / 50;
+        // auto m = (n * (n - 1)) / 2;
+        // auto d = m / 50;
 
-        for (unsigned int k = 0; k <= m - (n - 1); k += d)
+        // for (unsigned int k = 0; k <= m - (n - 1); k += d)
+        for (unsigned int k = 1; k <= 1; k++)
         {
-            for (unsigned int sample = 0; sample < 20; sample++)
+            for (unsigned int sample = 0; sample < 10; sample++)
             {
                 auto graph = Graph::random_spanning_tree(n);
 
@@ -94,6 +95,11 @@ int main()
                 auto duration_djs = std::chrono::duration_cast<std::chrono::microseconds>(t3 - t2);
 
                 file << n << " " << k << " " << duration_dfs.count() << " " << duration_djs.count() << std::endl;
+
+                if (result1 != 1 || result2 != 1)
+                {
+                    std::cout << "One of the algotithms failed to detect a cycle!" << std::endl;
+                }
             }
         }
     }

@@ -90,7 +90,7 @@ public:
 
     /// @brief Get a list of all the edges in the graph.
     /// @return An std::vector of std::tuple representing each edge.
-    std::set<std::tuple<unsigned int, unsigned int>> get_edges();
+    std::vector<std::tuple<unsigned int, unsigned int>> get_edges();
 
     /// @brief Check whether the graph contains cycles.
     /// @return true if a cycle is found, false otherwise.
