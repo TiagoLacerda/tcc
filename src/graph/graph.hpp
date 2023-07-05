@@ -112,6 +112,10 @@ public:
     /// @return An std::string equivalent of the graph.
     std::string to_json();
 
+    /// @brief Insert up to k randomly chosen edges in the graph. S
+    /// @param k The number of edges to be inserted.
+    void insert_random_edges(unsigned int k);
+
     /// @brief Generate a file at the given path with a representation of the graph. The first n lines represent each node with an index. The next m lines represent each edge with a pair of indexes.
     /// @param path The path of the file to be created.
     void to_file(std::string path);

@@ -38,36 +38,13 @@
 #include "src/graph/graph.hpp"
 #endif
 
-void add_cycle_inducing_edges(Graph *graph, unsigned int k)
-{
-    auto edges = Graph::inverse(*graph).get_edges();
-
-    static std::random_device rd;
-    static std::mt19937 rng(rd());
-    std::uniform_int_distribution<> dis;
-
-    for (unsigned int i = 0; i < k && !edges.empty(); i++)
-    {
-        dis = std::uniform_int_distribution<>(0, edges.size() - 1);
-
-        auto edge = std::next(edges.begin(), dis(rng));
-
-        auto u = std::get<0>(*edge);
-        auto v = std::get<1>(*edge);
-
-        edges.erase(edge);
-
-        (*graph).insert_edge(u, v);
-    }
-}
-
 int main()
 {
     auto t0 = std::chrono::high_resolution_clock::now();
 
     std::ofstream file("data/data.txt");
 
-    for (unsigned int n = 1000; n <= 10000; n += 100)
+    for (unsigned int n = 100; n <= 1000; n += 10)
     {
         // auto m = (n * (n - 1)) / 2;
         // auto d = m / 50;
@@ -79,7 +56,7 @@ int main()
             {
                 auto graph = Graph::random_spanning_tree(n);
 
-                add_cycle_inducing_edges(&graph, k);
+                graph.insert_random_edges(k);
 
                 auto t1 = std::chrono::high_resolution_clock::now();
 

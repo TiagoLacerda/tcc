@@ -476,6 +476,29 @@ void Graph::is_connected_internal(unsigned int node, std::set<unsigned int> *vis
     }
 }
 
+void Graph::insert_random_edges(unsigned int k)
+{
+    auto edges = Graph::inverse(*this).get_edges();
+
+    static std::random_device rd;
+    static std::mt19937 rng(rd());
+    std::uniform_int_distribution<> dis;
+
+    for (unsigned int i = 0; i < k && !edges.empty(); i++)
+    {
+        dis = std::uniform_int_distribution<>(0, edges.size() - 1);
+
+        auto edge = std::next(edges.begin(), dis(rng));
+
+        auto u = std::get<0>(*edge);
+        auto v = std::get<1>(*edge);
+
+        edges.erase(edge);
+
+        this->insert_edge(u, v);
+    }
+}
+
 std::string Graph::to_json()
 {
     std::stringstream stream;
