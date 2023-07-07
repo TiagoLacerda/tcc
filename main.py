@@ -8,15 +8,14 @@ file = open("data/data.txt", "r")
 data = [list(map(int, line.split(" "))) for line in file.read().splitlines()]
 
 n = [item[0] for item in data]
-k = [item[1] for item in data]
-dfs = [item[2] for item in data]
-djs = [item[3] for item in data]
+dfs = [item[1] for item in data]
+djs = [item[2] for item in data]
 
 # Setup matplotlib
 
 fig, ax = plt.subplots()
 
-plt.title("Tempo de execução dos algoritmos de detecção de ciclos", fontsize=10, fontweight='ultralight')
+plt.title("Tempo de execução dos algoritmos de decisão de conexidade", fontsize=10, fontweight='ultralight')
 plt.xlabel("Número de vértices do grafo")
 # plt.xlabel("Número de arestas que induzem ciclo no grafo")
 plt.ylabel("Tempo decorrido (us)")

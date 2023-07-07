@@ -47,19 +47,39 @@ int main()
 {
     auto t0 = std::chrono::high_resolution_clock::now();
 
-    auto graph = Graph::complete(4);
-    auto tree = Graph(4);
+    std::ofstream file("data/data.txt");
 
-    tree.insert_edge(0, 1);
-    tree.insert_edge(1, 2);
-    tree.insert_edge(2, 3);
+    for (int n = 1000; n < 10000; n += 1000)
+    {
+        for (int sample = 0; sample < 10; sample++)
+        {
+            auto graph = Graph::random_spanning_tree(n);
+            auto other = Graph::inverse(graph);
 
-    auto stretch_index = stretch(graph, tree);
+            auto t1 = std::chrono::high_resolution_clock::now();
 
-    std::cout << "Stretch index: " << stretch_index << std::endl;
+            auto result1 = other.is_connected_depth_first_search();
 
-    auto t1 = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
+            auto t2 = std::chrono::high_resolution_clock::now();
+
+            auto result2 = other.is_connected_disjoint_sets();
+
+            auto t3 = std::chrono::high_resolution_clock::now();
+
+            auto duration_dfs = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
+            auto duration_djs = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2);
+
+            file << n << " " << duration_dfs.count() << " " << duration_djs.count() << std::endl;
+
+            if (result1 != result2)
+            {
+                std::cout << "Algorithm returns differ!" << std::endl;
+            }
+        }
+    }
+
+    auto t4 = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t0);
 
     std::cout << "Elapsed: " << duration.count() << " ms" << std::endl;
 }

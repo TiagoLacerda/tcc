@@ -451,6 +451,11 @@ bool Graph::is_cyclic_disjoint_sets()
 
 bool Graph::is_connected()
 {
+    return this->is_connected_depth_first_search();
+}
+
+bool Graph::is_connected_depth_first_search()
+{
     if (this->n == 0)
     {
         return true;
@@ -458,12 +463,12 @@ bool Graph::is_connected()
 
     auto visited = std::set<unsigned int>();
 
-    is_connected_internal(0, &visited);
+    is_connected_depth_first_search_internal(0, &visited);
 
     return visited.size() == this->adjacencies.size();
 }
 
-void Graph::is_connected_internal(unsigned int node, std::set<unsigned int> *visited)
+void Graph::is_connected_depth_first_search_internal(unsigned int node, std::set<unsigned int> *visited)
 {
     visited->insert(node);
 
@@ -471,9 +476,32 @@ void Graph::is_connected_internal(unsigned int node, std::set<unsigned int> *vis
     {
         if (visited->find(neighbor) == visited->end())
         {
-            is_connected_internal(neighbor, visited);
+            is_connected_depth_first_search_internal(neighbor, visited);
         }
     }
+}
+
+bool Graph::is_connected_disjoint_sets()
+{
+    auto edges = this->get_edges();
+    auto sets = DisjointSets(this->get_n());
+
+    for (auto i = edges.begin(); i != edges.end(); i++)
+    {
+        auto u = std::get<0>(*i);
+        auto v = std::get<1>(*i);
+        sets.join(u, v);
+    }
+
+    std::set<unsigned int> representatives;
+
+    for (unsigned int i = 0; i < this->n; i++)
+    {
+        auto representative = sets.find(i);
+        representatives.insert(representative);
+    }
+
+    return representatives.size() < 2;
 }
 
 void Graph::insert_random_edges(unsigned int k)

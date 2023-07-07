@@ -108,6 +108,14 @@ public:
     /// @return true if the graph is connected, false otherwise.
     bool is_connected();
 
+    /// @brief Check whether the graph is connected using a depth-first search tree. The Null-Graph is said to be connected.
+    /// @return true if the graph is connected, false otherwise.
+    bool is_connected_depth_first_search();
+
+    /// @brief Check whether the graph is connected using disjoint sets. The Null-Graph is said to be connected.
+    /// @return true if the graph is connected, false otherwise.
+    bool is_connected_disjoint_sets();
+
     /// @brief Generate a JSON representation of the graph.
     /// @return An std::string equivalent of the graph.
     std::string to_json();
@@ -129,5 +137,5 @@ private:
 
     bool is_cyclic_depth_first_search_internal(unsigned int node, unsigned int parent, std::set<unsigned int> *visited);
 
-    void is_connected_internal(unsigned int node, std::set<unsigned int> *visited);
+    void is_connected_depth_first_search_internal(unsigned int node, std::set<unsigned int> *visited);
 };
