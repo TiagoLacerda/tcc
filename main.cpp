@@ -43,43 +43,86 @@
 #include "src/util/util.hpp"
 #endif
 
+void print_array(unsigned int *pointers, unsigned int length)
+{
+    std::cout << "[";
+
+    for (unsigned int i = 0; i < length; i++)
+    {
+        std::cout << pointers[i];
+
+        if (i < length - 1)
+        {
+            std::cout << ", ";
+        }
+    }
+
+    std::cout << "]";
+    std::cout << std::endl;
+}
+
+void foo(Graph graph)
+{
+    auto n = graph.get_n();
+    auto m = graph.get_m();
+
+    if (m < n - 1)
+    {
+        return; // Not enough edges in the graph to construct a spanning tree.
+    }
+
+    auto edges = graph.get_edges();
+
+    unsigned int pointers[n - 1];
+
+    for (unsigned int i = 0; i < n - 1; i++)
+    {
+        pointers[i] = -1; // unsigned int, underflow?
+    }
+
+    auto tree = Graph(n);
+
+    unsigned int i = 0;
+    unsigned int k = 0;
+
+    while (i < m && k < n - 1)
+    {
+        auto copy = Graph(tree);
+
+        auto u = std::get<0>(edges[i]);
+        auto v = std::get<1>(edges[i]);
+
+        std::cout << "(" << u << ", " << v << ")" << std::endl;
+
+        copy.insert_edge(u, v);
+
+        std::cout << copy.to_json() << std::endl;
+
+        if (!copy.is_cyclic())
+        {
+            std::cout << "Copy is not cyclic" << std::endl;
+
+            tree = copy;
+            pointers[k] = i;
+            k++;
+        }
+
+        i++;
+    }
+
+    print_array(pointers, n - 1);
+}
+
 int main()
 {
     auto t0 = std::chrono::high_resolution_clock::now();
 
-    std::ofstream file("data/data.txt");
+    auto graph = Graph::complete(3);
 
-    for (int n = 1000; n < 10000; n += 1000)
-    {
-        for (int sample = 0; sample < 10; sample++)
-        {
-            auto graph = Graph::random_spanning_tree(n);
-            auto other = Graph::inverse(graph);
+    foo(graph);
 
-            auto t1 = std::chrono::high_resolution_clock::now();
-
-            auto result1 = other.is_connected_depth_first_search();
-
-            auto t2 = std::chrono::high_resolution_clock::now();
-
-            auto result2 = other.is_connected_disjoint_sets();
-
-            auto t3 = std::chrono::high_resolution_clock::now();
-
-            auto duration_dfs = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
-            auto duration_djs = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2);
-
-            file << n << " " << duration_dfs.count() << " " << duration_djs.count() << std::endl;
-
-            if (result1 != result2)
-            {
-                std::cout << "Algorithm returns differ!" << std::endl;
-            }
-        }
-    }
-
-    auto t4 = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t0);
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
 
     std::cout << "Elapsed: " << duration.count() << " ms" << std::endl;
 }
