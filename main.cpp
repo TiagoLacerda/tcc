@@ -1,3 +1,8 @@
+#ifndef FILESYSTEM
+#define FILESYSTEM
+#include <filesystem>
+#endif
+
 #ifndef IOSTREAM
 #define IOSTREAM
 #include <iostream>
@@ -152,7 +157,7 @@ void generate_spanning_trees(Graph graph)
 
     // Determine initial pointer assignment.
 
-    auto tree = Graph(n);
+    auto candidate = Graph(n);
 
     auto edges = graph.get_edges();
 
@@ -164,11 +169,11 @@ void generate_spanning_trees(Graph graph)
 
         if (i == 0)
         {
-            j = find_edge(tree, edges, 0);
+            j = find_edge(candidate, edges, 0);
         }
         else
         {
-            j = find_edge(tree, edges, pointers[i - 1] + 1);
+            j = find_edge(candidate, edges, pointers[i - 1] + 1);
         }
 
         if (j < m)
@@ -178,7 +183,7 @@ void generate_spanning_trees(Graph graph)
             auto u = std::get<0>(edges[j]);
             auto v = std::get<1>(edges[j]);
 
-            tree.insert_edge(u, v);
+            candidate.insert_edge(u, v);
         }
         else
         {
@@ -188,15 +193,26 @@ void generate_spanning_trees(Graph graph)
 
     // Generate all trees.
 
+    unsigned int index = 0;
+
     unsigned int p = n - 2; // Index of furthermost assigned pointer.
 
     while (pointers[0] < m - (n - 1) + 1)
     {
+        if (p == 0 || pointers[p] != pointers[p - 1])
+        {
+            auto u = std::get<0>(edges[pointers[p]]);
+            auto v = std::get<1>(edges[pointers[p]]);
+            candidate.remove_edge(u, v);
+        }
+
         pointers[p]++;
 
         if (pointers[p] < m)
         {
-            auto candidate = graph_from_pointers(n, edges, pointers, p + 1);
+            auto u = std::get<0>(edges[pointers[p]]);
+            auto v = std::get<1>(edges[pointers[p]]);
+            candidate.insert_edge(u, v);
 
             if (!candidate.is_cyclic_disjoint_sets()) // Is acyclic
             {
@@ -204,7 +220,10 @@ void generate_spanning_trees(Graph graph)
                 {
                     if (candidate.is_connected_disjoint_sets()) // Is connected
                     {
-                        std::cout << "Found a tree!" << std::endl;
+                        std::stringstream stream;
+                        stream << "trees/" << index;
+                        candidate.to_file(stream.str());
+                        index++;
                     }
                 }
                 else
@@ -224,6 +243,8 @@ void generate_spanning_trees(Graph graph)
 int main()
 {
     auto t0 = std::chrono::high_resolution_clock::now();
+
+    std::filesystem::create_directory("trees");
 
     auto graph = Graph(9);
 
