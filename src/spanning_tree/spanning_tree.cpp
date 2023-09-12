@@ -73,6 +73,8 @@ namespace spanning_tree
                 return; // Unable to determine an initial pointer assignment.
             }
 
+            callback(candidate);
+
             // Generate all trees.
 
             unsigned int p = n - 2; // Index of furthermost assigned pointer.
