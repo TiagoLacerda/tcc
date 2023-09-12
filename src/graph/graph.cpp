@@ -70,7 +70,7 @@ Graph::Graph()
     this->m = 0;
 }
 
-Graph::Graph(Graph &graph)
+Graph::Graph(const Graph &graph)
 {
     this->adjacencies = graph.adjacencies;
     this->n = graph.n;

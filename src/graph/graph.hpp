@@ -27,7 +27,7 @@ public:
 
     /// @brief Copy constructor.
     /// @param graph A Graph.
-    Graph(Graph &graph);
+    Graph(const Graph &graph);
 
     /// @brief Construct a graph with n nodes, but no edges.
     /// @param n The number of nodes in the graph.
