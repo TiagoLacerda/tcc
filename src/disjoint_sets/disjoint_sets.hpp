@@ -11,28 +11,28 @@ class DisjointSets
 public:
     /// @brief Default constructor.
     /// @param n The number of elements in the universe.
-    DisjointSets(unsigned int n);
+    DisjointSets(int n);
 
     /// @brief Find the representative of u.
     /// @param u An element in the universe.
     /// @return The element that represents u's set.
-    unsigned int find(unsigned int u);
+    int find(int u);
 
     /// @brief Join u's and v's sets.
     /// @param u An element in the universe.
     /// @param v An element in the universe.
-    void join(unsigned int u, unsigned int v);
+    void join(int u, int v);
 
     /// @brief Whether u and v do not belong to the same set.
     /// @param u An element in the universe.
     /// @param v An element in the universe.
     /// @return true if u and v are not in the same set, false otherwise.
-    bool disjoint(unsigned int u, unsigned int v);
+    bool disjoint(int u, int v);
 
 private:
     /// @brief An array representing each element's parent in the trees that make up the disjoint sets, or themselves, should they be a root.
-    std::vector<unsigned int> parents;
+    std::vector<int> parents;
 
     /// @brief The height of the tree to which each element belongs, if they are a representative of a set.
-    std::vector<unsigned int> ranks;
+    std::vector<int> ranks;
 };

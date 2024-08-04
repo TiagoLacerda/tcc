@@ -34,13 +34,13 @@ int main()
 
     graph.to_file("graph.txt");
 
-    unsigned int factor = graph.get_n() - 1;
+    int factor = graph.get_n() - 1;
 
     std::mutex mutex;
 
     auto callback = [graph, &factor, &mutex](Graph tree)
     {
-        unsigned int candidate = stretch(graph, tree);
+        int candidate = stretch(graph, tree);
 
         mutex.lock();
 

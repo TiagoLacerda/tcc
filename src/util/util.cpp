@@ -13,15 +13,15 @@
 #include "util.hpp"
 #endif
 
-unsigned int **floyd_warshall(Graph graph)
+int **floyd_warshall(Graph graph)
 {
     int n = graph.get_n();
 
-    unsigned int **distances = new unsigned int *[n];
+    int **distances = new int *[n];
 
     for (int i = 0; i < n; i++)
     {
-        distances[i] = new unsigned int[n];
+        distances[i] = new int[n];
 
         for (int j = 0; j < n; j++)
         {
@@ -69,7 +69,7 @@ int stretch(Graph graph, Graph tree)
         return 0;
     }
 
-    unsigned int **distances = floyd_warshall(tree);
+    int **distances = floyd_warshall(tree);
 
     // Iterate through [graph]'s edges to ... TODO: Document
 

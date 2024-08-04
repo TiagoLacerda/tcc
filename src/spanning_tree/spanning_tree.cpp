@@ -27,7 +27,7 @@ namespace spanning_tree
 {
     namespace
     {
-        void generate_internal(Graph graph, std::function<void(Graph tree)> callback, unsigned int start, unsigned int end)
+        void generate_internal(Graph graph, std::function<void(Graph tree)> callback, int start, int end)
         {
             auto n = graph.get_n();
             auto m = graph.get_m();
@@ -41,12 +41,12 @@ namespace spanning_tree
 
             auto edges = graph.get_edges();
 
-            unsigned int pointers[n - 1];
+            int pointers[n - 1];
 
             // Determine initial pointer assignment.
 
-            unsigned int i = 0;     // Index of pointer.
-            unsigned int j = start; // Index of edge.
+            int i = 0;     // Index of pointer.
+            int j = start; // Index of edge.
 
             while (i < n - 1 && j < m)
             {
@@ -77,7 +77,7 @@ namespace spanning_tree
 
             // Generate all trees.
 
-            unsigned int p = n - 2; // Index of furthermost assigned pointer.
+            int p = n - 2; // Index of furthermost assigned pointer.
 
             while (pointers[0] < end)
             {
@@ -128,14 +128,14 @@ namespace spanning_tree
         generate_internal(graph, callback, 0, m - (n - 1) + 1);
     }
 
-    void generate(Graph graph, std::function<void(Graph tree)> callback, unsigned int num_threads)
+    void generate(Graph graph, std::function<void(Graph tree)> callback, int num_threads)
     {
         auto n = graph.get_n();
         auto m = graph.get_m();
 
 #pragma omp parallel num_threads(num_threads)
         {
-            unsigned int i = omp_get_thread_num(), start, end;
+            int i = omp_get_thread_num(), start, end;
 
             workload(n, m, i, num_threads, &start, &end);
 
@@ -143,7 +143,7 @@ namespace spanning_tree
         }
     }
 
-    void workload(unsigned int n, unsigned int m, unsigned int i, unsigned int num_threads, unsigned int *start, unsigned int *end)
+    void workload(int n, int m, int i, int num_threads, int *start, int *end)
     {
         if (n == 0 || m == 0 || m > n * (n - 1) / 2 || num_threads == 0 || i >= num_threads) // Invalid parameters.
         {
@@ -152,7 +152,7 @@ namespace spanning_tree
         }
         else
         {
-            unsigned int total = m - (n - 1) + 1; // If search started here, there woudldn't be enough edges to make a spanning tree.
+            int total = m - (n - 1) + 1; // If search started here, there woudldn't be enough edges to make a spanning tree.
 
             if (num_threads > total) // There are more threads than work available.
             {
@@ -169,7 +169,7 @@ namespace spanning_tree
             }
             else // There is more work than threads.
             {
-                unsigned int chunk = total / num_threads;
+                int chunk = total / num_threads;
 
                 *start = chunk * i;
                 *end = (i == num_threads - 1) ? total : *start + chunk;

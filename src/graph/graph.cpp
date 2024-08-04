@@ -65,7 +65,7 @@
 
 Graph::Graph()
 {
-    this->adjacencies = std::vector<std::vector<unsigned int>>();
+    this->adjacencies = std::vector<std::vector<int>>();
     this->n = 0;
     this->m = 0;
 }
@@ -77,15 +77,15 @@ Graph::Graph(const Graph &graph)
     this->m = graph.m;
 }
 
-Graph::Graph(unsigned int n)
+Graph::Graph(int n)
 {
-    this->adjacencies = std::vector<std::vector<unsigned int>>();
+    this->adjacencies = std::vector<std::vector<int>>();
     this->n = n;
     this->m = 0;
 
-    for (unsigned int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
-        this->adjacencies.push_back(std::vector<unsigned int>());
+        this->adjacencies.push_back(std::vector<int>());
     }
 }
 
@@ -106,21 +106,21 @@ Graph Graph::inverse(Graph &graph)
     return other;
 }
 
-Graph::Graph(std::vector<std::vector<unsigned int>> adjacencies, unsigned int n, unsigned int m)
+Graph::Graph(std::vector<std::vector<int>> adjacencies, int n, int m)
 {
     this->adjacencies = adjacencies;
     this->n = n;
     this->m = m;
 }
 
-Graph Graph::complete(unsigned int n)
+Graph Graph::complete(int n)
 {
-    std::vector<std::vector<unsigned int>> adjacencies;
+    std::vector<std::vector<int>> adjacencies;
 
-    for (unsigned int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
-        adjacencies.push_back(std::vector<unsigned int>());
-        for (unsigned int j = 0; j < n; j++)
+        adjacencies.push_back(std::vector<int>());
+        for (int j = 0; j < n; j++)
         {
             if (i != j)
             {
@@ -132,7 +132,7 @@ Graph Graph::complete(unsigned int n)
     return Graph(adjacencies, n, (n * (n - 1)) / 2);
 }
 
-Graph Graph::random_spanning_tree(unsigned int n)
+Graph Graph::random_spanning_tree(int n)
 {
     auto graph = Graph(n);
 
@@ -141,8 +141,8 @@ Graph Graph::random_spanning_tree(unsigned int n)
         return graph;
     }
 
-    std::vector<unsigned int> visited;
-    std::vector<unsigned int> unvisited(n);
+    std::vector<int> visited;
+    std::vector<int> unvisited(n);
     std::iota(unvisited.begin(), unvisited.end(), 0);
 
     auto u = unvisited[0];
@@ -182,11 +182,11 @@ Graph Graph::random_spanning_tree(unsigned int n)
 
 void Graph::insert_node()
 {
-    this->adjacencies.push_back(std::vector<unsigned int>());
+    this->adjacencies.push_back(std::vector<int>());
     this->n++;
 }
 
-void Graph::insert_edge(unsigned int u, unsigned int v)
+void Graph::insert_edge(int u, int v)
 {
     if (u == v)
     {
@@ -211,7 +211,7 @@ void Graph::insert_edge(unsigned int u, unsigned int v)
     this->m++;
 }
 
-void Graph::remove_node(unsigned int u)
+void Graph::remove_node(int u)
 {
     if (u >= this->n)
     {
@@ -241,7 +241,7 @@ void Graph::remove_node(unsigned int u)
     }
 }
 
-void Graph::remove_edge(unsigned int u, unsigned int v)
+void Graph::remove_edge(int u, int v)
 {
     if (u == v)
     {
@@ -282,17 +282,17 @@ void Graph::remove_edge(unsigned int u, unsigned int v)
     }
 }
 
-unsigned int Graph::get_n()
+int Graph::get_n()
 {
     return this->n;
 }
 
-unsigned int Graph::get_m()
+int Graph::get_m()
 {
     return this->m;
 }
 
-unsigned int Graph::get_minimum_degree()
+int Graph::get_minimum_degree()
 {
     if (this->adjacencies.empty())
     {
@@ -313,7 +313,7 @@ unsigned int Graph::get_minimum_degree()
     return minimum;
 }
 
-unsigned int Graph::get_maximum_degree()
+int Graph::get_maximum_degree()
 {
     if (this->adjacencies.empty())
     {
@@ -334,7 +334,7 @@ unsigned int Graph::get_maximum_degree()
     return maximum;
 }
 
-bool Graph::has_edge(unsigned int u, unsigned int v)
+bool Graph::has_edge(int u, int v)
 {
     if (u == v)
     {
@@ -358,11 +358,11 @@ bool Graph::has_edge(unsigned int u, unsigned int v)
     return false;
 }
 
-std::vector<std::tuple<unsigned int, unsigned int>> Graph::get_edges()
+std::vector<std::tuple<int, int>> Graph::get_edges()
 {
-    auto edges = std::vector<std::tuple<unsigned int, unsigned int>>();
+    auto edges = std::vector<std::tuple<int, int>>();
 
-    for (unsigned int u = 0; u < this->n; u++)
+    for (int u = 0; u < this->n; u++)
     {
         for (size_t i = 0; i < this->adjacencies[u].size(); i++)
         {
@@ -385,9 +385,9 @@ bool Graph::is_cyclic()
 
 bool Graph::is_cyclic_depth_first_search()
 {
-    auto visited = std::set<unsigned int>();
+    auto visited = std::set<int>();
 
-    for (unsigned int i = 0; i < this->n; i++)
+    for (int i = 0; i < this->n; i++)
     {
         if (visited.find(i) != visited.end())
         {
@@ -403,7 +403,7 @@ bool Graph::is_cyclic_depth_first_search()
     return false;
 }
 
-bool Graph::is_cyclic_depth_first_search_internal(unsigned int node, unsigned int parent, std::set<unsigned int> *visited)
+bool Graph::is_cyclic_depth_first_search_internal(int node, int parent, std::set<int> *visited)
 {
     visited->insert(node);
 
@@ -461,14 +461,14 @@ bool Graph::is_connected_depth_first_search()
         return true;
     }
 
-    auto visited = std::set<unsigned int>();
+    auto visited = std::set<int>();
 
     is_connected_depth_first_search_internal(0, &visited);
 
     return visited.size() == this->adjacencies.size();
 }
 
-void Graph::is_connected_depth_first_search_internal(unsigned int node, std::set<unsigned int> *visited)
+void Graph::is_connected_depth_first_search_internal(int node, std::set<int> *visited)
 {
     visited->insert(node);
 
@@ -493,9 +493,9 @@ bool Graph::is_connected_disjoint_sets()
         sets.join(u, v);
     }
 
-    std::set<unsigned int> representatives;
+    std::set<int> representatives;
 
-    for (unsigned int i = 0; i < this->n; i++)
+    for (int i = 0; i < this->n; i++)
     {
         auto representative = sets.find(i);
         representatives.insert(representative);
@@ -504,7 +504,7 @@ bool Graph::is_connected_disjoint_sets()
     return representatives.size() < 2;
 }
 
-void Graph::insert_random_edges(unsigned int k)
+void Graph::insert_random_edges(int k)
 {
     auto edges = Graph::inverse(*this).get_edges();
 
@@ -512,7 +512,7 @@ void Graph::insert_random_edges(unsigned int k)
     static std::mt19937 rng(rd());
     std::uniform_int_distribution<> dis;
 
-    for (unsigned int i = 0; i < k && !edges.empty(); i++)
+    for (int i = 0; i < k && !edges.empty(); i++)
     {
         dis = std::uniform_int_distribution<>(0, edges.size() - 1);
 
@@ -574,7 +574,7 @@ void Graph::to_file(std::string path)
 {
     std::ofstream file(path);
 
-    for (unsigned int i = 0; i < this->n; i++)
+    for (int i = 0; i < this->n; i++)
     {
         file << i << std::endl;
     }

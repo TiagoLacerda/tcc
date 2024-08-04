@@ -10,17 +10,17 @@
 
 // https://www.geeksforgeeks.org/disjoint-set-data-structures/
 
-DisjointSets::DisjointSets(unsigned int n)
+DisjointSets::DisjointSets(int n)
 {
-    this->parents = std::vector<unsigned int>();
-    for (unsigned int i = 0; i < n; i++)
+    this->parents = std::vector<int>();
+    for (int i = 0; i < n; i++)
     {
         this->parents.push_back(i);
         this->ranks.push_back(0);
     }
 };
 
-unsigned int DisjointSets::find(unsigned int u)
+int DisjointSets::find(int u)
 {
     if (this->parents[u] == u)
     {
@@ -39,7 +39,7 @@ unsigned int DisjointSets::find(unsigned int u)
     }
 };
 
-void DisjointSets::join(unsigned int u, unsigned int v)
+void DisjointSets::join(int u, int v)
 {
     // Find the representative of u's set.
     auto u_rep = this->find(u);
@@ -79,7 +79,7 @@ void DisjointSets::join(unsigned int u, unsigned int v)
     }
 };
 
-bool DisjointSets::disjoint(unsigned int u, unsigned int v)
+bool DisjointSets::disjoint(int u, int v)
 {
     return this->find(u) != this->find(v);
 };

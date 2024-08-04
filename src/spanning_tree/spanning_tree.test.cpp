@@ -8,11 +8,11 @@
 #include "spanning_tree.hpp"
 #endif
 
-TEST_SUITE("spanning_tree::workload(unsigned int n, unsigned int m, unsigned int i, unsigned int *start, unsigned int *end)")
+TEST_SUITE("spanning_tree::workload(int n, int m, int i, int *start, int *end)")
 {
     TEST_CASE("Invalid parameters")
     {
-        unsigned int start, end;
+        int start, end;
 
         spanning_tree::workload(0, 0, 0, 0, &start, &end);
 
@@ -22,7 +22,7 @@ TEST_SUITE("spanning_tree::workload(unsigned int n, unsigned int m, unsigned int
 
     TEST_CASE("There is only one thread")
     {
-        unsigned int start, end;
+        int start, end;
 
         spanning_tree::workload(5, 10, 0, 1, &start, &end);
 
@@ -32,7 +32,7 @@ TEST_SUITE("spanning_tree::workload(unsigned int n, unsigned int m, unsigned int
 
     TEST_CASE("There is more work than threads")
     {
-        unsigned int start, end;
+        int start, end;
 
         spanning_tree::workload(5, 10, 0, 2, &start, &end);
 
@@ -47,7 +47,7 @@ TEST_SUITE("spanning_tree::workload(unsigned int n, unsigned int m, unsigned int
 
     TEST_CASE("There are more threads than work")
     {
-        unsigned int start, end;
+        int start, end;
 
         spanning_tree::workload(5, 10, 0, 8, &start, &end);
 

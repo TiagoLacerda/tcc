@@ -8,7 +8,7 @@
 #include "disjoint_sets.hpp"
 #endif
 
-TEST_CASE("unsigned int DisjointSets::find(unsigned int u)")
+TEST_CASE("int DisjointSets::find(int u)")
 {
     auto sets = DisjointSets(3);
 
@@ -22,7 +22,7 @@ TEST_CASE("unsigned int DisjointSets::find(unsigned int u)")
     REQUIRE(sets.find(1) != sets.find(2));
 }
 
-TEST_CASE("void DisjointSets::join(unsigned int u, unsigned int v)")
+TEST_CASE("void DisjointSets::join(int u, int v)")
 {
     auto sets = DisjointSets(2);
 
@@ -33,7 +33,7 @@ TEST_CASE("void DisjointSets::join(unsigned int u, unsigned int v)")
     REQUIRE(sets.find(0) == sets.find(1));
 }
 
-TEST_CASE("bool DisjointSets::disjoint(unsigned int u, unsigned int v)")
+TEST_CASE("bool DisjointSets::disjoint(int u, int v)")
 {
     auto sets = DisjointSets(2);
 

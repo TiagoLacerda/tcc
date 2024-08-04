@@ -79,7 +79,7 @@ TEST_CASE("Graph::Graph(Graph &graph)")
     REQUIRE(clone.get_maximum_degree() == 0);
 }
 
-TEST_CASE("Graph::Graph(unsigned int n)")
+TEST_CASE("Graph::Graph(int n)")
 {
     Graph graph;
 
@@ -159,7 +159,7 @@ TEST_CASE("Graph Graph::inverse(Graph &graph)")
     }
 }
 
-TEST_CASE("Graph Graph::complete(unsigned int n)")
+TEST_CASE("Graph Graph::complete(int n)")
 {
     Graph graph;
 
@@ -248,7 +248,7 @@ TEST_CASE("void Graph::insert_node()")
     REQUIRE(graph.is_connected() == false);
 }
 
-TEST_CASE("void Graph::insert_edge(unsigned int u, unsigned int v)")
+TEST_CASE("void Graph::insert_edge(int u, int v)")
 {
 
     Graph graph = Graph();
@@ -291,7 +291,7 @@ TEST_CASE("void Graph::insert_edge(unsigned int u, unsigned int v)")
     REQUIRE(graph.is_connected() == true);
 }
 
-TEST_CASE("void Graph::remove_node(unsigned int u)")
+TEST_CASE("void Graph::remove_node(int u)")
 {
     Graph graph = Graph::complete(5);
 
@@ -348,7 +348,7 @@ TEST_CASE("void Graph::remove_node(unsigned int u)")
     REQUIRE(graph.is_connected() == true);
 }
 
-TEST_CASE("void Graph::remove_edge(unsigned int u, unsigned int v)")
+TEST_CASE("void Graph::remove_edge(int u, int v)")
 {
 
     Graph graph = Graph::complete(3);
@@ -443,7 +443,7 @@ TEST_CASE("int Graph::get_maximum_degree()")
     REQUIRE(graph.get_maximum_degree() == 2);
 }
 
-TEST_CASE("int Graph::has_edge(unsigned int u, unsigned int v)")
+TEST_CASE("int Graph::has_edge(int u, int v)")
 {
 
     Graph graph = Graph(2);
