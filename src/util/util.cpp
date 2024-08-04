@@ -8,38 +8,38 @@
 #include "../graph/graph.hpp"
 #endif
 
-int stretch(Graph graph, Graph tree)
+#ifndef UTIL
+#define UTIL
+#include "util.hpp"
+#endif
+
+unsigned int **floyd_warshall(Graph graph)
 {
-    // Apply the Floyd-Warshall algorithm to determine pairwise distances in the tree.
-    // https://www.youtube.com/watch?v=4OQeCuLYj-4&ab_channel=MichaelSambol
+    int n = graph.get_n();
 
-    if (tree.get_m() == 0)
-    {
-        return 0;
-    }
-
-    int n = tree.get_n();
-
-    int distance[n][n];
+    unsigned int **distances = new unsigned int *[n];
 
     for (int i = 0; i < n; i++)
     {
+        distances[i] = new unsigned int[n];
+
         for (int j = 0; j < n; j++)
         {
-            distance[i][j] = INT_MAX / 2;
+            distances[i][j] = INT_MAX / 2;
         }
-        distance[i][i] = 0;
+
+        distances[i][i] = 0;
     }
 
-    auto edges = tree.get_edges();
+    auto edges = graph.get_edges();
 
     for (auto edge = edges.begin(); edge != edges.end(); edge++)
     {
         auto u = std::get<0>(*edge);
         auto v = std::get<1>(*edge);
 
-        distance[u][v] = 1;
-        distance[v][u] = 1;
+        distances[u][v] = 1;
+        distances[v][u] = 1;
     }
 
     for (int k = 0; k < n; k++)
@@ -48,33 +48,56 @@ int stretch(Graph graph, Graph tree)
         {
             for (int j = 0; j < n; j++)
             {
-                auto candidate = distance[i][k] + distance[k][j];
+                auto candidate = distances[i][k] + distances[k][j];
 
-                if (distance[i][j] > candidate)
+                if (distances[i][j] > candidate)
                 {
-                    distance[i][j] = candidate;
-                    distance[j][i] = candidate;
+                    distances[i][j] = candidate;
+                    distances[j][i] = candidate;
                 }
             }
         }
     }
 
+    return distances;
+}
+
+int stretch(Graph graph, Graph tree)
+{
+    if (tree.get_m() == 0)
+    {
+        return 0;
+    }
+
+    unsigned int **distances = floyd_warshall(tree);
+
     // Iterate through [graph]'s edges to ... TODO: Document
 
-    auto stretch = 0;
+    int stretch = 0;
 
-    edges = graph.get_edges();
+    auto edges = graph.get_edges();
 
     for (auto edge = edges.begin(); edge != edges.end(); edge++)
     {
         auto u = std::get<0>(*edge);
         auto v = std::get<1>(*edge);
 
-        if (distance[u][v] > stretch)
+        if (distances[u][v] > stretch)
         {
-            stretch = distance[u][v];
+            stretch = distances[u][v];
         }
     }
+
+    // Free dynamically allocated memory
+
+    for (auto i = 0; i < tree.get_n(); i++)
+    {
+        delete[] distances[i];
+    }
+
+    delete[] distances;
+
+    //
 
     return stretch;
 }
