@@ -44,6 +44,11 @@ public:
     /// @return A complete graph with n nodes.
     static Graph complete(int n);
 
+    /// @brief Construct a cycle graph, where each node is connected to exactly two other nodes, forming a single cycle.
+    /// @param n The number of nodes in the graph.
+    /// @return A cycle graph with n nodes.
+    static Graph cycle(int n);
+
     /// @brief Construct a spanning tree with n nodes, where edges are chosen at random without violating the properties that make up a tree.
     /// @param n The number of nodes in the graph.
     /// @return A spanning tree.

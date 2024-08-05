@@ -137,6 +137,25 @@ Graph Graph::complete(int n)
     return Graph(adjacencies, n, (n * (n - 1)) / 2);
 }
 
+Graph Graph::cycle(int n)
+{
+    if (n < 3)
+    {
+        throw std::invalid_argument("At least 3 nodes are required for a simple cycle graph.");
+    }
+
+    std::vector<std::vector<int>> adjacencies;
+
+    for (int i = 0; i < n; i++)
+    {
+        adjacencies.push_back(std::vector<int>());
+        adjacencies[i].push_back(((i + n) - 1) % n);
+        adjacencies[i].push_back(((i + n) + 1) % n);
+    }
+
+    return Graph(adjacencies, n, n);
+}
+
 Graph Graph::random_spanning_tree(int n)
 {
     auto graph = Graph(n);
