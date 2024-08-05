@@ -43,6 +43,11 @@
 #include <algorithm>
 #endif
 
+#ifndef NUMERIC
+#define NUMERIC
+#include <numeric>
+#endif
+
 #ifndef RANDOM
 #define RANDOM
 #include <random>
