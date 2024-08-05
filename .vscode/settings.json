@@ -59,7 +59,9 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "typeinfo": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"

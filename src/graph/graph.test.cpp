@@ -443,6 +443,35 @@ TEST_CASE("int Graph::get_maximum_degree()")
     REQUIRE(graph.get_maximum_degree() == 2);
 }
 
+TEST_CASE("int Graph::get_girth()")
+{
+
+    Graph graph = Graph();
+
+    REQUIRE(graph.get_girth() == INT_MAX);
+
+    graph = Graph::complete(3);
+
+    REQUIRE(graph.get_girth() == 3);
+
+    graph = Graph::cycle(4);
+
+    REQUIRE(graph.get_girth() == 4);
+
+    graph = Graph::cycle(5);
+
+    REQUIRE(graph.get_girth() == 5);
+
+    graph.insert_edge(0, 2);
+
+    REQUIRE(graph.get_girth() == 3);
+
+    graph.remove_edge(0, 2);
+    graph.remove_edge(0, 1);
+
+    REQUIRE(graph.get_girth() == INT_MAX);
+}
+
 TEST_CASE("int Graph::has_edge(int u, int v)")
 {
 

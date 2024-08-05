@@ -38,6 +38,16 @@
 #include <tuple>
 #endif
 
+#ifndef STACK
+#define STACK
+#include <stack>
+#endif
+
+#ifndef QUEUE
+#define QUEUE
+#include <queue>
+#endif
+
 #ifndef ALGORITHM
 #define ALGORITHM
 #include <algorithm>
@@ -356,6 +366,62 @@ int Graph::get_maximum_degree()
     }
 
     return maximum;
+}
+
+int Graph::get_girth()
+{
+    int girth = INT_MAX;
+    int parent[n];
+    int distances[n];
+    int visited[n];
+    std::queue<int> queue;
+
+    for (int i = 0; i < n; i++)
+    {
+        parent[i] = -1;
+        distances[i] = 0;
+        visited[i] = -1;
+    }
+
+    for (int root = 0; root < n; root++)
+    {
+        queue.push(root);
+
+        parent[root] = -1;
+        distances[root] = 0;
+
+        while (!queue.empty())
+        {
+            int u = queue.front();
+
+            queue.pop();
+            visited[u] = root;
+
+            for (int v : adjacencies[u])
+            {
+                if (v != parent[u])
+                {
+                    if (visited[v] == root)
+                    {
+                        int distance = distances[u] + distances[v] + 1;
+
+                        if (distance < girth)
+                        {
+                            girth = distance;
+                        }
+                    }
+                    else
+                    {
+                        parent[v] = u;
+                        distances[v] = distances[u] + 1;
+                        queue.push(v);
+                    }
+                }
+            }
+        }
+    }
+
+    return girth;
 }
 
 bool Graph::has_edge(int u, int v)

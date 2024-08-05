@@ -87,6 +87,10 @@ public:
     /// @return The degree of the highest-degree node in the graph.
     int get_maximum_degree();
 
+    /// @brief Determine the girth of the graph.
+    /// @return an integer representing the girth of the graph, INT_MAX if the graph is acyclic.
+    int get_girth();
+
     /// @brief Whether there is an edge connecting u and v,
     /// @param u Index of a node in the graph.
     /// @param v Index of a node in the graph.
