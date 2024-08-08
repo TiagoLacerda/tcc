@@ -23,7 +23,7 @@ https://google.github.io/styleguide/cppguide.html
 
 + ~~Implement function to load graph from file~~
 + ~~Import graphs from other repository~~
-+ Implement smallest-e-cycle lower bound evaluation
++ ~~Implement smallest-e-cycle lower bound evaluation~~
 + Implement parallelism with MPI
 + See about changing static methods to constructions in Graph class
 + Implement GUI that updates progress for every graph processed (Flutter) (low-priority)
