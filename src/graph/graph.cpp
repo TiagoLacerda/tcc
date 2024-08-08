@@ -372,15 +372,15 @@ int Graph::get_girth()
 {
     int girth = INT_MAX;
     int parent[n];
-    int distances[n];
     int visited[n];
+    int distance[n];
     std::queue<int> queue;
 
     for (int i = 0; i < n; i++)
     {
         parent[i] = -1;
-        distances[i] = 0;
         visited[i] = -1;
+        distance[i] = 0;
     }
 
     for (int root = 0; root < n; root++)
@@ -388,7 +388,7 @@ int Graph::get_girth()
         queue.push(root);
 
         parent[root] = -1;
-        distances[root] = 0;
+        distance[root] = 0;
 
         while (!queue.empty())
         {
@@ -403,17 +403,17 @@ int Graph::get_girth()
                 {
                     if (visited[v] == root)
                     {
-                        int distance = distances[u] + distances[v] + 1;
+                        int length = distance[u] + distance[v] + 1;
 
-                        if (distance < girth)
+                        if (length < girth)
                         {
-                            girth = distance;
+                            girth = length;
                         }
                     }
                     else
                     {
                         parent[v] = u;
-                        distances[v] = distances[u] + 1;
+                        distance[v] = distance[u] + 1;
                         queue.push(v);
                     }
                 }
