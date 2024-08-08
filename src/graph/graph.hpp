@@ -91,6 +91,12 @@ public:
     /// @return an integer representing the girth of the graph, INT_MAX if the graph is acyclic.
     int get_girth();
 
+    /// @brief Determine the length of the shortest path between nodes u and v
+    /// @param u Index of a node in the graph.
+    /// @param v Index of a node in the graph.
+    /// @return an integer representing the length of the shortest path between u and v, 0 if u == v, INT_MAX if no path is found.
+    int get_shortest_path_length(int u, int v);
+
     /// @brief Whether there is an edge connecting u and v,
     /// @param u Index of a node in the graph.
     /// @param v Index of a node in the graph.

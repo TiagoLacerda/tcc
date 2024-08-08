@@ -424,6 +424,54 @@ int Graph::get_girth()
     return girth;
 }
 
+int Graph::get_shortest_path_length(int u, int v)
+{
+    if (u == v)
+    {
+        return 0;
+    }
+
+    bool visited[n];
+    int distance[n];
+    std::queue<int> queue;
+
+    for (int i = 0; i < n; i++)
+    {
+        visited[i] = false;
+        distance[i] = INT_MAX;
+    }
+
+    queue.push(u);
+
+    visited[u] = true;
+    distance[u] = 0;
+
+    while (!queue.empty())
+    {
+        int current = queue.front();
+
+        queue.pop();
+
+        for (int neighbor : adjacencies[current])
+        {
+            if (!visited[neighbor])
+            {
+
+                distance[neighbor] = distance[current] + 1;
+                visited[neighbor] = true;
+                queue.push(neighbor);
+
+                if (neighbor == v)
+                {
+                    return distance[neighbor];
+                }
+            }
+        }
+    }
+
+    return distance[v];
+}
+
 bool Graph::has_edge(int u, int v)
 {
     if (u == v)

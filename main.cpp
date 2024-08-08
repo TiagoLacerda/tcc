@@ -13,6 +13,11 @@
 #include <mutex>
 #endif
 
+#ifndef IOMANIP
+#define IOMANIP
+#include <iomanip>
+#endif
+
 #ifndef GRAPH
 #define GRAPH
 #include "src/graph/graph.hpp"
@@ -30,49 +35,52 @@
 
 int main()
 {
-    auto graph = Graph::complete(9);
+    auto graph = Graph(5);
+
+    // graph.insert_edge(0, 1);
+    graph.insert_edge(1, 2);
+    graph.insert_edge(2, 3);
+    graph.insert_edge(1, 4);
+    graph.insert_edge(3, 4);
 
     graph.to_file("graph.txt");
 
-    int factor = graph.get_n() - 1;
-
-    std::mutex mutex;
-
-    auto callback = [graph, &factor, &mutex](Graph tree)
-    {
-        int candidate = stretch(graph, tree);
-
-        mutex.lock();
-
-        if (candidate < factor)
-        {
-            factor = candidate;
-        }
-
-        mutex.unlock();
-    };
-
-    // Sequential.
-
     auto t0 = std::chrono::high_resolution_clock::now();
 
-    spanning_tree::generate(graph, callback);
+    auto n = graph.get_n();
+
+    for (int u = 0; u < n; u++)
+    {
+        for (int v = 0; v < n; v++)
+        {
+            auto length = graph.get_shortest_path_length(u, v);
+
+            if (length == INT_MAX)
+            {
+                std::cout << std::setw(5) << " ";
+            }
+            else
+            {
+                std::cout << std::setw(5) << length;
+            }
+
+            if (v < n - 1)
+            {
+                std::cout << ", ";
+            }
+        }
+
+        if (u < n - 1)
+        {
+            std::cout << ", ";
+        }
+
+        std::cout << std::endl;
+    }
 
     auto t1 = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
 
-    std::cout << "Sequential: " << duration.count() << " ms" << std::endl;
-
-    // Parallel.
-
-    t0 = std::chrono::high_resolution_clock::now();
-
-    spanning_tree::generate(graph, callback, 8);
-
-    t1 = std::chrono::high_resolution_clock::now();
-
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
-
-    std::cout << "Parallel: " << duration.count() << " ms" << std::endl;
+    std::cout << "Elapsed: " << duration.count() << " ms" << std::endl;
 }
