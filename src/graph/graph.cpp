@@ -681,3 +681,32 @@ void Graph::to_file(std::string path)
 
     file.close();
 };
+
+Graph Graph::load(std::string path)
+{
+    std::ifstream file(path);
+
+    int n, u, v, k;
+
+    file >> n;
+
+    auto graph = Graph(n);
+
+    for (u = 0; u < n; u++)
+    {
+        for (v = 0; v < n; v++)
+        {
+
+            file >> k;
+
+            if (k == 1)
+            {
+                graph.insert_edge(u, v);
+            }
+        }
+    }
+
+    file.close();
+
+    return graph;
+}

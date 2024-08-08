@@ -137,6 +137,11 @@ public:
     /// @param path The path of the file to be created.
     void to_file(std::string path);
 
+    /// Loads a graph from a file containing an adjacency matrix.
+    /// @param path The file path.
+    /// @return The constructed graph.
+    static Graph load(std::string path);
+
 private:
     std::vector<std::vector<int>> adjacencies;
     int n;
