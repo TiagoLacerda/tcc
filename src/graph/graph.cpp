@@ -326,6 +326,11 @@ int Graph::get_m()
     return this->m;
 }
 
+std::vector<int> Graph::get_neighbors(int u)
+{
+    return adjacencies[u];
+}
+
 int Graph::get_minimum_degree()
 {
     if (this->adjacencies.empty())
@@ -424,6 +429,34 @@ int Graph::get_girth()
     return girth;
 }
 
+int Graph::get_smallest_e_cycle()
+{
+    auto edges = get_edges();
+
+    auto clone = Graph(*this);
+
+    auto highest = -1;
+
+    for (auto edge : edges)
+    {
+        auto u = std::get<0>(edge);
+        auto v = std::get<1>(edge);
+
+        clone.remove_edge(u, v);
+
+        auto length = clone.get_shortest_path_length(u, v);
+
+        clone.insert_edge(u, v);
+
+        if (length + 1 > highest)
+        {
+            highest = length + 1;
+        }
+    }
+
+    return highest;
+}
+
 int Graph::get_shortest_path_length(int u, int v)
 {
     if (u == v)
@@ -438,7 +471,7 @@ int Graph::get_shortest_path_length(int u, int v)
     for (int i = 0; i < n; i++)
     {
         visited[i] = false;
-        distance[i] = INT_MAX;
+        distance[i] = -1;
     }
 
     queue.push(u);

@@ -472,6 +472,45 @@ TEST_CASE("int Graph::get_girth()")
     REQUIRE(graph.get_girth() == INT_MAX);
 }
 
+TEST_CASE("int Graph::get_smallest_e_cycle()")
+{
+    Graph graph = Graph(1);
+
+    REQUIRE(graph.get_smallest_e_cycle() == -1);
+
+    graph = Graph::cycle(3);
+
+    REQUIRE(graph.get_smallest_e_cycle() == 3);
+
+    graph = Graph::cycle(5);
+
+    REQUIRE(graph.get_smallest_e_cycle() == 5);
+
+    graph = Graph::cycle(5);
+
+    graph.insert_edge(0, 2);
+
+    REQUIRE(graph.get_smallest_e_cycle() == 4);
+}
+
+TEST_CASE("int Graph::get_shortest_path_length(int u, int v)")
+{
+
+    Graph graph = Graph(5);
+
+    graph.insert_edge(1, 2);
+    graph.insert_edge(2, 3);
+    graph.insert_edge(3, 4);
+    graph.insert_edge(4, 1);
+
+    REQUIRE(graph.get_shortest_path_length(0, 0) == 0);
+    REQUIRE(graph.get_shortest_path_length(0, 1) == -1);
+    REQUIRE(graph.get_shortest_path_length(1, 1) == 0);
+    REQUIRE(graph.get_shortest_path_length(1, 2) == 1);
+    REQUIRE(graph.get_shortest_path_length(1, 3) == 2);
+    REQUIRE(graph.get_shortest_path_length(1, 4) == 1);
+}
+
 TEST_CASE("int Graph::has_edge(int u, int v)")
 {
 

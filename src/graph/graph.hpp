@@ -79,6 +79,11 @@ public:
     /// @return The number of edges in the graph.
     int get_m();
 
+    /// @brief Get the neighbors of u.
+    /// @param u Index of a node in the graph.
+    /// @return An std::vector<int> containing the index of the neighbors of u in the graph.
+    std::vector<int> get_neighbors(int u);
+
     /// @brief Get the degree of the lowest-degree node in the graph.
     /// @return The degree of the lowest-degree node in the graph.
     int get_minimum_degree();
@@ -91,10 +96,14 @@ public:
     /// @return an integer representing the girth of the graph, INT_MAX if the graph is acyclic.
     int get_girth();
 
+    /// @brief Determine the length of the smallest cycle that passes through each edge in the graph and returns the highest of these lengths.
+    /// @return The length of the largest smallest cycle among all edges, INT_MAX if the graph is acyclic.
+    int get_smallest_e_cycle();
+
     /// @brief Determine the length of the shortest path between nodes u and v
     /// @param u Index of a node in the graph.
     /// @param v Index of a node in the graph.
-    /// @return an integer representing the length of the shortest path between u and v, 0 if u == v, INT_MAX if no path is found.
+    /// @return an integer representing the length of the shortest path between u and v, 0 if u == v, -1 if no path is found.
     int get_shortest_path_length(int u, int v);
 
     /// @brief Whether there is an edge connecting u and v,
