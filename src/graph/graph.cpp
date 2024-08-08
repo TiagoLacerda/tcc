@@ -380,7 +380,7 @@ int Graph::get_girth()
     {
         parent[i] = -1;
         visited[i] = -1;
-        distance[i] = 0;
+        distance[i] = INT_MAX;
     }
 
     for (int root = 0; root < n; root++)
@@ -392,18 +392,18 @@ int Graph::get_girth()
 
         while (!queue.empty())
         {
-            int u = queue.front();
+            int current = queue.front();
 
             queue.pop();
-            visited[u] = root;
+            visited[current] = root;
 
-            for (int v : adjacencies[u])
+            for (int neighbor : adjacencies[current])
             {
-                if (v != parent[u])
+                if (neighbor != parent[current])
                 {
-                    if (visited[v] == root)
+                    if (visited[neighbor] == root)
                     {
-                        int length = distance[u] + distance[v] + 1;
+                        int length = distance[current] + distance[neighbor] + 1;
 
                         if (length < girth)
                         {
@@ -412,9 +412,9 @@ int Graph::get_girth()
                     }
                     else
                     {
-                        parent[v] = u;
-                        distance[v] = distance[u] + 1;
-                        queue.push(v);
+                        parent[neighbor] = current;
+                        distance[neighbor] = distance[current] + 1;
+                        queue.push(neighbor);
                     }
                 }
             }
