@@ -745,6 +745,11 @@ void Graph::to_file(std::string path)
 {
     std::ofstream file(path);
 
+    if (!file)
+    {
+        throw std::invalid_argument("Failed to open file");
+    }
+
     for (int i = 0; i < this->n; i++)
     {
         file << i << std::endl;
@@ -766,6 +771,11 @@ void Graph::to_file(std::string path)
 Graph Graph::load(std::string path)
 {
     std::ifstream file(path);
+
+    if (!file)
+    {
+        throw std::invalid_argument("Failed to open file");
+    }
 
     int n, u, v, k;
 
