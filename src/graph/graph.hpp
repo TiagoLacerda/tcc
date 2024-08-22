@@ -96,7 +96,7 @@ public:
     /// @return an integer representing the girth of the graph, INT_MAX if the graph is acyclic.
     int get_girth();
 
-    /// @brief Determine the length of the smallest cycle that passes through each edge in the graph and returns the highest of these lengths.
+    /// @brief For each edge in the graph, determine the length of the smallest cycle that passes through it then returns the highest of these lengths.
     /// @return The length of the largest smallest cycle among all edges, INT_MAX if the graph is acyclic.
     int get_smallest_e_cycle();
 
