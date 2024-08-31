@@ -23,11 +23,16 @@
 #include "spanning_tree.hpp"
 #endif
 
+#ifndef UTIL
+#define UTIL
+#include "../util/util.hpp"
+#endif
+
 namespace spanning_tree
 {
     namespace
     {
-        void generate_internal(Graph graph, std::function<void(Graph tree)> callback, int start, int end)
+        void generate_internal(Graph graph, std::function<void(int stretch_factor)> callback, int lower_bound, bool early_halt, int start, int end)
         {
             auto n = graph.get_n();
             auto m = graph.get_m();
@@ -73,9 +78,17 @@ namespace spanning_tree
                 return; // Unable to determine an initial pointer assignment.
             }
 
-            callback(candidate);
+            auto stretch_factor = stretch(graph, candidate);
 
-            // Generate all trees.
+            callback(stretch_factor);
+
+            // TODO: Avoid this silly code repetition
+            if (stretch_factor <= lower_bound && early_halt)
+            {
+                return;
+            }
+
+            // Generate all remaining trees.
 
             int p = n - 2; // Index of furthermost assigned pointer.
 
@@ -102,7 +115,15 @@ namespace spanning_tree
                         {
                             if (candidate.is_connected_disjoint_sets()) // Is connected
                             {
-                                callback(candidate);
+                                stretch_factor = stretch(graph, candidate);
+
+                                callback(stretch_factor);
+
+                                // TODO: Avoid this silly code repetition
+                                if (stretch_factor <= lower_bound && early_halt)
+                                {
+                                    return;
+                                }
                             }
                         }
                         else
@@ -120,26 +141,25 @@ namespace spanning_tree
         }
     }
 
-    void generate(Graph graph, std::function<void(Graph tree)> callback)
+    void generate(Graph graph, std::function<void(int stretch_factor)> callback, int lower_bound, bool early_halt, int num_threads)
     {
         auto n = graph.get_n();
         auto m = graph.get_m();
 
-        generate_internal(graph, callback, 0, m - (n - 1) + 1);
-    }
-
-    void generate(Graph graph, std::function<void(Graph tree)> callback, int num_threads)
-    {
-        auto n = graph.get_n();
-        auto m = graph.get_m();
-
-#pragma omp parallel num_threads(num_threads)
+        if (num_threads < 2)
         {
-            int i = omp_get_thread_num(), start, end;
+            generate_internal(graph, callback, lower_bound, early_halt, 0, m - (n - 1) + 1);
+        }
+        else
+        {
+            #pragma omp parallel num_threads(num_threads)
+            {
+                int i = omp_get_thread_num(), start, end;
 
-            workload(n, m, i, num_threads, &start, &end);
+                workload(n, m, i, num_threads, &start, &end);
 
-            generate_internal(graph, callback, start, end);
+                generate_internal(graph, callback, lower_bound, early_halt, start, end);
+            }
         }
     }
 

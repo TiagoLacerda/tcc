@@ -11,3 +11,10 @@ int **floyd_warshall(Graph graph);
 /// @param tree A spanning tree of [graph].
 /// @return An integer representing the stretch index.
 int stretch(Graph graph, Graph tree);
+
+
+/// @brief Determine current date and time using the format `"%FT%T%z"`.
+/// 
+/// For more info, see https://en.cppreference.com/w/cpp/io/manip/put_time.
+/// @return a string representing the current date and time.
+std::string now();

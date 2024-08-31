@@ -1,0 +1,10 @@
+data\graphs\barabasi_albert\gba_10_4__10_24_0.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_1.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_2.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_3.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_4.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_5.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_6.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_7.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_8.txt
+data\graphs\barabasi_albert\gba_10_4__10_24_9.txt

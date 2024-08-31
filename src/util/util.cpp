@@ -3,6 +3,31 @@
 #include <limits.h>
 #endif
 
+#ifndef IOSTREAM
+#define IOSTREAM
+#include <iostream>
+#endif
+
+#ifndef CHRONO
+#define CHRONO
+#include <chrono>
+#endif
+
+#ifndef CTIME
+#define CTIME
+#include <ctime>
+#endif
+
+#ifndef IOMANIP
+#define IOMANIP
+#include <iomanip>
+#endif
+
+#ifndef SSTREAM
+#define SSTREAM
+#include <sstream>
+#endif
+
 #ifndef GRAPH
 #define GRAPH
 #include "../graph/graph.hpp"
@@ -100,4 +125,19 @@ int stretch(Graph graph, Graph tree)
     //
 
     return stretch;
+}
+
+std::string now()
+{
+    auto now = std::chrono::system_clock::now();
+
+    auto now_time_t = std::chrono::system_clock::to_time_t(now);
+
+    auto *now_tm = std::gmtime(&now_time_t);
+
+    std::stringstream stream;
+
+    stream << std::put_time(now_tm, "%FT%T%z");
+
+    return stream.str();
 }

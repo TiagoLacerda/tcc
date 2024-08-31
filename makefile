@@ -13,3 +13,5 @@ clean:
 	del graph.txt
 	del main.exe
 	del tests.exe
+	del log*.txt
+	del result*.json
