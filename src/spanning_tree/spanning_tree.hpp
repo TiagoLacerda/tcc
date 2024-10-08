@@ -11,7 +11,7 @@ namespace spanning_tree
     /// @param graph A graph.
     /// @param callback A function to be called whenever a new spanning tree is found.
     /// @param num_threads Number of threads between which to split the workload.
-    void generate(Graph graph, std::function<void(int stretch_factor)> callback, int lower_bound = 1, bool early_halt = false, int num_threads = 1);
+    void generate(const Graph &graph, const std::function<void(int stretch_factor)> &callback, int lower_bound = 1, bool early_halt = false, int num_threads = 1);
 
     /// @brief Determine the start and end positions for the first pointer in a search.
     /// @param n The number of nodes in the graph.

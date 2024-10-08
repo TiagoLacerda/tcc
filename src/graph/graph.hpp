@@ -37,7 +37,7 @@ public:
     /// @brief Construct a graph that is the inverse or complement of another.
     /// @param graph A graph.
     /// @return A graph that is the inverse or complement of another.
-    static Graph inverse(Graph &graph);
+    static Graph inverse(const Graph &graph);
 
     /// @brief Construct a complete graph, where every pair of distinct nodes is connected by an edge.
     /// @param n The number of nodes in the graph.
@@ -73,76 +73,76 @@ public:
 
     /// @brief Get the number of nodes in the graph.
     /// @return The number of nodes in the graph.
-    int get_n();
+    int get_n() const;
 
     /// @brief Get the number of edges in the graph.
     /// @return The number of edges in the graph.
-    int get_m();
+    int get_m() const;
 
     /// @brief Get the neighbors of u.
     /// @param u Index of a node in the graph.
     /// @return An std::vector<int> containing the index of the neighbors of u in the graph.
-    std::vector<int> get_neighbors(int u);
+    std::vector<int> get_neighbors(int u) const;
 
     /// @brief Get the degree of the lowest-degree node in the graph.
     /// @return The degree of the lowest-degree node in the graph.
-    int get_minimum_degree();
+    int get_minimum_degree() const;
 
     /// @brief Get the degree of the highest-degree node in the graph.
     /// @return The degree of the highest-degree node in the graph.
-    int get_maximum_degree();
+    int get_maximum_degree() const;
 
     /// @brief Determine the girth of the graph.
     /// @return an integer representing the girth of the graph, INT_MAX if the graph is acyclic.
-    int get_girth();
+    int get_girth() const;
 
     /// @brief For each edge in the graph, determine the length of the smallest cycle that passes through it then returns the highest of these lengths.
     /// @return The length of the largest smallest cycle among all edges, INT_MAX if the graph is acyclic.
-    int get_smallest_e_cycle();
+    int get_smallest_e_cycle() const;
 
     /// @brief Determine the length of the shortest path between nodes u and v
     /// @param u Index of a node in the graph.
     /// @param v Index of a node in the graph.
     /// @return an integer representing the length of the shortest path between u and v, 0 if u == v, -1 if no path is found.
-    int get_shortest_path_length(int u, int v);
+    int get_shortest_path_length(int u, int v) const;
 
     /// @brief Whether there is an edge connecting u and v,
     /// @param u Index of a node in the graph.
     /// @param v Index of a node in the graph.
     /// @return true if there is an edge connecting u and v, false otherwise.
-    bool has_edge(int u, int v);
+    bool has_edge(int u, int v) const;
 
     /// @brief Get a list of all the edges in the graph.
     /// @return An std::vector of std::tuple representing each edge.
-    std::vector<std::tuple<int, int>> get_edges();
+    std::vector<std::tuple<int, int>> get_edges() const;
 
     /// @brief Check whether the graph contains cycles.
     /// @return true if a cycle is found, false otherwise.
-    bool is_cyclic();
+    bool is_cyclic() const;
 
     /// @brief Check whether the graph contains cycles using a depth-first search tree.
     /// @return true if a cycle is found, false otherwise.
-    bool is_cyclic_depth_first_search();
+    bool is_cyclic_depth_first_search() const;
 
     /// @brief Check whether the graph contains cycles using disjoint sets.
     /// @return true if a cycle is found, false otherwise.
-    bool is_cyclic_disjoint_sets();
+    bool is_cyclic_disjoint_sets() const;
 
     /// @brief Check whether the graph is connected. The Null-Graph is said to be connected.
     /// @return true if the graph is connected, false otherwise.
-    bool is_connected();
+    bool is_connected() const;
 
     /// @brief Check whether the graph is connected using a depth-first search tree. The Null-Graph is said to be connected.
     /// @return true if the graph is connected, false otherwise.
-    bool is_connected_depth_first_search();
+    bool is_connected_depth_first_search() const;
 
     /// @brief Check whether the graph is connected using disjoint sets. The Null-Graph is said to be connected.
     /// @return true if the graph is connected, false otherwise.
-    bool is_connected_disjoint_sets();
+    bool is_connected_disjoint_sets() const;
 
     /// @brief Generate a JSON representation of the graph.
     /// @return An std::string equivalent of the graph.
-    std::string to_json();
+    std::string to_json() const;
 
     /// @brief Insert up to k randomly chosen edges in the graph. S
     /// @param k The number of edges to be inserted.
@@ -150,12 +150,12 @@ public:
 
     /// @brief Generate a file at the given path with a representation of the graph. The first n lines represent each node with an index. The next m lines represent each edge with a pair of indexes.
     /// @param path The path of the file to be created.
-    void to_file(std::string path);
+    void to_file(const std::string &path) const;
 
     /// Loads a graph from a file containing an adjacency matrix.
     /// @param path The file path.
     /// @return The constructed graph.
-    static Graph load(std::string path);
+    static Graph load(const std::string &path);
 
 private:
     std::vector<std::vector<int>> adjacencies;
@@ -164,7 +164,7 @@ private:
 
     Graph(std::vector<std::vector<int>> adjacencies, int n, int m);
 
-    bool is_cyclic_depth_first_search_internal(int node, int parent, std::set<int> *visited);
+    bool is_cyclic_depth_first_search_internal(int node, int parent, std::set<int> *visited) const;
 
-    void is_connected_depth_first_search_internal(int node, std::set<int> *visited);
+    void is_connected_depth_first_search_internal(int node, std::set<int> *visited) const;
 };

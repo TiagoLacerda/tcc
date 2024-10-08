@@ -32,7 +32,7 @@ namespace spanning_tree
 {
     namespace
     {
-        void generate_internal(Graph graph, std::function<void(int stretch_factor)> callback, int lower_bound, bool early_halt, int start, int end)
+        void generate_internal(const Graph &graph, std::function<void(int stretch_factor)> callback, int lower_bound, bool early_halt, int start, int end)
         {
             auto n = graph.get_n();
             auto m = graph.get_m();
@@ -141,7 +141,7 @@ namespace spanning_tree
         }
     }
 
-    void generate(Graph graph, std::function<void(int stretch_factor)> callback, int lower_bound, bool early_halt, int num_threads)
+    void generate(const Graph &graph, const std::function<void(int stretch_factor)> &callback, int lower_bound, bool early_halt, int num_threads)
     {
         auto n = graph.get_n();
         auto m = graph.get_m();
@@ -152,7 +152,7 @@ namespace spanning_tree
         }
         else
         {
-            #pragma omp parallel num_threads(num_threads)
+#pragma omp parallel num_threads(num_threads)
             {
                 int i = omp_get_thread_num(), start, end;
 

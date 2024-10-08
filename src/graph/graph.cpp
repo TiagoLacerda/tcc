@@ -104,7 +104,7 @@ Graph::Graph(int n)
     }
 }
 
-Graph Graph::inverse(Graph &graph)
+Graph Graph::inverse(const Graph &graph)
 {
     auto other = Graph::complete(graph.n);
 
@@ -316,22 +316,22 @@ void Graph::remove_edge(int u, int v)
     }
 }
 
-int Graph::get_n()
+int Graph::get_n() const
 {
     return this->n;
 }
 
-int Graph::get_m()
+int Graph::get_m() const
 {
     return this->m;
 }
 
-std::vector<int> Graph::get_neighbors(int u)
+std::vector<int> Graph::get_neighbors(int u) const
 {
     return adjacencies[u];
 }
 
-int Graph::get_minimum_degree()
+int Graph::get_minimum_degree() const
 {
     if (this->adjacencies.empty())
     {
@@ -340,9 +340,10 @@ int Graph::get_minimum_degree()
 
     auto minimum = this->adjacencies[0].size();
 
-    for (size_t i = 0; i < this->adjacencies.size(); i++)
+    for (auto neighborhood : adjacencies)
     {
-        auto degree = this->adjacencies[i].size();
+        auto degree = neighborhood.size();
+
         if (degree < minimum)
         {
             minimum = degree;
@@ -352,7 +353,7 @@ int Graph::get_minimum_degree()
     return minimum;
 }
 
-int Graph::get_maximum_degree()
+int Graph::get_maximum_degree() const
 {
     if (this->adjacencies.empty())
     {
@@ -361,9 +362,10 @@ int Graph::get_maximum_degree()
 
     auto maximum = this->adjacencies[0].size();
 
-    for (size_t i = 0; i < this->adjacencies.size(); i++)
+    for (auto neighborhood : adjacencies)
     {
-        auto degree = this->adjacencies[i].size();
+        auto degree = neighborhood.size();
+
         if (degree > maximum)
         {
             maximum = degree;
@@ -373,7 +375,7 @@ int Graph::get_maximum_degree()
     return maximum;
 }
 
-int Graph::get_girth()
+int Graph::get_girth() const
 {
     int girth = INT_MAX;
     int parent[n];
@@ -429,7 +431,7 @@ int Graph::get_girth()
     return girth;
 }
 
-int Graph::get_smallest_e_cycle()
+int Graph::get_smallest_e_cycle() const
 {
     auto edges = get_edges();
 
@@ -457,7 +459,7 @@ int Graph::get_smallest_e_cycle()
     return highest;
 }
 
-int Graph::get_shortest_path_length(int u, int v)
+int Graph::get_shortest_path_length(int u, int v) const
 {
     if (u == v)
     {
@@ -505,7 +507,7 @@ int Graph::get_shortest_path_length(int u, int v)
     return distance[v];
 }
 
-bool Graph::has_edge(int u, int v)
+bool Graph::has_edge(int u, int v) const
 {
     if (u == v)
     {
@@ -529,9 +531,11 @@ bool Graph::has_edge(int u, int v)
     return false;
 }
 
-std::vector<std::tuple<int, int>> Graph::get_edges()
+std::vector<std::tuple<int, int>> Graph::get_edges() const
 {
     auto edges = std::vector<std::tuple<int, int>>();
+
+    edges.reserve(m);
 
     for (int u = 0; u < this->n; u++)
     {
@@ -541,7 +545,7 @@ std::vector<std::tuple<int, int>> Graph::get_edges()
             // This ensures each edge is inserted only once
             if (u < v)
             {
-                edges.push_back(std::tuple(u, v));
+                edges.emplace_back(std::tuple(u, v));
             }
         }
     }
@@ -549,12 +553,12 @@ std::vector<std::tuple<int, int>> Graph::get_edges()
     return edges;
 }
 
-bool Graph::is_cyclic()
+bool Graph::is_cyclic() const
 {
     return this->is_cyclic_depth_first_search();
 }
 
-bool Graph::is_cyclic_depth_first_search()
+bool Graph::is_cyclic_depth_first_search() const
 {
     auto visited = std::set<int>();
 
@@ -574,7 +578,7 @@ bool Graph::is_cyclic_depth_first_search()
     return false;
 }
 
-bool Graph::is_cyclic_depth_first_search_internal(int node, int parent, std::set<int> *visited)
+bool Graph::is_cyclic_depth_first_search_internal(int node, int parent, std::set<int> *visited) const
 {
     visited->insert(node);
 
@@ -599,7 +603,7 @@ bool Graph::is_cyclic_depth_first_search_internal(int node, int parent, std::set
     return false;
 }
 
-bool Graph::is_cyclic_disjoint_sets()
+bool Graph::is_cyclic_disjoint_sets() const
 {
     auto edges = this->get_edges();
     auto sets = DisjointSets(this->get_n());
@@ -620,12 +624,12 @@ bool Graph::is_cyclic_disjoint_sets()
     return false;
 }
 
-bool Graph::is_connected()
+bool Graph::is_connected() const
 {
     return this->is_connected_depth_first_search();
 }
 
-bool Graph::is_connected_depth_first_search()
+bool Graph::is_connected_depth_first_search() const
 {
     if (this->n == 0)
     {
@@ -639,7 +643,7 @@ bool Graph::is_connected_depth_first_search()
     return visited.size() == this->adjacencies.size();
 }
 
-void Graph::is_connected_depth_first_search_internal(int node, std::set<int> *visited)
+void Graph::is_connected_depth_first_search_internal(int node, std::set<int> *visited) const
 {
     visited->insert(node);
 
@@ -652,7 +656,7 @@ void Graph::is_connected_depth_first_search_internal(int node, std::set<int> *vi
     }
 }
 
-bool Graph::is_connected_disjoint_sets()
+bool Graph::is_connected_disjoint_sets() const
 {
     auto edges = this->get_edges();
     auto sets = DisjointSets(this->get_n());
@@ -698,7 +702,7 @@ void Graph::insert_random_edges(int k)
     }
 }
 
-std::string Graph::to_json()
+std::string Graph::to_json() const
 {
     std::stringstream stream;
 
@@ -741,7 +745,7 @@ std::string Graph::to_json()
     return stream.str();
 };
 
-void Graph::to_file(std::string path)
+void Graph::to_file(const std::string &path) const
 {
     std::ofstream file(path);
 
@@ -768,7 +772,7 @@ void Graph::to_file(std::string path)
     file.close();
 };
 
-Graph Graph::load(std::string path)
+Graph Graph::load(const std::string &path)
 {
     std::ifstream file(path);
 

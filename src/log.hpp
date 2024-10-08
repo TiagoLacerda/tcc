@@ -30,7 +30,7 @@ enum ANSIColor
 
 // TODO: Document
 template <typename T>
-void log(T object, ANSIColor color = blue)
+void log(const T &object, ANSIColor color = blue)
 {
     std::stringstream stream;
     // SET ATTRIBUTES

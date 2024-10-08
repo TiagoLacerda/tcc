@@ -38,7 +38,7 @@
 #include "util.hpp"
 #endif
 
-int **floyd_warshall(Graph graph)
+int **floyd_warshall(const Graph &graph)
 {
     int n = graph.get_n();
 
@@ -87,7 +87,7 @@ int **floyd_warshall(Graph graph)
     return distances;
 }
 
-int stretch(Graph graph, Graph tree)
+int stretch(const Graph &graph, const Graph &tree)
 {
     if (tree.get_m() == 0)
     {
