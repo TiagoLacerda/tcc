@@ -78,6 +78,11 @@
 #include "../log.hpp"
 #endif
 
+#ifndef CLIMITS
+#define CLIMITS
+#include <climits>
+#endif
+
 Graph::Graph()
 {
     this->adjacencies = std::vector<std::vector<int>>();
