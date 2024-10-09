@@ -109,9 +109,9 @@ namespace spanning_tree
                     auto v = std::get<1>(edges[pointers[p]]);
                     candidate.insert_edge(u, v);
 
-                    if (!candidate.is_cyclic_disjoint_sets()) // Is acyclic
+                    if (p == n - 2) // Has n - 1 edges.
                     {
-                        if (p == n - 2) // Has n - 1 edges.
+                        if (!candidate.is_cyclic_disjoint_sets()) // Is acyclic
                         {
                             if (candidate.is_connected_disjoint_sets()) // Is connected
                             {
@@ -126,11 +126,11 @@ namespace spanning_tree
                                 }
                             }
                         }
-                        else
-                        {
-                            p++;
-                            pointers[p] = pointers[p - 1];
-                        }
+                    }
+                    else
+                    {
+                        p++;
+                        pointers[p] = pointers[p - 1];
                     }
                 }
                 else
