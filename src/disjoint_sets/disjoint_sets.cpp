@@ -13,6 +13,9 @@
 DisjointSets::DisjointSets(int n)
 {
     this->parents = std::vector<int>();
+
+    this->parents.reserve(n);
+
     for (int i = 0; i < n; i++)
     {
         this->parents.push_back(i);
