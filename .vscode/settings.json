@@ -68,7 +68,9 @@
         "span": "cpp",
         "variant": "cpp",
         "text_encoding": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "bitset": "cpp",
+        "regex": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"
