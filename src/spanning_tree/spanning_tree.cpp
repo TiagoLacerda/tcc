@@ -30,9 +30,79 @@
 
 namespace spanning_tree
 {
+
+    void generate_sequential(const Graph &graph, const std::function<int(const Graph &tree)> &callback, int lower_bound, bool early_halt)
+    {
+        int n = graph.get_n();
+        int u;
+        int v = 0;
+        int next_neighbor[n];
+        int last_neighbor[n];
+
+        Graph tree(n);
+
+        for (int i = 0; i < n; i++)
+        {
+            next_neighbor[i] = 0;
+            last_neighbor[i] = -1;
+        }
+
+        while (v >= 0)
+        {
+            if (next_neighbor[v] == graph.get_degree(v))
+            {
+                next_neighbor[v] = 0;
+
+                --v;
+
+                if (v < 0)
+                {
+                    break;
+                }
+
+                tree.remove_edge(v, last_neighbor[v]);
+
+                last_neighbor[v] = -1;
+            }
+            else
+            {
+                u = graph.get_neighbors(v)[next_neighbor[v]];
+
+                next_neighbor[v]++;
+
+                if (!tree.has_edge(v, u))
+                {
+                    tree.insert_edge(v, u);
+
+                    last_neighbor[v] = u;
+
+                    if (!tree.is_cyclic_disjoint_sets())
+                    {
+                        if (tree.get_m() == tree.get_n() - 1)
+                        {
+                            auto stretch_factor = callback(tree);
+
+                            if (early_halt && stretch_factor <= lower_bound)
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            v++;
+                            continue;
+                        }
+                    }
+
+                    tree.remove_edge(v, u);
+                }
+            }
+        }
+    }
+
     namespace
     {
-        void generate_internal(const Graph &graph, std::function<void(int stretch_factor)> callback, int lower_bound, bool early_halt, int start, int end)
+        void generate_internal(const Graph &graph, std::function<int(const Graph &tree)> callback, int lower_bound, bool early_halt, int start, int end)
         {
             auto n = graph.get_n();
             auto m = graph.get_m();
@@ -78,12 +148,10 @@ namespace spanning_tree
                 return; // Unable to determine an initial pointer assignment.
             }
 
-            auto stretch_factor = stretch(graph, candidate);
-
-            callback(stretch_factor);
+            auto stretch_factor = callback(candidate);
 
             // TODO: Avoid this silly code repetition
-            if (stretch_factor <= lower_bound && early_halt)
+            if (early_halt && stretch_factor <= lower_bound)
             {
                 return;
             }
@@ -115,12 +183,10 @@ namespace spanning_tree
                         {
                             if (candidate.is_connected_disjoint_sets()) // Is connected
                             {
-                                stretch_factor = stretch(graph, candidate);
-
-                                callback(stretch_factor);
+                                stretch_factor = callback(candidate);
 
                                 // TODO: Avoid this silly code repetition
-                                if (stretch_factor <= lower_bound && early_halt)
+                                if (early_halt && stretch_factor <= lower_bound)
                                 {
                                     return;
                                 }
@@ -141,7 +207,7 @@ namespace spanning_tree
         }
     }
 
-    void generate(const Graph &graph, const std::function<void(int stretch_factor)> &callback, int lower_bound, bool early_halt, int num_threads)
+    void generate(const Graph &graph, const std::function<int(const Graph &tree)> &callback, int lower_bound, bool early_halt, int num_threads)
     {
         auto n = graph.get_n();
         auto m = graph.get_m();

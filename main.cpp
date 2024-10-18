@@ -43,197 +43,160 @@
 #include "src/util/util.hpp"
 #endif
 
-std::ofstream log_file;
-
-void log(std::string message)
+void evaluate(const Graph &graph, int num_threads = 1, bool early_halt = false)
 {
-    std::stringstream stringstream;
-
-    stringstream << "[" << now() << "]: " << message;
-
-    std::string string = stringstream.str();
-
-    std::cout << string << std::endl;
-    log_file << string << std::endl;
-}
-
-int main(int argc, char **argv)
-{
-    // Validate arguments
-
-    if (argc < 2)
-    {
-        throw std::invalid_argument("No index file specified.");
-    }
-
-    //
-
-    std::string date = now();
-
-    // Open log file
-
-    std::replace(date.begin(), date.end(), ':', '-');
-
-    auto log_file_name = "log-" + date + ".txt";
-
-    log_file.open(log_file_name, std::ios::out | std::ios::trunc);
-
-    if (!log_file.is_open())
-    {
-        throw std::runtime_error("Failed to open log file: " + log_file_name);
-    }
-
-    // Open result file
-
-    std::replace(date.begin(), date.end(), ':', '-');
-
-    auto result_file_name = "result-" + date + ".json";
-
-    std::ofstream result_file(result_file_name);
-
-    if (!result_file.is_open())
-    {
-        throw std::runtime_error("Failed to open result file: " + result_file_name);
-    }
-
-    // Get graph paths
-
-    auto index_file_name = std::string(argv[1]);
-
-    std::ifstream index_file(index_file_name);
-
-    if (!index_file.is_open())
-    {
-        throw std::runtime_error("Failed to open index file: " + index_file_name);
-    }
-
-    std::string line;
-    std::vector<std::string> paths;
-
-    while (std::getline(index_file, line))
-    {
-        paths.push_back(line);
-    }
-
-    index_file.close();
-
-    //
-
     std::chrono::_V2::system_clock::time_point t0, t1;
 
     std::chrono::microseconds duration;
 
-    result_file << "[";
+    //
 
-    log("Found " + std::to_string(paths.size()) + " files to load");
+    t0 = std::chrono::high_resolution_clock::now();
 
-    for (size_t i = 0; i < paths.size(); i++)
+    auto girth = graph.get_girth();
+
+    t1 = std::chrono::high_resolution_clock::now();
+
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+    std::cout << "Girth: " << girth << "(" << duration.count() << " us)" << std::endl;
+
+    //
+
+    t0 = std::chrono::high_resolution_clock::now();
+
+    auto smallest_e_cycle = graph.get_smallest_e_cycle();
+
+    t1 = std::chrono::high_resolution_clock::now();
+
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+    std::cout << "Smallest e-cycle: " << smallest_e_cycle << "(" << duration.count() << " us)" << std::endl;
+
+    //
+
+    std::mutex mutex;
+
+    int stretch_index = graph.get_n() - 1;
+
+    int count = 0;
+
+    int lower_bound = std::max(girth, smallest_e_cycle) - 1;
+
+    // TODO: early-halting a thread doesnt halt the others, change this to a flag acessible to all that gets passed back to the calling threads
+    auto callback = [&mutex, &count, &stretch_index, &graph](const Graph &tree)
     {
-        auto path = paths[i];
+        auto stretch_factor = stretch(graph, tree);
 
-        log("Loading \"" + path + "\"");
+        mutex.lock();
 
-        result_file << "{";
-        // result_file << "\"path\":\"" << path << "\",";
+        count++;
 
-        // Construction
-
-        t0 = std::chrono::high_resolution_clock::now();
-
-        auto graph = Graph::load(path);
-
-        t1 = std::chrono::high_resolution_clock::now();
-
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
-
-        log("  Construction (" + std::to_string(duration.count()) + " us)");
-
-        result_file << "\"n\":" << graph.get_n() << ",";
-        result_file << "\"m\":" << graph.get_m() << ",";
-        result_file << "\"construction\":" << duration.count() << ",";
-
-        // Girth
-
-        t0 = std::chrono::high_resolution_clock::now();
-
-        auto girth = graph.get_girth();
-
-        t1 = std::chrono::high_resolution_clock::now();
-
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
-
-        log("  Girth (" + std::to_string(duration.count()) + " us): " + std::to_string(girth));
-
-        result_file << "\"girth\":" << girth << ",";
-        result_file << "\"girth_microseconds\":" << duration.count() << ",";
-
-        // Smallest-e-cycle
-
-        t0 = std::chrono::high_resolution_clock::now();
-
-        auto smallest_e_cycle = graph.get_smallest_e_cycle();
-
-        t1 = std::chrono::high_resolution_clock::now();
-
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
-
-        log("  Smallest-e-cycle (" + std::to_string(duration.count()) + " us): " + std::to_string(smallest_e_cycle));
-
-        result_file << "\"smallest_e_cycle\":" << smallest_e_cycle << ",";
-        result_file << "\"smallest_e_cycle_microseconds\":" << duration.count() << ",";
-
-        // Tree generation
-
-        std::mutex mutex;
-
-        int stretch_index = graph.get_n() - 1;
-
-        int count = 0;
-
-        int lower_bound = std::min(girth, smallest_e_cycle - 1);
-
-        int num_threads = 8;
-
-        auto callback = [graph, &mutex, &stretch_index, &count](int stretch_factor)
+        if (stretch_factor < stretch_index)
         {
-            mutex.lock();
+            stretch_index = stretch_factor;
+        }
 
-            count++;
+        mutex.unlock();
 
-            if (stretch_factor < stretch_index)
+        return stretch_factor;
+    };
+
+    t0 = std::chrono::high_resolution_clock::now();
+
+    spanning_tree::generate(graph, callback, lower_bound, early_halt, num_threads);
+    // spanning_tree::generate_sequential(graph, callback, lower_bound, early_halt);
+
+    t1 = std::chrono::high_resolution_clock::now();
+
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+    std::cout << "Stretch index: " << stretch_index << "(" << duration.count() << " us)" << std::endl;
+    std::cout << "Count: " << count << std::endl;
+}
+
+/// @brief Validates CLI arguments.
+/// @param argc argument count.
+/// @param argv argument values.
+/// @return path to file containing a graph, the number of threads to use, whether to early-halt tree generation.
+///
+/// TODO: Improve this validation
+std::tuple<std::string, int, bool> validate_arguments(int argc, char **argv)
+{
+    std::vector<std::string> args(argv, argv + argc);
+
+    std::string path;
+    bool early_halt = false;
+    int num_threads = 1;
+
+    bool exit = false;
+
+    const char *help =
+        "                                                                                             \n"
+        "Usage: main                                                                                  \n"
+        "                                                                                             \n"
+        "Global options                                                                               \n"
+        "-h, --help                  Print this usage information.                                    \n"
+        "                                                                                             \n"
+        "-p, --path                  Specify the path to the file to be evaluated.                    \n"
+        "-n, --num-threads           The number of threads to use in the evaluation.                  \n"
+        "-e, --early-halt            Whether to stop generating trees when the lower bound is reached.\n";
+
+    try
+    {
+        for (auto i = 0; i < static_cast<int>(args.size()); i++)
+        {
+            if (args[i] == "-p" || args[i] == "--path")
             {
-                stretch_index = stretch_factor;
+                path = args[i + 1];
             }
 
-            mutex.unlock();
-        };
+            if (args[i] == "-n" || args[i] == "--num-threads")
+            {
+                num_threads = std::stoi(args[i + 1]);
 
-        t0 = std::chrono::high_resolution_clock::now();
+                if (num_threads < 1)
+                {
+                    throw std::out_of_range("Number of threads cannot be lower than 1");
+                }
+            }
 
-        spanning_tree::generate(graph, callback, lower_bound, num_threads);
+            if (args[i] == "-e" || args[i] == "--early-halt")
+            {
+                early_halt = true;
+            }
 
-        t1 = std::chrono::high_resolution_clock::now();
+            if (args[i] == "-h" || args[i] == "--help")
+            {
+                exit = true;
+            }
+        }
 
-        duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-
-        log("  Tree generation (" + std::to_string(duration.count()) + " us)");
-        log("    Generated " + std::to_string(count) + " trees");
-        log("    Used " + std::to_string(num_threads) + " thread(s)");
-
-        result_file << "\"trees_generated\":" << count << ",";
-        result_file << "\"trees_generated_microseconds\":" << duration.count() << ",";
-        result_file << "\"stretch_index\":" << stretch_index << ",";
-        result_file << "\"num_threads\":" << num_threads;
-
-        //
-
-        result_file << "}";
-
-        if (i < paths.size() - 1)
+        if (path.empty())
         {
-            result_file << ",";
+            throw std::invalid_argument("No file path specified.");
         }
     }
+    catch (...)
+    {
+        exit = true;
+    }
 
-    result_file << "]";
+    if (exit)
+    {
+        std::cout << help << std::endl;
+
+        std::exit(0); // TODO: See the implications of this function.
+    }
+
+    return std::tuple<std::string, int, bool>(path, num_threads, early_halt);
+}
+
+int main(int argc, char **argv)
+{
+    auto [path, num_threads, early_halt] = validate_arguments(argc, argv);
+
+    auto graph = Graph::load(path);
+
+    evaluate(graph, num_threads, early_halt);
 }
