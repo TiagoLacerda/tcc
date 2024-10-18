@@ -31,7 +31,7 @@
 namespace spanning_tree
 {
 
-    void generate_sequential(const Graph &graph, const std::function<int(const Graph &tree)> &callback, int lower_bound, bool early_halt)
+    void generate_sequential(const Graph &graph, const std::function<int(const Graph &tree)> &callback, bool *abort, int lower_bound)
     {
         int n = graph.get_n();
         int u;
@@ -47,7 +47,7 @@ namespace spanning_tree
             last_neighbor[i] = -1;
         }
 
-        while (v >= 0)
+        while (v >= 0 && !(*abort))
         {
             if (next_neighbor[v] == graph.get_degree(v))
             {
@@ -80,12 +80,7 @@ namespace spanning_tree
                     {
                         if (tree.get_m() == tree.get_n() - 1)
                         {
-                            auto stretch_factor = callback(tree);
-
-                            if (early_halt && stretch_factor <= lower_bound)
-                            {
-                                return;
-                            }
+                            callback(tree);
                         }
                         else
                         {
@@ -102,7 +97,7 @@ namespace spanning_tree
 
     namespace
     {
-        void generate_internal(const Graph &graph, std::function<int(const Graph &tree)> callback, int lower_bound, bool early_halt, int start, int end)
+        void generate_internal(const Graph &graph, std::function<int(const Graph &tree)> callback, bool *abort, int lower_bound, int start, int end)
         {
             auto n = graph.get_n();
             auto m = graph.get_m();
@@ -125,6 +120,7 @@ namespace spanning_tree
 
             while (i < n - 1 && j < m)
             {
+
                 auto u = std::get<0>(edges[j]);
                 auto v = std::get<1>(edges[j]);
 
@@ -148,19 +144,13 @@ namespace spanning_tree
                 return; // Unable to determine an initial pointer assignment.
             }
 
-            auto stretch_factor = callback(candidate);
-
-            // TODO: Avoid this silly code repetition
-            if (early_halt && stretch_factor <= lower_bound)
-            {
-                return;
-            }
+            callback(candidate);
 
             // Generate all remaining trees.
 
             int p = n - 2; // Index of furthermost assigned pointer.
 
-            while (pointers[0] < end)
+            while (pointers[0] < end && !(*abort))
             {
                 if (p == 0 || pointers[p] != pointers[p - 1])
                 {
@@ -183,13 +173,7 @@ namespace spanning_tree
                         {
                             if (candidate.is_connected_disjoint_sets()) // Is connected
                             {
-                                stretch_factor = callback(candidate);
-
-                                // TODO: Avoid this silly code repetition
-                                if (early_halt && stretch_factor <= lower_bound)
-                                {
-                                    return;
-                                }
+                                callback(candidate);
                             }
                         }
                     }
@@ -207,14 +191,14 @@ namespace spanning_tree
         }
     }
 
-    void generate(const Graph &graph, const std::function<int(const Graph &tree)> &callback, int lower_bound, bool early_halt, int num_threads)
+    void generate(const Graph &graph, const std::function<int(const Graph &tree)> &callback, bool *abort, int lower_bound, int num_threads)
     {
         auto n = graph.get_n();
         auto m = graph.get_m();
 
         if (num_threads < 2)
         {
-            generate_internal(graph, callback, lower_bound, early_halt, 0, m - (n - 1) + 1);
+            generate_internal(graph, callback, abort, lower_bound, 0, m - (n - 1) + 1);
         }
         else
         {
@@ -224,7 +208,7 @@ namespace spanning_tree
 
                 workload(n, m, i, num_threads, &start, &end);
 
-                generate_internal(graph, callback, lower_bound, early_halt, start, end);
+                generate_internal(graph, callback, abort, lower_bound, start, end);
             }
         }
     }

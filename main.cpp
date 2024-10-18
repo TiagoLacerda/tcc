@@ -45,6 +45,17 @@
 
 void evaluate(const Graph &graph, int num_threads = 1, bool early_halt = false)
 {
+    std::cout << "Number of threads: " << num_threads << std::endl;
+
+    if (early_halt)
+    {
+        std::cout << "Early halt: true" << std::endl;
+    }
+    else
+    {
+        std::cout << "Early halt: false" << std::endl;
+    }
+
     std::chrono::_V2::system_clock::time_point t0, t1;
 
     std::chrono::microseconds duration;
@@ -83,8 +94,10 @@ void evaluate(const Graph &graph, int num_threads = 1, bool early_halt = false)
 
     int lower_bound = std::max(girth, smallest_e_cycle) - 1;
 
+    bool abort = false;
+
     // TODO: early-halting a thread doesnt halt the others, change this to a flag acessible to all that gets passed back to the calling threads
-    auto callback = [&mutex, &count, &stretch_index, &graph](const Graph &tree)
+    auto callback = [&graph, &early_halt, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
     {
         auto stretch_factor = stretch(graph, tree);
 
@@ -99,13 +112,17 @@ void evaluate(const Graph &graph, int num_threads = 1, bool early_halt = false)
 
         mutex.unlock();
 
+        if (early_halt && stretch_factor <= lower_bound)
+        {
+            abort = true;
+        }
+
         return stretch_factor;
     };
 
     t0 = std::chrono::high_resolution_clock::now();
 
-    spanning_tree::generate(graph, callback, lower_bound, early_halt, num_threads);
-    // spanning_tree::generate_sequential(graph, callback, lower_bound, early_halt);
+    spanning_tree::generate(graph, callback, &abort, lower_bound, num_threads);
 
     t1 = std::chrono::high_resolution_clock::now();
 
