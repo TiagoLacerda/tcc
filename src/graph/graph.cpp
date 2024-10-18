@@ -331,6 +331,12 @@ int Graph::get_m() const
     return this->m;
 }
 
+int Graph::get_degree(int u) const
+{
+
+    return static_cast<int>(adjacencies[u].size());
+}
+
 std::vector<int> Graph::get_neighbors(int u) const
 {
     return adjacencies[u];

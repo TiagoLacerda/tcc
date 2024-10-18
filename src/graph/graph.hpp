@@ -79,6 +79,11 @@ public:
     /// @return The number of edges in the graph.
     int get_m() const;
 
+    /// @brief Get the degree of a node.
+    /// @param u Index of a node in the graph. 
+    /// @return The degree of the node.
+    int get_degree(int u) const;
+
     /// @brief Get the neighbors of u.
     /// @param u Index of a node in the graph.
     /// @return An std::vector<int> containing the index of the neighbors of u in the graph.
