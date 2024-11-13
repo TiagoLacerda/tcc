@@ -31,7 +31,7 @@
 namespace spanning_tree
 {
 
-    void generate_sequential(const Graph &graph, const std::function<int(const Graph &tree)> &callback, bool *abort, int lower_bound)
+    void generate_sequential(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound)
     {
         int n = graph.get_n();
         int u;
@@ -95,125 +95,14 @@ namespace spanning_tree
         }
     }
 
-    namespace
-    {
-        void generate_internal(const Graph &graph, std::function<int(const Graph &tree)> callback, bool *abort, int lower_bound, int start, int end)
-        {
-            auto n = graph.get_n();
-            auto m = graph.get_m();
-
-            if (m < n - 1)
-            {
-                return; // Not enough edges in the graph to construct a spanning tree.
-            }
-
-            auto candidate = Graph(n);
-
-            auto edges = graph.get_edges();
-
-            int pointers[n - 1];
-
-            // Determine initial pointer assignment.
-
-            int i = 0;     // Index of pointer.
-            int j = start; // Index of edge.
-
-            while (i < n - 1 && j < m)
-            {
-
-                auto u = std::get<0>(edges[j]);
-                auto v = std::get<1>(edges[j]);
-
-                candidate.insert_edge(u, v);
-
-                if (candidate.is_cyclic_disjoint_sets())
-                {
-                    candidate.remove_edge(u, v);
-                }
-                else
-                {
-                    pointers[i] = j;
-                    i++;
-                }
-
-                j++;
-            }
-
-            if (i < n - 1)
-            {
-                return; // Unable to determine an initial pointer assignment.
-            }
-
-            callback(candidate);
-
-            // Generate all remaining trees.
-
-            int p = n - 2; // Index of furthermost assigned pointer.
-
-            while (pointers[0] < end && !(*abort))
-            {
-                if (p == 0 || pointers[p] != pointers[p - 1])
-                {
-                    auto u = std::get<0>(edges[pointers[p]]);
-                    auto v = std::get<1>(edges[pointers[p]]);
-                    candidate.remove_edge(u, v);
-                }
-
-                pointers[p]++;
-
-                if (pointers[p] < m)
-                {
-                    auto u = std::get<0>(edges[pointers[p]]);
-                    auto v = std::get<1>(edges[pointers[p]]);
-                    candidate.insert_edge(u, v);
-
-                    if (p == n - 2) // Has n - 1 edges.
-                    {
-                        if (!candidate.is_cyclic_disjoint_sets()) // Is acyclic
-                        {
-                            if (candidate.is_connected_disjoint_sets()) // Is connected
-                            {
-                                callback(candidate);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        p++;
-                        pointers[p] = pointers[p - 1];
-                    }
-                }
-                else
-                {
-                    p--;
-                }
-            }
-        }
-    }
-
-    void generate(const Graph &graph, const std::function<int(const Graph &tree)> &callback, bool *abort, int lower_bound, int num_threads)
-    {
-        auto n = graph.get_n();
-        auto m = graph.get_m();
-
-        if (num_threads < 2)
-        {
-            generate_internal(graph, callback, abort, lower_bound, 0, m - (n - 1) + 1);
-        }
-        else
-        {
-#pragma omp parallel num_threads(num_threads)
-            {
-                int i = omp_get_thread_num(), start, end;
-
-                workload(n, m, i, num_threads, &start, &end);
-
-                generate_internal(graph, callback, abort, lower_bound, start, end);
-            }
-        }
-    }
-
-    void workload(int n, int m, int i, int num_threads, int *start, int *end)
+    /// @brief Determine the start and end positions for the first pointer in a search.
+    /// @param n The number of nodes in the graph.
+    /// @param m The number of edges in the graph.
+    /// @param i The index of the current thread.
+    /// @param num_threads The number of threads.
+    /// @param start When attempting to assign pointers, the search will start at this position in the edge list.
+    /// @param end When attempting to assign pointers, the search will halt when the leftmost pointer reaches this position. In a single thread context, this would be `m - (n - 1) + 1`, since there wouldn't be enough edges to the right to form a spanning tree.
+    void workload(const int n, const int m, const int i, const int num_threads, int *start, int *end)
     {
         if (n == 0 || m == 0 || m > n * (n - 1) / 2 || num_threads == 0 || i >= num_threads) // Invalid parameters.
         {
@@ -244,6 +133,110 @@ namespace spanning_tree
                 *start = chunk * i;
                 *end = (i == num_threads - 1) ? total : *start + chunk;
             }
+        }
+    }
+
+    void generate_internal(const Graph &graph, const std::function<int(const Graph &tree)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end)
+    {
+        auto candidate = Graph(n);
+
+        int pointers[n - 1];
+
+        // Determine initial pointer assignment.
+
+        int i = 0;     // Index of pointer.
+        int j = start; // Index of edge.
+
+        while (i < n - 1 && j < m)
+        {
+            auto u = std::get<0>(edges[j]);
+            auto v = std::get<1>(edges[j]);
+
+            candidate.insert_edge(u, v);
+
+            if (candidate.is_cyclic_disjoint_sets())
+            {
+                candidate.remove_edge(u, v);
+            }
+            else
+            {
+                pointers[i] = j;
+                i++;
+            }
+
+            j++;
+        }
+
+        if (i < n - 1)
+        {
+            return; // Unable to determine an initial pointer assignment.
+        }
+
+        callback(candidate);
+
+        // Generate all remaining trees.
+
+        int p = n - 2; // Index of furthermost assigned pointer.
+
+        while (pointers[0] < end && !(*abort))
+        {
+            if (p == 0 || pointers[p] != pointers[p - 1])
+            {
+                auto u = std::get<0>(edges[pointers[p]]);
+                auto v = std::get<1>(edges[pointers[p]]);
+                candidate.remove_edge(u, v);
+            }
+
+            pointers[p]++;
+
+            if (pointers[p] < m)
+            {
+                auto u = std::get<0>(edges[pointers[p]]);
+                auto v = std::get<1>(edges[pointers[p]]);
+                candidate.insert_edge(u, v);
+
+                if (p == n - 2) // Has n - 1 edges.
+                {
+                    if (!candidate.is_cyclic_disjoint_sets()) // Is acyclic
+                    {
+                        if (candidate.is_connected_disjoint_sets()) // Is connected
+                        {
+                            callback(candidate);
+                        }
+                    }
+                }
+                else
+                {
+                    p++;
+                    pointers[p] = pointers[p - 1];
+                }
+            }
+            else
+            {
+                p--;
+            }
+        }
+    }
+
+    void generate(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads)
+    {
+        auto n = graph.get_n();
+        auto m = graph.get_m();
+
+        if (m < n - 1)
+        {
+            return; // Not enough edges in the graph to construct a spanning tree.
+        }
+
+        auto edges = graph.get_edges();
+
+#pragma omp parallel num_threads(num_threads)
+        {
+            int i = omp_get_thread_num(), start, end;
+
+            workload(n, m, i, num_threads, &start, &end);
+
+            generate_internal(graph, callback, abort, lower_bound, n, m, edges, start, end);
         }
     }
 }
