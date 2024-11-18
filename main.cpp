@@ -3,6 +3,16 @@
 #include <iostream>
 #endif
 
+#ifndef FILESYSTEM
+#define FILESYSTEM
+#include <filesystem>
+#endif
+
+#ifndef FSTREAM
+#define FSTREAM
+#include <fstream>
+#endif
+
 #ifndef CHRONO
 #define CHRONO
 #include <chrono>
@@ -16,11 +26,6 @@
 #ifndef IOMANIP
 #define IOMANIP
 #include <iomanip>
-#endif
-
-#ifndef FSTREAM
-#define FSTREAM
-#include <fstream>
 #endif
 
 #ifndef ALGORITHM
@@ -43,24 +48,43 @@
 #include "src/util/util.hpp"
 #endif
 
-void evaluate(const Graph &graph, int num_threads = 1, bool early_halt = false)
+void evaluate(const std::string i_path, std::ofstream &output, const bool debug, const bool early_halt, const bool evaluate_stretch_factor, const int threads, const int samples)
 {
-    std::cout << "Number of threads: " << num_threads << std::endl;
-
-    if (early_halt)
-    {
-        std::cout << "Early halt: true" << std::endl;
-    }
-    else
-    {
-        std::cout << "Early halt: false" << std::endl;
-    }
+    auto write = output.is_open();
 
     std::chrono::_V2::system_clock::time_point t0, t1;
 
     std::chrono::microseconds duration;
 
-    //
+    // Graph construction
+
+    t0 = std::chrono::high_resolution_clock::now();
+
+    auto graph = Graph::load(i_path);
+
+    t1 = std::chrono::high_resolution_clock::now();
+
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+    if (write)
+    {
+        output << "{";
+        output << "\"path\":\"" << i_path << "\",";
+        output << "\"n\":" << graph.get_n() << ",";
+        output << "\"m\":" << graph.get_m() << ",";
+        output << "\"construction_microseconds\":" << duration.count() << ",";
+        output.flush();
+    }
+
+    if (debug)
+    {
+        std::cout << "N: " << graph.get_n() << std::endl;
+        std::cout << "M: " << graph.get_m() << std::endl;
+        std::cout << "Construction (" << duration.count() << " us)" << std::endl;
+        output.flush();
+    }
+
+    // Girth
 
     t0 = std::chrono::high_resolution_clock::now();
 
@@ -70,9 +94,19 @@ void evaluate(const Graph &graph, int num_threads = 1, bool early_halt = false)
 
     duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-    std::cout << "Girth: " << girth << "(" << duration.count() << " us)" << std::endl;
+    if (write)
+    {
+        output << "\"girth\":" << girth << ",";
+        output << "\"girth_microseconds\":" << duration.count() << ",";
+        output.flush();
+    }
 
-    //
+    if (debug)
+    {
+        std::cout << "Girth: " << girth << " (" << duration.count() << " us)" << std::endl;
+    }
+
+    // Smallest e-cycle
 
     t0 = std::chrono::high_resolution_clock::now();
 
@@ -82,21 +116,30 @@ void evaluate(const Graph &graph, int num_threads = 1, bool early_halt = false)
 
     duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-    std::cout << "Smallest e-cycle: " << smallest_e_cycle << "(" << duration.count() << " us)" << std::endl;
+    if (write)
+    {
+        output << "\"smallest_e_cycle\":" << smallest_e_cycle << ",";
+        output << "\"smallest_e_cycle_microseconds\":" << duration.count() << ",";
+        output.flush();
+    }
 
-    //
+    if (debug)
+    {
+        std::cout << "Smallest e-cycle: " << smallest_e_cycle << " (" << duration.count() << " us)" << std::endl;
+    }
+
+    // Tree generation
 
     std::mutex mutex;
 
-    int stretch_index = graph.get_n() - 1;
+    int stretch_index;
 
-    int count = 0;
+    int count;
 
     int lower_bound = std::max(girth, smallest_e_cycle) - 1;
 
     bool abort = false;
 
-    // TODO: early-halting a thread doesnt halt the others, change this to a flag acessible to all that gets passed back to the calling threads
     auto callback = [&graph, &early_halt, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
     {
         auto stretch_factor = stretch(graph, tree);
@@ -120,78 +163,187 @@ void evaluate(const Graph &graph, int num_threads = 1, bool early_halt = false)
         return stretch_factor;
     };
 
-    t0 = std::chrono::high_resolution_clock::now();
+    double average = 0;
 
-    spanning_tree::generate(graph, callback, &abort, lower_bound, num_threads);
+    if (write)
+    {
+        output << "\"runs\":[";
+        output.flush();
+    }
 
-    t1 = std::chrono::high_resolution_clock::now();
+    for (int sample = 0; sample < samples; ++sample)
+    {
+        stretch_index = graph.get_n() - 1;
 
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+        count = 0;
 
-    std::cout << "Stretch index: " << stretch_index << "(" << duration.count() << " us)" << std::endl;
-    std::cout << "Count: " << count << std::endl;
+        abort = false;
+
+        t0 = std::chrono::high_resolution_clock::now();
+
+        spanning_tree::generate(graph, callback, &abort, lower_bound, threads);
+
+        t1 = std::chrono::high_resolution_clock::now();
+
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+        average += duration.count();
+
+        if (write)
+        {
+            output << "{";
+            output << "\"generation_microseconds\":" << duration.count() << ",";
+            output << "\"stretch_index\":" << stretch_index << ",";
+            output << "\"trees_generated\":" << count;
+            output << "}";
+
+            if (sample < samples - 1)
+            {
+                output << ",";
+            }
+
+            output.flush();
+        }
+
+        if (debug)
+        {
+            std::cout << "Stretch index: " << stretch_index << "(" << duration.count() << " us)" << std::endl;
+            std::cout << "Count: " << count << std::endl;
+        }
+    }
+
+    average /= samples;
+
+    if (write)
+    {
+        output << "],";
+        output << "\"average_generation_microseconds\":" << average << "";
+        output << "}";
+        output.flush();
+    }
+
+    if (debug)
+    {
+        std::cout << "Average genertion elapsed microseconds: " << average << std::endl;
+    }
 }
 
 /// @brief Validates CLI arguments.
 /// @param argc argument count.
 /// @param argv argument values.
-/// @return path to file containing a graph, the number of threads to use, whether to early-halt tree generation.
+/// @return A tuple containing the following values:
 ///
-/// TODO: Improve this validation
-std::tuple<std::string, int, bool> validate_arguments(int argc, char **argv)
+/// `i_path`:         Input file path.
+///
+/// `o_path`:         (Optional) Output file path.
+///
+/// `debug`:          Enable debug mode (outputs to console).
+///
+/// `early_halt`:     Stop tree generation at lower bound (default: false).
+///
+/// `stretch_factor`: Evaluate stretch factor (default: true).
+///
+/// `threads`:        Number of threads for evaluation (default: 1).
+///
+/// `samples`:        Number of evaluations per graph for averaging (default: 1).
+std::tuple<std::string, std::string, bool, bool, bool, int, int> validate_arguments(int argc, char **argv)
 {
     std::vector<std::string> args(argv, argv + argc);
 
-    std::string path;
-    bool early_halt = false;
-    int num_threads = 1;
+    std::string i_path;         // Input file path.
+    std::string o_path;         // (Optional) Output file path.
+    bool debug = false;         // Enable debug mode (outputs to console).
+    bool early_halt = false;    // Stop tree generation at lower bound (default: false).
+    bool stretch_factor = true; // Evaluate stretch factor (default: true).
+    int threads = 1;            // Number of threads for evaluation (default: 1).
+    int samples = 1;            // Number of evaluations per graph for averaging (default: 1).
 
     bool exit = false;
 
     const char *help =
-        "                                                                                             \n"
-        "Usage: main                                                                                  \n"
-        "                                                                                             \n"
-        "Global options                                                                               \n"
-        "-h, --help                  Print this usage information.                                    \n"
-        "                                                                                             \n"
-        "-p, --path                  Specify the path to the file to be evaluated.                    \n"
-        "-n, --num-threads           The number of threads to use in the evaluation.                  \n"
-        "-e, --early-halt            Whether to stop generating trees when the lower bound is reached.\n";
+        "                                                                                                 \n"
+        "Usage: main                                                                                      \n"
+        "                                                                                                 \n"
+        "Options                                                                                          \n"
+        "-h, --help                 Show this help message.                                               \n"
+        "-i, --input                Input file path.                                                      \n"
+        "-o, --output               (Optional) Output file path.                                          \n"
+        "-d, --debug                Enable debug mode (outputs to console) (default: false).              \n"
+        "--early-halt               Tree generation will stop once the lower-bound is reached.            \n"
+        "--no-early-halt            Tree generation will go on until all trees are generated. (default)   \n"
+        "--stretch-factor           Will evaluate the strech factor of every generated tree. (default)    \n"
+        "--no-stretch-factor        Will not evaluate the stretch factor of any generated tree.           \n"
+        "-t, --threads              Number of threads for evaluation (default: 1).                        \n"
+        "-s, --samples              Number of evaluations per graph for averaging (default: 1).           \n";
 
     try
     {
         for (auto i = 0; i < static_cast<int>(args.size()); i++)
         {
-            if (args[i] == "-p" || args[i] == "--path")
+            if (args[i] == "-h" || args[i] == "--help")
             {
-                path = args[i + 1];
+                exit = true;
             }
 
-            if (args[i] == "-n" || args[i] == "--num-threads")
+            if (args[i] == "-i" || args[i] == "--input")
             {
-                num_threads = std::stoi(args[i + 1]);
+                i_path = args[i + 1];
+            }
 
-                if (num_threads < 1)
+            if (args[i] == "-o" || args[i] == "--output")
+            {
+                o_path = args[i + 1];
+            }
+
+            if (args[i] == "-d" || args[i] == "--debug")
+            {
+                debug = true;
+            }
+
+            if (args[i] == "--early-halt")
+            {
+                early_halt = true;
+            }
+
+            if (args[i] == "--no-early-halt")
+            {
+                early_halt = false;
+            }
+
+            if (args[i] == "--stretch-factor")
+            {
+                stretch_factor = true;
+            }
+
+            if (args[i] == "--no-stretch-factor")
+            {
+                stretch_factor = false;
+            }
+
+            if (args[i] == "-n" || args[i] == "--threads")
+            {
+                threads = std::stoi(args[i + 1]);
+
+                if (threads < 1)
                 {
                     throw std::out_of_range("Number of threads cannot be lower than 1");
                 }
             }
 
-            if (args[i] == "-e" || args[i] == "--early-halt")
+            if (args[i] == "-s" || args[i] == "--samples")
             {
-                early_halt = true;
-            }
+                samples = std::stoi(args[i + 1]);
 
-            if (args[i] == "-h" || args[i] == "--help")
-            {
-                exit = true;
+                if (samples < 1)
+                {
+                    throw std::out_of_range("Number of samples cannot be lower than 1");
+                }
             }
         }
 
-        if (path.empty())
+        if (i_path.empty())
         {
-            throw std::invalid_argument("No file path specified.");
+            throw std::invalid_argument("No input file path specified.");
         }
     }
     catch (...)
@@ -206,14 +358,64 @@ std::tuple<std::string, int, bool> validate_arguments(int argc, char **argv)
         std::exit(0); // TODO: See the implications of this function.
     }
 
-    return std::tuple<std::string, int, bool>(path, num_threads, early_halt);
+    return std::tuple<std::string, std::string, bool, bool, bool, int, int>(i_path, o_path, debug, early_halt, stretch_factor, threads, samples);
 }
 
 int main(int argc, char **argv)
 {
-    auto [path, num_threads, early_halt] = validate_arguments(argc, argv);
+    auto [i_path, o_path, debug, early_halt, stretch_factor, threads, samples] = validate_arguments(argc, argv);
 
-    auto graph = Graph::load(path);
+    // Handle input file
 
-    evaluate(graph, num_threads, early_halt);
+    std::vector<std::string> paths;
+
+    {
+        std::ifstream file(i_path);
+        std::string line;
+
+        if (file && std::getline(file, line) && std::filesystem::exists(line))
+        {
+            do
+            {
+                paths.emplace_back(line);
+            } while (std::getline(file, line));
+        }
+        else
+        {
+            paths.emplace_back(i_path);
+        }
+    }
+
+    //
+
+    std::ofstream file(o_path);
+
+    auto write = file.is_open();
+
+    if (write)
+    {
+        file << "[";
+        file.flush();
+    }
+
+    for (int i = 0; i < static_cast<int>(paths.size()); i++)
+    {
+        evaluate(paths[i], file, debug, early_halt, stretch_factor, threads, samples);
+
+        if (i < static_cast<int>(paths.size()) - 1)
+        {
+
+            if (write)
+            {
+                file << ",";
+                file.flush();
+            }
+        }
+    }
+
+    if (write)
+    {
+        file << "]";
+        file.flush();
+    }
 }
