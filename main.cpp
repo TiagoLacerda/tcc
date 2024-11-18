@@ -320,7 +320,7 @@ std::tuple<std::string, std::string, bool, bool, bool, int, int> validate_argume
                 stretch_factor = false;
             }
 
-            if (args[i] == "-n" || args[i] == "--threads")
+            if (args[i] == "-t" || args[i] == "--threads")
             {
                 threads = std::stoi(args[i + 1]);
 
