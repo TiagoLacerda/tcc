@@ -1,0 +1,153 @@
+[
+    {
+        "path": "data/graphs/uncategorized/grafo_15.txt",
+        "n": 15,
+        "m": 23,
+        "girth": 4,
+        "girth_elapsed": 8,
+        "smallest_e_cycle": 6,
+        "smallest_e_cycle_elapsed": 5,
+        "executions": [
+            {
+                "threads": 1,
+                "elapsed": 329165
+            },
+            {
+                "threads": 1,
+                "elapsed": 326973
+            },
+            {
+                "threads": 1,
+                "elapsed": 324723
+            },
+            {
+                "threads": 1,
+                "elapsed": 322775
+            },
+            {
+                "threads": 1,
+                "elapsed": 322986
+            },
+            {
+                "threads": 2,
+                "elapsed": 319648
+            },
+            {
+                "threads": 2,
+                "elapsed": 321808
+            },
+            {
+                "threads": 2,
+                "elapsed": 319575
+            },
+            {
+                "threads": 2,
+                "elapsed": 320709
+            },
+            {
+                "threads": 2,
+                "elapsed": 321441
+            },
+            {
+                "threads": 4,
+                "elapsed": 274303
+            },
+            {
+                "threads": 4,
+                "elapsed": 295724
+            },
+            {
+                "threads": 4,
+                "elapsed": 277697
+            },
+            {
+                "threads": 4,
+                "elapsed": 273821
+            },
+            {
+                "threads": 4,
+                "elapsed": 273567
+            },
+            {
+                "threads": 6,
+                "elapsed": 176017
+            },
+            {
+                "threads": 6,
+                "elapsed": 172974
+            },
+            {
+                "threads": 6,
+                "elapsed": 181219
+            },
+            {
+                "threads": 6,
+                "elapsed": 174089
+            },
+            {
+                "threads": 6,
+                "elapsed": 180365
+            },
+            {
+                "threads": 8,
+                "elapsed": 174392
+            },
+            {
+                "threads": 8,
+                "elapsed": 191897
+            },
+            {
+                "threads": 8,
+                "elapsed": 191548
+            },
+            {
+                "threads": 8,
+                "elapsed": 219985
+            },
+            {
+                "threads": 8,
+                "elapsed": 177721
+            },
+            {
+                "threads": 10,
+                "elapsed": 239544
+            },
+            {
+                "threads": 10,
+                "elapsed": 177389
+            },
+            {
+                "threads": 10,
+                "elapsed": 177461
+            },
+            {
+                "threads": 10,
+                "elapsed": 178292
+            },
+            {
+                "threads": 10,
+                "elapsed": 177793
+            },
+            {
+                "threads": 12,
+                "elapsed": 184875
+            },
+            {
+                "threads": 12,
+                "elapsed": 184149
+            },
+            {
+                "threads": 12,
+                "elapsed": 177212
+            },
+            {
+                "threads": 12,
+                "elapsed": 177900
+            },
+            {
+                "threads": 12,
+                "elapsed": 178635
+            }
+        ]
+    }
+]

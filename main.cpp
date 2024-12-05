@@ -48,9 +48,23 @@
 #include "src/util/util.hpp"
 #endif
 
-void evaluate(const std::string i_path, std::ofstream &output, const bool debug, const bool early_halt, const bool evaluate_stretch_factor, const int threads, const int samples)
+#ifndef JSON
+#define JSON
+#include "include/json.hpp"
+#endif
+
+/// @brief TODO: Document
+/// @param i_path
+/// @param output
+/// @param debug
+/// @param early_halt
+/// @param evaluate_stretch_factor
+/// @param threads
+/// @param samples
+/// @return
+nlohmann::ordered_json evaluate(const std::string path, const bool debug, const int samples, std::vector<int> threads)
 {
-    auto write = output.is_open();
+    nlohmann::ordered_json data;
 
     std::chrono::_V2::system_clock::time_point t0, t1;
 
@@ -58,30 +72,18 @@ void evaluate(const std::string i_path, std::ofstream &output, const bool debug,
 
     // Graph construction
 
-    t0 = std::chrono::high_resolution_clock::now();
+    data["path"] = path;
 
-    auto graph = Graph::load(i_path);
+    auto graph = Graph::load(path);
 
-    t1 = std::chrono::high_resolution_clock::now();
-
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-
-    if (write)
-    {
-        output << "{";
-        output << "\"path\":\"" << i_path << "\",";
-        output << "\"n\":" << graph.get_n() << ",";
-        output << "\"m\":" << graph.get_m() << ",";
-        output << "\"construction_microseconds\":" << duration.count() << ",";
-        output.flush();
-    }
+    data["n"] = graph.get_n();
+    data["m"] = graph.get_m();
 
     if (debug)
     {
         std::cout << "N: " << graph.get_n() << std::endl;
         std::cout << "M: " << graph.get_m() << std::endl;
         std::cout << "Construction (" << duration.count() << " us)" << std::endl;
-        output.flush();
     }
 
     // Girth
@@ -94,12 +96,8 @@ void evaluate(const std::string i_path, std::ofstream &output, const bool debug,
 
     duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-    if (write)
-    {
-        output << "\"girth\":" << girth << ",";
-        output << "\"girth_microseconds\":" << duration.count() << ",";
-        output.flush();
-    }
+    data["girth"] = girth;
+    data["girth_elapsed"] = duration.count();
 
     if (debug)
     {
@@ -116,12 +114,8 @@ void evaluate(const std::string i_path, std::ofstream &output, const bool debug,
 
     duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-    if (write)
-    {
-        output << "\"smallest_e_cycle\":" << smallest_e_cycle << ",";
-        output << "\"smallest_e_cycle_microseconds\":" << duration.count() << ",";
-        output.flush();
-    }
+    data["smallest_e_cycle"] = smallest_e_cycle;
+    data["smallest_e_cycle_elapsed"] = duration.count();
 
     if (debug)
     {
@@ -129,6 +123,8 @@ void evaluate(const std::string i_path, std::ofstream &output, const bool debug,
     }
 
     // Tree generation
+
+    data["executions"] = nlohmann::json::array();
 
     std::mutex mutex;
 
@@ -140,7 +136,7 @@ void evaluate(const std::string i_path, std::ofstream &output, const bool debug,
 
     bool abort = false;
 
-    auto callback = [&graph, &early_halt, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
+    auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
     {
         auto stretch_factor = stretch(graph, tree);
 
@@ -155,108 +151,53 @@ void evaluate(const std::string i_path, std::ofstream &output, const bool debug,
 
         mutex.unlock();
 
-        if (early_halt && stretch_factor <= lower_bound)
-        {
-            abort = true;
-        }
-
         return stretch_factor;
     };
 
-    double average = 0;
-
-    if (write)
+    for (auto t : threads)
     {
-        output << "\"runs\":[";
-        output.flush();
-    }
-
-    for (int sample = 0; sample < samples; ++sample)
-    {
-        stretch_index = graph.get_n() - 1;
-
-        count = 0;
-
-        abort = false;
-
-        t0 = std::chrono::high_resolution_clock::now();
-
-        spanning_tree::generate(graph, callback, &abort, lower_bound, threads);
-
-        t1 = std::chrono::high_resolution_clock::now();
-
-        duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-
-        average += duration.count();
-
-        if (write)
+        for (int s = 0; s < samples; ++s)
         {
-            output << "{";
-            output << "\"generation_microseconds\":" << duration.count() << ",";
-            output << "\"stretch_index\":" << stretch_index << ",";
-            output << "\"trees_generated\":" << count;
-            output << "}";
+            stretch_index = graph.get_n() - 1;
 
-            if (sample < samples - 1)
+            count = 0;
+
+            abort = false;
+
+            t0 = std::chrono::high_resolution_clock::now();
+
+            spanning_tree::generate(graph, callback, &abort, lower_bound, t);
+
+            t1 = std::chrono::high_resolution_clock::now();
+
+            duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+            data["executions"].push_back({{"threads", t}, {"spanning_trees", count}, {"elapsed", duration.count()}});
+
+            if (debug)
             {
-                output << ",";
+                std::cout << "(threads: " << t << "), (sample: " << s << ")" << std::endl;
+                std::cout << " Stretch index: " << stretch_index << "(" << duration.count() << " us)" << std::endl;
+                std::cout << " Count: " << count << std::endl;
             }
-
-            output.flush();
-        }
-
-        if (debug)
-        {
-            std::cout << "Stretch index: " << stretch_index << "(" << duration.count() << " us)" << std::endl;
-            std::cout << "Count: " << count << std::endl;
         }
     }
 
-    average /= samples;
-
-    if (write)
-    {
-        output << "],";
-        output << "\"average_generation_microseconds\":" << average << "";
-        output << "}";
-        output.flush();
-    }
-
-    if (debug)
-    {
-        std::cout << "Average genertion elapsed microseconds: " << average << std::endl;
-    }
+    return data;
 }
 
 /// @brief Validates CLI arguments.
-/// @param argc argument count.
-/// @param argv argument values.
-/// @return A tuple containing the following values:
-///
-/// `i_path`:         Input file path.
-///
-/// `o_path`:         (Optional) Output file path.
-///
-/// `debug`:          Enable debug mode (outputs to console).
-///
-/// `early_halt`:     Stop tree generation at lower bound (default: false).
-///
-/// `stretch_factor`: Evaluate stretch factor (default: true).
-///
-/// `threads`:        Number of threads for evaluation (default: 1).
-///
-/// `samples`:        Number of evaluations per graph for averaging (default: 1).
-std::tuple<std::string, std::string, bool, bool, bool, int, int> validate_arguments(int argc, char **argv)
+std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> validate_arguments(int argc, char **argv)
 {
     std::vector<std::string> args(argv, argv + argc);
 
-    std::string i_path;         // Input file path.
-    std::string o_path;         // (Optional) Output file path.
-    bool debug = false;         // Enable debug mode (outputs to console).
-    bool early_halt = false;    // Stop tree generation at lower bound (default: false).
-    bool stretch_factor = true; // Evaluate stretch factor (default: true).
-    int threads = 1;            // Number of threads for evaluation (default: 1).
-    int samples = 1;            // Number of evaluations per graph for averaging (default: 1).
+    std::string i_path;             // Input file path.
+    std::string o_path;             // (Optional) Output file path.
+    bool debug = false;             // Enable debug mode (outputs to console).
+    bool early_halt = false;        // Stop tree generation at lower bound (default: false).
+    bool stretch_factor = true;     // Evaluate stretch factor (default: true).
+    std::vector<int> threads = {1}; // Number of threads for evaluation (default: [1]).
+    int samples = 1;                // Number of evaluations per graph for averaging (default: 1).
 
     bool exit = false;
 
@@ -267,13 +208,14 @@ std::tuple<std::string, std::string, bool, bool, bool, int, int> validate_argume
         "Options                                                                                          \n"
         "-h, --help                 Show this help message.                                               \n"
         "-i, --input                Input file path.                                                      \n"
-        "-o, --output               (Optional) Output file path.                                          \n"
+        "-o, --output               Output file path.                                                     \n"
         "-d, --debug                Enable debug mode (outputs to console) (default: false).              \n"
         "--early-halt               Tree generation will stop once the lower-bound is reached.            \n"
         "--no-early-halt            Tree generation will go on until all trees are generated. (default)   \n"
         "--stretch-factor           Will evaluate the strech factor of every generated tree. (default)    \n"
         "--no-stretch-factor        Will not evaluate the stretch factor of any generated tree.           \n"
         "-t, --threads              Number of threads for evaluation (default: 1).                        \n"
+        "                           Also accepts a sequence of numbers (e.g. \"-t 1 2 4 8\").             \n"
         "-s, --samples              Number of evaluations per graph for averaging (default: 1).           \n";
 
     try
@@ -322,12 +264,22 @@ std::tuple<std::string, std::string, bool, bool, bool, int, int> validate_argume
 
             if (args[i] == "-t" || args[i] == "--threads")
             {
-                threads = std::stoi(args[i + 1]);
+                threads.clear();
 
-                if (threads < 1)
+                for (int j = i + 1; j < static_cast<int>(args.size()); ++j)
                 {
-                    throw std::out_of_range("Number of threads cannot be lower than 1");
+                    try
+                    {
+                        threads.push_back(std::stoi(args[j]));
+                    }
+                    catch (const std::invalid_argument &)
+                    {
+                        break;
+                    }
                 }
+
+                // Advance index to skip processed values
+                i += static_cast<int>(threads.size());
             }
 
             if (args[i] == "-s" || args[i] == "--samples")
@@ -358,7 +310,7 @@ std::tuple<std::string, std::string, bool, bool, bool, int, int> validate_argume
         std::exit(0); // TODO: See the implications of this function.
     }
 
-    return std::tuple<std::string, std::string, bool, bool, bool, int, int>(i_path, o_path, debug, early_halt, stretch_factor, threads, samples);
+    return std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int>(i_path, o_path, debug, early_halt, stretch_factor, threads, samples);
 }
 
 int main(int argc, char **argv)
@@ -390,32 +342,25 @@ int main(int argc, char **argv)
 
     std::ofstream file(o_path);
 
-    auto write = file.is_open();
-
-    if (write)
-    {
-        file << "[";
-        file.flush();
-    }
+    file << "[";
+    file.flush();
 
     for (int i = 0; i < static_cast<int>(paths.size()); i++)
     {
-        evaluate(paths[i], file, debug, early_halt, stretch_factor, threads, samples);
+        auto data = evaluate(paths[i], debug, samples, threads);
+
+        file << data.dump();
 
         if (i < static_cast<int>(paths.size()) - 1)
         {
 
-            if (write)
-            {
-                file << ",";
-                file.flush();
-            }
+            file << ",";
         }
-    }
 
-    if (write)
-    {
-        file << "]";
         file.flush();
     }
+
+    file << "]";
+    file.flush();
+    file.close();
 }

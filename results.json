@@ -1,0 +1,38 @@
+[
+    {
+        "path": "data/graphs/uncategorized/grafo_15.txt",
+        "n": 15,
+        "m": 23,
+        "girth": 4,
+        "girth_elapsed": 7,
+        "smallest_e_cycle": 6,
+        "smallest_e_cycle_elapsed": 5,
+        "executions": [
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 302523
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 297546
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 255297
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 173544
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 166972
+            }
+        ]
+    }
+]

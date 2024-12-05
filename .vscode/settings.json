@@ -70,7 +70,11 @@
         "text_encoding": "cpp",
         "codecvt": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "any": "cpp",
+        "forward_list": "cpp",
+        "ranges": "cpp",
+        "valarray": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"
