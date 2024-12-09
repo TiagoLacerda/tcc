@@ -1,1 +1,8 @@
+data/graphs/uncategorized/grafo_10.txt
+data/graphs/uncategorized/grafo_11.txt
+data/graphs/uncategorized/grafo_12.txt
+data/graphs/uncategorized/grafo_13.txt
+data/graphs/uncategorized/grafo_14.txt
 data/graphs/uncategorized/grafo_15.txt
+data/graphs/uncategorized/grafo_16.txt
+data/graphs/uncategorized/grafo_17.txt

@@ -1,37 +1,2889 @@
 [
     {
+        "path": "data/graphs/uncategorized/grafo_10.txt",
+        "n": 10,
+        "m": 13,
+        "girth": 4,
+        "girth_elapsed": 3,
+        "smallest_e_cycle": 5,
+        "smallest_e_cycle_elapsed": 3,
+        "executions": [
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 575
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 532
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 533
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 524
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 524
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 523
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 519
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 524
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 520
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 274,
+                "elapsed": 538
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 579
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 495
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 492
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 491
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 489
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 572
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 675
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 714
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 638
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 274,
+                "elapsed": 499
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 904
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 634
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 587
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 386
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 350
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 347
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 343
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 342
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 345
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 274,
+                "elapsed": 344
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 447
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 482
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 663
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 585
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 385
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 352
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 348
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 347
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 532
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 274,
+                "elapsed": 363
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 438
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 411
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 585
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 653
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 605
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 613
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 628
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 826
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 677
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 274,
+                "elapsed": 424
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 785
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 625
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 601
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 616
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 630
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 622
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 500
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 389
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 381
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 274,
+                "elapsed": 711
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 11180
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 1197
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 1483
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 6722
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 632
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 620
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 610
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 606
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 609
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 274,
+                "elapsed": 595
+            }
+        ]
+    },
+    {
+        "path": "data/graphs/uncategorized/grafo_11.txt",
+        "n": 11,
+        "m": 15,
+        "girth": 4,
+        "girth_elapsed": 4,
+        "smallest_e_cycle": 5,
+        "smallest_e_cycle_elapsed": 5,
+        "executions": [
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 3043
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 3356
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 2394
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 1668
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 1601
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 1607
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 1672
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 1849
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 1652
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 512,
+                "elapsed": 1672
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 2743
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 2311
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 1574
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 1645
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 1817
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 1728
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 1647
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 1550
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 1557
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 512,
+                "elapsed": 1572
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1440
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1148
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1698
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1275
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1161
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1073
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1120
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1078
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1094
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 512,
+                "elapsed": 1139
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1407
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1101
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1101
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1882
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1833
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1812
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1798
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1770
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1741
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 512,
+                "elapsed": 1734
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1834
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1838
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1831
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1770
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1749
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1732
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1811
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1127
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1864
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 512,
+                "elapsed": 1850
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1925
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1855
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1935
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1829
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1819
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1978
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1646
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1400
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1931
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 512,
+                "elapsed": 1835
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 1970
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 1816
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 1894
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 2027
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 1968
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 1876
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 1985
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 2021
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 1934
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 512,
+                "elapsed": 1956
+            }
+        ]
+    },
+    {
+        "path": "data/graphs/uncategorized/grafo_12.txt",
+        "n": 12,
+        "m": 17,
+        "girth": 4,
+        "girth_elapsed": 5,
+        "smallest_e_cycle": 5,
+        "smallest_e_cycle_elapsed": 5,
+        "executions": [
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 10511
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 8118
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 8257
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 8029
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 8545
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 8714
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 7888
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 8141
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 7876
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2464,
+                "elapsed": 8065
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 8196
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 7650
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 8817
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 7962
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 8075
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 7884
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 7643
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 7839
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 7720
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2464,
+                "elapsed": 7889
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 5094
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 5837
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 4988
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 6263
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 4943
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 5050
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 5089
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 4943
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 6227
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2464,
+                "elapsed": 8457
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 6777
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 6635
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 5851
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 5506
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 6365
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 4909
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 5052
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 5805
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 4952
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2464,
+                "elapsed": 5588
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 7013
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 6308
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 5950
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 5839
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 8071
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 7827
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 5036
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 6585
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 5115
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2464,
+                "elapsed": 5467
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 7303
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 8288
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 7379
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 8170
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 7530
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 7074
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 7310
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 8550
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 7684
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2464,
+                "elapsed": 7848
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 8343
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 8232
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 8352
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 8436
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 7809
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 7992
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 7875
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 8138
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 8287
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2464,
+                "elapsed": 8121
+            }
+        ]
+    },
+    {
+        "path": "data/graphs/uncategorized/grafo_13.txt",
+        "n": 13,
+        "m": 19,
+        "girth": 4,
+        "girth_elapsed": 6,
+        "smallest_e_cycle": 5,
+        "smallest_e_cycle_elapsed": 6,
+        "executions": [
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 36911
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 35029
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 34667
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 34513
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 34345
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 35042
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 34458
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 36810
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 34578
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 9190,
+                "elapsed": 34642
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 35248
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34075
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34071
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34339
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34129
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34256
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34237
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34655
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34249
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 9190,
+                "elapsed": 34933
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 31773
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 31551
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 31347
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 32508
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 31419
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 35431
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 31472
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 31714
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 32105
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 9190,
+                "elapsed": 32029
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 23767
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 21762
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 21866
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 22722
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 24370
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 26324
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 21639
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 22474
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 21560
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 9190,
+                "elapsed": 21458
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 23901
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 24797
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 23996
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 26851
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 30008
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 30187
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 23852
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 24197
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 31989
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 9190,
+                "elapsed": 22095
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 31753
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 23660
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 24241
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 26665
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 24549
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 24112
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 23605
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 23122
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 24200
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 9190,
+                "elapsed": 23931
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24432
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24261
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24274
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24754
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24212
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24228
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 28138
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24066
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24656
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 9190,
+                "elapsed": 24735
+            }
+        ]
+    },
+    {
+        "path": "data/graphs/uncategorized/grafo_14.txt",
+        "n": 14,
+        "m": 24,
+        "girth": 4,
+        "girth_elapsed": 10,
+        "smallest_e_cycle": 4,
+        "smallest_e_cycle_elapsed": 8,
+        "executions": [
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 996806
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 993823
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 1001209
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 989030
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 1002194
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 991360
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 989734
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 994034
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 989974
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 145084,
+                "elapsed": 991513
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 999658
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 990524
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 1015841
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 1017204
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 996848
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 999857
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 1006994
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 1114236
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 1066218
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 145084,
+                "elapsed": 1066789
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 942164
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 979513
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 997815
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 965883
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 934643
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 937293
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 937804
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 933499
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 931979
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 145084,
+                "elapsed": 933275
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 851100
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 848314
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 855122
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 853856
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 859665
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 868802
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 858202
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 852748
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 855609
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 145084,
+                "elapsed": 858369
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 574045
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 569834
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 609107
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 620774
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 576260
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 590553
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 575440
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 586511
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 579005
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 145084,
+                "elapsed": 625886
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 621392
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 632475
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 580603
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 585249
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 574465
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 600160
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 604377
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 581617
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 611699
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 145084,
+                "elapsed": 641963
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 571746
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 572985
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 588360
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 604181
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 604631
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 577506
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 599512
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 599883
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 579598
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 145084,
+                "elapsed": 614491
+            }
+        ]
+    },
+    {
         "path": "data/graphs/uncategorized/grafo_15.txt",
         "n": 15,
         "m": 23,
         "girth": 4,
         "girth_elapsed": 7,
         "smallest_e_cycle": 6,
-        "smallest_e_cycle_elapsed": 5,
+        "smallest_e_cycle_elapsed": 6,
         "executions": [
             {
                 "threads": 1,
                 "spanning_trees": 31136,
-                "elapsed": 302523
+                "elapsed": 326193
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 322897
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 322807
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 322330
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 320249
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 323137
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 325132
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 321901
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 324020
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 31136,
+                "elapsed": 318777
             },
             {
                 "threads": 2,
                 "spanning_trees": 31136,
-                "elapsed": 297546
+                "elapsed": 319113
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 317038
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 318648
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 320273
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 321003
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 319751
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 319525
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 319048
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 319578
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 31136,
+                "elapsed": 319034
             },
             {
                 "threads": 4,
                 "spanning_trees": 31136,
-                "elapsed": 255297
+                "elapsed": 295218
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 276862
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 276975
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 311560
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 276714
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 279877
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 292822
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 274981
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 276977
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 31136,
+                "elapsed": 278420
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 206031
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 180165
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 184770
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 192985
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 196671
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 176627
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 191468
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 175414
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 179262
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 31136,
+                "elapsed": 196775
             },
             {
                 "threads": 8,
                 "spanning_trees": 31136,
-                "elapsed": 173544
+                "elapsed": 229878
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 176794
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 176558
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 190004
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 195271
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 194468
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 174347
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 174585
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 177271
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 31136,
+                "elapsed": 180960
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 193312
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 178307
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 205388
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 180132
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 181885
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 177818
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 197866
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 175430
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 175183
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 31136,
+                "elapsed": 176473
             },
             {
                 "threads": 12,
                 "spanning_trees": 31136,
-                "elapsed": 166972
+                "elapsed": 176565
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 177751
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 180875
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 181898
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 179063
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 176316
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 195181
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 179670
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 176748
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 31136,
+                "elapsed": 178213
+            }
+        ]
+    },
+    {
+        "path": "data/graphs/uncategorized/grafo_16.txt",
+        "n": 16,
+        "m": 25,
+        "girth": 4,
+        "girth_elapsed": 8,
+        "smallest_e_cycle": 5,
+        "smallest_e_cycle_elapsed": 7,
+        "executions": [
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1402530
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1396647
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1385335
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1418687
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1391260
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1425812
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1392595
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1394187
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1394189
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 102976,
+                "elapsed": 1391603
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1370769
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1366272
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1374217
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1395762
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1369237
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1371654
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1408859
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1386833
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1390346
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 102976,
+                "elapsed": 1374656
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1190302
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1196923
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1195833
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1190395
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1195761
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1187438
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1183546
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1205492
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1226634
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 102976,
+                "elapsed": 1200227
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 865447
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 845872
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 853482
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 832765
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 834595
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 861645
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 898653
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 877355
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 883650
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 102976,
+                "elapsed": 914118
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 997442
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 912840
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 949936
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 1013845
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 957197
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 996412
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 912243
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 868529
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 843908
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 102976,
+                "elapsed": 879510
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 879962
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 851591
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 824319
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 857284
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 832546
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 882105
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 834654
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 829826
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 831796
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 102976,
+                "elapsed": 830042
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 855526
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 879443
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 831219
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 856958
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 848543
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 851919
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 861413
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 842785
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 853372
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 102976,
+                "elapsed": 844351
+            }
+        ]
+    },
+    {
+        "path": "data/graphs/uncategorized/grafo_17.txt",
+        "n": 17,
+        "m": 29,
+        "girth": 4,
+        "girth_elapsed": 17,
+        "smallest_e_cycle": 5,
+        "smallest_e_cycle_elapsed": 11,
+        "executions": [
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 32860060
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 32251321
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 31844493
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 32210044
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 31919006
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 31734986
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 31942041
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 31753155
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 31706619
+            },
+            {
+                "threads": 1,
+                "spanning_trees": 2836701,
+                "elapsed": 31885090
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31842637
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31648381
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31500989
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31451607
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31449239
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31464385
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31444891
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31402778
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31518550
+            },
+            {
+                "threads": 2,
+                "spanning_trees": 2836701,
+                "elapsed": 31533319
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 29498927
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 30203736
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 30031883
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 30354381
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 29890654
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 29949238
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 30558419
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 30545016
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 29964099
+            },
+            {
+                "threads": 4,
+                "spanning_trees": 2836701,
+                "elapsed": 29772674
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 27218979
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 27537947
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 27050127
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 27021864
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 26987677
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 27065311
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 27061545
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 27017098
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 26996943
+            },
+            {
+                "threads": 6,
+                "spanning_trees": 2836701,
+                "elapsed": 27028874
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 19087434
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 19051701
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 19289595
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 19244183
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 19058469
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 19161909
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 19166914
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 18589765
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 18989995
+            },
+            {
+                "threads": 8,
+                "spanning_trees": 2836701,
+                "elapsed": 19116518
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 18986507
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 19443619
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 19210799
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 19591742
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 19087175
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 19089444
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 18792827
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 19550058
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 19029087
+            },
+            {
+                "threads": 10,
+                "spanning_trees": 2836701,
+                "elapsed": 19259607
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 19118531
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 19058388
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 18618111
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 18927352
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 19514852
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 18931365
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 19318445
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 18866682
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 19116274
+            },
+            {
+                "threads": 12,
+                "spanning_trees": 2836701,
+                "elapsed": 18880586
             }
         ]
     }
