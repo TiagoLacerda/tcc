@@ -172,7 +172,7 @@ nlohmann::ordered_json evaluate(const std::string path, const bool debug, const 
 
             duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-            data["executions"].push_back({{"threads", t}, {"spanning_trees", count}, {"elapsed", duration.count()}});
+            data["executions"].push_back({{"threads", t}, {"spanning_trees", count}, {"elapsed", duration.count()}, {"stretch_index", stretch_index}});
 
             if (debug)
             {
