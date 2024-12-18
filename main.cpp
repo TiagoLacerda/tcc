@@ -79,13 +79,6 @@ nlohmann::ordered_json evaluate(const std::string path, const bool debug, const 
     data["n"] = graph.get_n();
     data["m"] = graph.get_m();
 
-    if (debug)
-    {
-        std::cout << "N: " << graph.get_n() << std::endl;
-        std::cout << "M: " << graph.get_m() << std::endl;
-        std::cout << "Construction (" << duration.count() << " us)" << std::endl;
-    }
-
     // Girth
 
     t0 = std::chrono::high_resolution_clock::now();
@@ -98,11 +91,6 @@ nlohmann::ordered_json evaluate(const std::string path, const bool debug, const 
 
     data["girth"] = girth;
     data["girth_elapsed"] = duration.count();
-
-    if (debug)
-    {
-        std::cout << "Girth: " << girth << " (" << duration.count() << " us)" << std::endl;
-    }
 
     // Smallest e-cycle
 
@@ -117,9 +105,11 @@ nlohmann::ordered_json evaluate(const std::string path, const bool debug, const 
     data["smallest_e_cycle"] = smallest_e_cycle;
     data["smallest_e_cycle_elapsed"] = duration.count();
 
+    //
+
     if (debug)
     {
-        std::cout << "Smallest e-cycle: " << smallest_e_cycle << " (" << duration.count() << " us)" << std::endl;
+        std::cout << data.dump(4) << std::endl;
     }
 
     // Tree generation
@@ -172,13 +162,13 @@ nlohmann::ordered_json evaluate(const std::string path, const bool debug, const 
 
             duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-            data["executions"].push_back({{"threads", t}, {"spanning_trees", count}, {"elapsed", duration.count()}, {"stretch_index", stretch_index}});
+            nlohmann::json execution = {{"threads", t}, {"spanning_trees", count}, {"elapsed", duration.count()}, {"stretch_index", stretch_index}};
+
+            data["executions"].emplace_back(std::move(execution));
 
             if (debug)
             {
-                std::cout << "(threads: " << t << "), (sample: " << s << ")" << std::endl;
-                std::cout << " Stretch index: " << stretch_index << "(" << duration.count() << " us)" << std::endl;
-                std::cout << " Count: " << count << std::endl;
+                std::cout << execution.dump(4) << std::endl;
             }
         }
     }
