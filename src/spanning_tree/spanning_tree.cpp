@@ -142,51 +142,14 @@ namespace spanning_tree
 
         int pointers[n - 1];
 
-        // Determine initial pointer assignment.
+        int p = 0;
 
-        int i = 0;     // Index of pointer.
-        int j = start; // Index of edge.
+        int count = 0;
 
-        while (i < n - 1 && j < m)
-        {
-            auto u = std::get<0>(edges[j]);
-            auto v = std::get<1>(edges[j]);
-
-            candidate.insert_edge(u, v);
-
-            if (candidate.is_cyclic_disjoint_sets())
-            {
-                candidate.remove_edge(u, v);
-            }
-            else
-            {
-                pointers[i] = j;
-                i++;
-            }
-
-            j++;
-        }
-
-        if (i < n - 1)
-        {
-            return; // Unable to determine an initial pointer assignment.
-        }
-
-        callback(candidate);
-
-        // Generate all remaining trees.
-
-        int p = n - 2; // Index of furthermost assigned pointer.
+        pointers[p] = start - 1;
 
         while (pointers[0] < end && !(*abort))
         {
-            if (p == 0 || pointers[p] != pointers[p - 1])
-            {
-                auto u = std::get<0>(edges[pointers[p]]);
-                auto v = std::get<1>(edges[pointers[p]]);
-                candidate.remove_edge(u, v);
-            }
-
             pointers[p]++;
 
             if (pointers[p] < m)
@@ -199,11 +162,10 @@ namespace spanning_tree
                 {
                     if (!candidate.is_cyclic_disjoint_sets()) // Is acyclic
                     {
-                        if (candidate.is_connected_disjoint_sets()) // Is connected
-                        {
-                            callback(candidate);
-                        }
+                        callback(candidate);
                     }
+
+                    candidate.remove_edge(u, v);
                 }
                 else
                 {
@@ -214,6 +176,9 @@ namespace spanning_tree
             else
             {
                 p--;
+                auto u = std::get<0>(edges[pointers[p]]);
+                auto v = std::get<1>(edges[pointers[p]]);
+                candidate.remove_edge(u, v);
             }
         }
     }
