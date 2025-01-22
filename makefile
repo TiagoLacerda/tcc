@@ -1,22 +1,29 @@
 SOURCE := $(wildcard *.cpp */*.cpp */*/*.cpp)
-OUTPUT := main.exe
 
 FLAGS := -Wall -O3 -Wno-unused-variable -fopenmp
 
 build:
-	g++ -g main.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o $(OUTPUT) $(FLAGS)
+	g++ -g main.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o main.exe $(FLAGS)
 
 tests:
 	g++ -g src/graph/graph.test.cpp src/disjoint_sets/disjoint_sets.test.cpp src/spanning_tree/spanning_tree.test.cpp src/util/util.test.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp include/doctest.h -o tests.exe $(FLAGS)
 
+cycle-detection:
+	g++ -g cycle_detection.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp -o cycle_detection.exe $(FLAGS)
+
 clean:
-	del graph.txt
 	del main.exe
+	del graph.txt
+	del results.json
 	del tests.exe
-	del results*.json
+	del cycle_detection.exe
+	del cycle_detection.txt
+	del tools/cycle_detection.png
 
 clean-linux:
 	-rm graph.txt
-	-rm main.exe
+	-rm results.json
 	-rm tests.exe
-	-rm results*.json
+	-rm cycle_detection.exe
+	-rm cycle_detection.txt
+	-rm tools/cycle_detection.png
