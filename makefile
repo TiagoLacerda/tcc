@@ -13,5 +13,10 @@ clean:
 	del graph.txt
 	del main.exe
 	del tests.exe
-	del log*.txt
-	del result*.json
+	del results*.json
+
+clean-linux:
+	-rm graph.txt
+	-rm main.exe
+	-rm tests.exe
+	-rm results*.json
