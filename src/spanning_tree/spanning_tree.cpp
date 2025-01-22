@@ -95,13 +95,6 @@ namespace spanning_tree
         }
     }
 
-    /// @brief Determine the start and end positions for the first pointer in a search.
-    /// @param n The number of nodes in the graph.
-    /// @param m The number of edges in the graph.
-    /// @param i The index of the current thread.
-    /// @param num_threads The number of threads.
-    /// @param start When attempting to assign pointers, the search will start at this position in the edge list.
-    /// @param end When attempting to assign pointers, the search will halt when the leftmost pointer reaches this position. In a single thread context, this would be `m - (n - 1) + 1`, since there wouldn't be enough edges to the right to form a spanning tree.
     void workload(const int n, const int m, const int i, const int num_threads, int *start, int *end)
     {
         if (n == 0 || m == 0 || m > n * (n - 1) / 2 || num_threads == 0 || i >= num_threads) // Invalid parameters.
@@ -122,7 +115,7 @@ namespace spanning_tree
                 }
                 else // Last threads are idle.
                 {
-                    *start = m;
+                    *start = m + 1;
                     *end = m;
                 }
             }
@@ -136,7 +129,7 @@ namespace spanning_tree
         }
     }
 
-    void generate_internal(const Graph &graph, const std::function<int(const Graph &tree)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end)
+    void generate_prallel_internal(const Graph &graph, const std::function<int(const Graph &tree)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end)
     {
         auto candidate = Graph(n);
 
@@ -176,14 +169,17 @@ namespace spanning_tree
             else
             {
                 p--;
-                auto u = std::get<0>(edges[pointers[p]]);
-                auto v = std::get<1>(edges[pointers[p]]);
-                candidate.remove_edge(u, v);
+                if (p >= 0)
+                {
+                    auto u = std::get<0>(edges[pointers[p]]);
+                    auto v = std::get<1>(edges[pointers[p]]);
+                    candidate.remove_edge(u, v);
+                }
             }
         }
     }
 
-    void generate(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads)
+    void generate_parallel(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads)
     {
         auto n = graph.get_n();
         auto m = graph.get_m();
@@ -201,7 +197,7 @@ namespace spanning_tree
 
             workload(n, m, i, num_threads, &start, &end);
 
-            generate_internal(graph, callback, abort, lower_bound, n, m, edges, start, end);
+            generate_prallel_internal(graph, callback, abort, lower_bound, n, m, edges, start, end);
         }
     }
 }

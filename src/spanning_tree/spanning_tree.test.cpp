@@ -86,7 +86,7 @@ TEST_SUITE("spanning_tree::workload(int n, int m, int i, int *start, int *end)")
 
         spanning_tree::workload(5, 10, 7, 8, &start, &end);
 
-        REQUIRE(start == 10);
+        REQUIRE(start == 11);
         REQUIRE(end == 10);
     }
 }
