@@ -33,34 +33,41 @@ int main(int argc, char **argv)
 
     std::ofstream file("cycle_detection.txt");
 
-    for (int i = 10000; i <= 100000; i += 10000)
+    for (int i = 500; i <= 5000; i += 500)
     {
         lengths.push_back(i);
     }
 
     for (auto length : lengths)
     {
-        for (int sample = 0; sample < samples; sample++)
+        for (float density = 0.0; density <= 100.0; density += 10)
         {
-            auto graph = Graph::random_spanning_tree(length);
+            for (int sample = 0; sample < samples; sample++)
+            {
+                auto graph = Graph::random_spanning_tree(length);
 
-            t0 = std::chrono::high_resolution_clock::now();
+                int k = density * length * (length - 1) * 0.5 - (length - 1);
 
-            graph.is_connected_depth_first_search();
+                graph.insert_random_edges(k);
 
-            t1 = std::chrono::high_resolution_clock::now();
+                t0 = std::chrono::high_resolution_clock::now();
 
-            duration_dfs = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count();
+                graph.is_connected_depth_first_search();
 
-            t0 = std::chrono::high_resolution_clock::now();
+                t1 = std::chrono::high_resolution_clock::now();
 
-            graph.is_cyclic_disjoint_sets();
+                duration_dfs = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count();
 
-            t1 = std::chrono::high_resolution_clock::now();
+                t0 = std::chrono::high_resolution_clock::now();
 
-            duration_djs = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count();
+                graph.is_cyclic_disjoint_sets();
 
-            file << length << " " << sample << " " << duration_dfs << " " << duration_djs << std::endl;
+                t1 = std::chrono::high_resolution_clock::now();
+
+                duration_djs = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count();
+
+                file << length << " " << sample << " " << density << " " << duration_dfs << " " << duration_djs << std::endl;
+            }
         }
     }
 

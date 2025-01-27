@@ -684,3 +684,26 @@ TEST_CASE("bool Graph::is_connected_disjoint_sets()")
 
     REQUIRE(graph.is_connected_disjoint_sets() == true);
 }
+
+TEST_CASE("bool Graph::insert_random_edges(int k)")
+{
+    Graph graph;
+
+    graph = Graph();
+
+    graph.insert_random_edges(1);
+
+    REQUIRE(graph.get_m() == 0);
+
+    graph = Graph(2);
+
+    graph.insert_random_edges(1);
+
+    REQUIRE(graph.get_m() == 1);
+
+    graph = Graph(3);
+
+    graph.insert_random_edges(4);
+
+    REQUIRE(graph.get_m() == 3);
+}

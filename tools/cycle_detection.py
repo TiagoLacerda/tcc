@@ -1,3 +1,4 @@
+import math
 import matplotlib.pyplot as plt
 import numpy as np
 import json
@@ -51,47 +52,51 @@ def save(ax, path):
     plt.savefig(path)
 
 
+def std_of_ratio(a, b, a_std, b_std):
+    return math.sqrt((a_std / b) ** 2 + (a * b_std / b ** 2) ** 2)
+
+
 fig, ax = setup(
-    title='Tempo de execução dos algoritmos de detecção de ciclos',
+    title='Relação do tempo de execução dos algoritmos de detecção\nde ciclos (Disjoint Sets / Depth-first Search)',
     xlabel='Número de vértices do grafo',
-    ylabel='Tempo decorrido (us)'
+    ylabel=''
 )
 
 data = {}
 
 with open(sys.argv[1], 'r') as file:
     for line in file:
-        length, sample, dfs, djs = map(float, line.split())
+        length, sample, density, dfs, djs = map(float, line.split())
 
-        if length not in data:
-            data[length] = [[], []]
+        if density not in data:
+            data[density] = {}
 
-        data[length][0].append(dfs)
-        data[length][1].append(djs)
+        if length not in data[density]:
+            data[density][length] = [[], []]
 
-x = []
-y = []
-e = []
-
-for length in data:
-    x.append(length)
-    y.append(np.average(data[length][0]))
-    e.append(np.std(data[length][0]))
-
-ax.errorbar(x, y, e, linewidth=1.0, marker='.',
-            color='red', label='Depth-first Search')
+        data[density][length][0].append(dfs)
+        data[density][length][1].append(djs)
 
 
-x = []
-y = []
-e = []
+for density in data:
+    x = []
+    y = []
+    e = []
 
-for length in data:
-    x.append(length)
-    y.append(np.average(data[length][1]))
-    e.append(np.std(data[length][1]))
+    for length in data[density]:
+        dfs = np.average(data[density][length][0])
+        dfs_std = np.std(data[density][length][0])
 
-ax.errorbar(x, y, e, linewidth=1.0,
-            marker='.', color='blue', label='Disjoint Sets')
+        djs = np.average(data[density][length][1])
+        djs_std = np.std(data[density][length][1])
+
+        std = std_of_ratio(djs, dfs, djs_std, dfs_std)
+
+        x.append(length)
+        y.append(djs / dfs)
+        e.append(std)
+
+    ax.errorbar(x, y, e, linewidth=1.0, marker='.', label=f'density={int(density)}')
+
 
 save(ax, 'cycle_detection.png')

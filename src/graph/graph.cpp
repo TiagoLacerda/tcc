@@ -83,6 +83,9 @@
 #include <climits>
 #endif
 
+static std::random_device rd;
+static std::mt19937 rng(rd());
+
 Graph::Graph()
 {
     this->adjacencies = std::vector<std::vector<int>>();
@@ -195,8 +198,6 @@ Graph Graph::random_spanning_tree(int n)
     visited.push_back(u);
     visited.push_back(v);
 
-    static std::random_device rd;
-    static std::mt19937 rng(rd());
     std::uniform_int_distribution<> dis;
 
     while (!unvisited.empty())
@@ -692,22 +693,19 @@ bool Graph::is_connected_disjoint_sets() const
 
 void Graph::insert_random_edges(int k)
 {
+    if (k < 1)
+    {
+        return;
+    }
+
     auto edges = Graph::inverse(*this).get_edges();
 
-    static std::random_device rd;
-    static std::mt19937 rng(rd());
-    std::uniform_int_distribution<> dis;
+    std::shuffle(edges.begin(), edges.end(), rng);
 
-    for (int i = 0; i < k && !edges.empty(); i++)
+    for (int i = 0; i < std::min(k, static_cast<int>(edges.size())); i++)
     {
-        dis = std::uniform_int_distribution<>(0, edges.size() - 1);
-
-        auto edge = std::next(edges.begin(), dis(rng));
-
-        auto u = std::get<0>(*edge);
-        auto v = std::get<1>(*edge);
-
-        edges.erase(edge);
+        auto u = std::get<0>(edges[i]);
+        auto v = std::get<1>(edges[i]);
 
         this->insert_edge(u, v);
     }
