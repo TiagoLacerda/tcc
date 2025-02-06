@@ -156,7 +156,14 @@ nlohmann::ordered_json evaluate(const std::string path, const bool debug, const 
 
             t0 = std::chrono::high_resolution_clock::now();
 
-            spanning_tree::generate_parallel(graph, callback, &abort, lower_bound, t);
+            if (t == 1)
+            {
+                spanning_tree::generate_sequential(graph, callback, &abort, lower_bound);
+            }
+            else
+            {
+                spanning_tree::generate_parallel(graph, callback, &abort, lower_bound, t);
+            }
 
             t1 = std::chrono::high_resolution_clock::now();
 
