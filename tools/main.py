@@ -122,8 +122,11 @@ fig, ax = setup(
 
 data = {}
 
-load(sys.argv[1], data, 10 ** -6, True)
+for i in range(1, len(sys.argv) - 1):
+    load(sys.argv[i], data, 10 ** -6, True)
+
+print(json.dumps(data))
 
 plot(data, ax)
 
-save(ax, 'data.png')
+save(ax, sys.argv[len(sys.argv) - 1])
