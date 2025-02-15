@@ -315,32 +315,35 @@ std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> va
     return std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int>(i_path, o_path, debug, early_halt, stretch_factor, threads, samples);
 }
 
+/// @brief Load a collection of paths from a file.
+/// @param path Path to the file.
+/// @return a collection of paths to files each containing a graph.
+std::vector<std::string> get_paths(const std::string &path)
+{
+    std::vector<std::string> paths;
+    std::ifstream file(path);
+    std::string line;
+
+    if (file && std::getline(file, line) && std::filesystem::exists(line))
+    {
+        do
+        {
+            paths.emplace_back(line);
+        } while (std::getline(file, line));
+    }
+    else
+    {
+        paths.emplace_back(path);
+    }
+
+    return paths;
+}
+
 int main(int argc, char **argv)
 {
     auto [i_path, o_path, debug, early_halt, stretch_factor, threads, samples] = validate_arguments(argc, argv);
 
-    // Handle input file
-
-    std::vector<std::string> paths;
-
-    {
-        std::ifstream file(i_path);
-        std::string line;
-
-        if (file && std::getline(file, line) && std::filesystem::exists(line))
-        {
-            do
-            {
-                paths.emplace_back(line);
-            } while (std::getline(file, line));
-        }
-        else
-        {
-            paths.emplace_back(i_path);
-        }
-    }
-
-    //
+    auto paths = get_paths(i_path);
 
     std::ofstream file(o_path);
 
