@@ -294,6 +294,11 @@ std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> va
         {
             throw std::invalid_argument("No input file path specified.");
         }
+
+        if (o_path.empty())
+        {
+            throw std::invalid_argument("No output file path specified.");
+        }
     }
     catch (...)
     {
