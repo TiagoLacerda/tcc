@@ -48,141 +48,6 @@
 #include "src/util/util.hpp"
 #endif
 
-#ifndef JSON
-#define JSON
-#include "include/json.hpp"
-#endif
-
-/// @brief TODO: Document
-/// @param i_path
-/// @param output
-/// @param debug
-/// @param early_halt
-/// @param evaluate_stretch_factor
-/// @param threads
-/// @param samples
-/// @return
-nlohmann::ordered_json evaluate(const std::string path, const bool debug, const int samples, std::vector<int> threads)
-{
-    nlohmann::ordered_json data;
-
-    std::chrono::_V2::system_clock::time_point t0, t1;
-
-    std::chrono::microseconds duration;
-
-    // Graph construction
-
-    data["path"] = path;
-
-    auto graph = Graph::load(path);
-
-    data["n"] = graph.get_n();
-    data["m"] = graph.get_m();
-
-    // Girth
-
-    t0 = std::chrono::high_resolution_clock::now();
-
-    auto girth = graph.get_girth();
-
-    t1 = std::chrono::high_resolution_clock::now();
-
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-
-    data["girth"] = girth;
-    data["girth_elapsed"] = duration.count();
-
-    // Smallest e-cycle
-
-    t0 = std::chrono::high_resolution_clock::now();
-
-    auto smallest_e_cycle = graph.get_smallest_e_cycle();
-
-    t1 = std::chrono::high_resolution_clock::now();
-
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-
-    data["smallest_e_cycle"] = smallest_e_cycle;
-    data["smallest_e_cycle_elapsed"] = duration.count();
-
-    //
-
-    if (debug)
-    {
-        std::cout << data.dump(4) << std::endl;
-    }
-
-    // Tree generation
-
-    data["executions"] = nlohmann::json::array();
-
-    std::mutex mutex;
-
-    int stretch_index;
-
-    int count;
-
-    int lower_bound = std::max(girth, smallest_e_cycle) - 1;
-
-    bool abort = false;
-
-    auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
-    {
-        auto stretch_factor = stretch(graph, tree);
-
-        mutex.lock();
-
-        count++;
-
-        if (stretch_factor < stretch_index)
-        {
-            stretch_index = stretch_factor;
-        }
-
-        mutex.unlock();
-
-        return stretch_factor;
-    };
-
-    for (auto t : threads)
-    {
-        for (int s = 0; s < samples; ++s)
-        {
-            stretch_index = graph.get_n() - 1;
-
-            count = 0;
-
-            abort = false;
-
-            t0 = std::chrono::high_resolution_clock::now();
-
-            if (t == 1)
-            {
-                spanning_tree::generate_sequential(graph, callback, &abort, lower_bound);
-            }
-            else
-            {
-                spanning_tree::generate_parallel(graph, callback, &abort, lower_bound, t);
-            }
-
-            t1 = std::chrono::high_resolution_clock::now();
-
-            duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-
-            nlohmann::json execution = {{"threads", t}, {"spanning_trees", count}, {"elapsed", duration.count()}, {"stretch_index", stretch_index}};
-
-            data["executions"].emplace_back(std::move(execution));
-
-            if (debug)
-            {
-                std::cout << execution.dump(4) << std::endl;
-            }
-        }
-    }
-
-    return data;
-}
-
 /// @brief Validates CLI arguments.
 std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> validate_arguments(int argc, char **argv)
 {
@@ -347,25 +212,168 @@ int main(int argc, char **argv)
 
     std::ofstream file(o_path);
 
+    std::chrono::_V2::system_clock::time_point t0, t1;
+
+    std::chrono::microseconds duration;
+
+    std::mutex mutex;
+
+    int stretch_index;
+
+    int count;
+
+    int lower_bound;
+
+    bool abort;
+
+    Graph graph;
+
+    auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
+    {
+        auto stretch_factor = stretch(graph, tree);
+
+        mutex.lock();
+
+        count++;
+
+        if (stretch_factor < stretch_index)
+        {
+            stretch_index = stretch_factor;
+        }
+
+        mutex.unlock();
+
+        return stretch_factor;
+    };
+
+    //
+
     file << "[";
-    file.flush();
 
     for (int i = 0; i < static_cast<int>(paths.size()); i++)
     {
-        auto data = evaluate(paths[i], debug, samples, threads);
+        auto path = paths[i];
 
-        file << data.dump();
+        // Graph construction
+
+        graph = Graph::load(path);
+
+        file << "{";
+        file << "\"path\":\"" << path << "\",";
+        file << "\"n\":" << graph.get_n() << ",";
+        file << "\"m\":" << graph.get_m() << ",";
+
+        if (debug)
+        {
+            std::cout << "path: " << path << std::endl;
+            std::cout << "  n: " << graph.get_n() << std::endl;
+            std::cout << "  m: " << graph.get_m() << std::endl;
+        }
+
+        // Girth
+
+        t0 = std::chrono::high_resolution_clock::now();
+
+        auto girth = graph.get_girth();
+
+        t1 = std::chrono::high_resolution_clock::now();
+
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+        file << "\"girth\":" << girth << ",";
+        file << "\"girth_elapsed\":" << duration.count() << ",";
+
+        if (debug)
+        {
+            std::cout << "  girth: " << girth << std::endl;
+            std::cout << "  girth_elapsed: " << duration.count() << std::endl;
+        }
+
+        // Smallest e-cycle
+
+        t0 = std::chrono::high_resolution_clock::now();
+
+        auto smallest_e_cycle = graph.get_smallest_e_cycle();
+
+        t1 = std::chrono::high_resolution_clock::now();
+
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+        file << "\"smallest_e_cycle\":" << smallest_e_cycle << ",";
+        file << "\"smallest_e_cycle_elapsed\":" << duration.count() << ",";
+
+        if (debug)
+        {
+            std::cout << "  smallest_e_cycle: " << smallest_e_cycle << std::endl;
+            std::cout << "  smallest_e_cycle_elapsed: " << duration.count() << std::endl;
+        }
+
+        // Tree generation
+
+        file << "\"executions\":";
+        file << "[";
+        file.flush();
+
+        lower_bound = std::max(girth, smallest_e_cycle) - 1;
+
+        for (auto t : threads)
+        {
+            for (int s = 0; s < samples; ++s)
+            {
+                stretch_index = graph.get_n() - 1;
+
+                count = 0;
+
+                abort = false;
+
+                t0 = std::chrono::high_resolution_clock::now();
+
+                if (t == 1)
+                {
+                    spanning_tree::generate_sequential(graph, callback, &abort, lower_bound);
+                }
+                else
+                {
+                    spanning_tree::generate_parallel(graph, callback, &abort, lower_bound, t);
+                }
+
+                t1 = std::chrono::high_resolution_clock::now();
+
+                duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+
+                file << "{";
+                file << "\"elapsed\":" << duration.count() << ",";
+                file << "\"spanning_trees\":" << count << ",";
+                file << "\"stretch_index\":" << stretch_index << ",";
+                file << "\"threads\":" << t;
+                file << "}";
+                file.flush();
+
+                if (!(t == threads.back() && s == samples - 1))
+                {
+                    file << ",";
+                }
+
+                if (debug)
+                {
+                    std::cout << "    elapsed: " << duration.count() << std::endl;
+                    std::cout << "    spanning_trees: " << count << std::endl;
+                    std::cout << "    stretch_index: " << stretch_index << std::endl;
+                    std::cout << "    threads: " << t << std::endl;
+                    std::cout << std::endl;
+                }
+            }
+        }
+
+        file << "]";
+        file << "}";
 
         if (i < static_cast<int>(paths.size()) - 1)
         {
-
             file << ",";
         }
-
-        file.flush();
     }
 
     file << "]";
-    file.flush();
     file.close();
 }
