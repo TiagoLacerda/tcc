@@ -72,6 +72,10 @@ def load(path, data, multiplier, average):
 
 
 def plot(data, ax):
+    cmap = plt.get_cmap("rainbow")
+    cind = np.linspace(0, 1, len({n for n in data}))
+    i = 0
+
     for n in data:
         x = []
         y = []
@@ -90,7 +94,8 @@ def plot(data, ax):
             y.append(avg_1/avg_t)
             e.append(std_a_over_b(avg_1, avg_t, std_1, std_t))
 
-        ax.errorbar(x, y, linewidth=1.0, marker='.', label=f'N = {n}')
+        ax.errorbar(x, y, linewidth=1.0, marker='.', label=f'N = {n}', color=cmap(cind[i]))
+        i += 1
 
 
 def save(ax, path):
