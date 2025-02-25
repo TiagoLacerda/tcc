@@ -85,19 +85,31 @@ def plot(data, ax):
         #     continue
 
         for t in data[n]:
-            if (t == 1):
-                continue
-
             # if t > 12:
             #     continue
 
-            if len(data[n][t]) < 2:
-                continue
+            if len(sys.argv) < 4:
+                # Compare within file (speedup)
 
-            avg_a = data[n][t][0]['avg']
-            std_a = data[n][t][0]['std']
-            avg_b = data[n][t][-1]['avg']
-            std_b = data[n][t][-1]['std']
+                if t == 1:
+                    continue
+
+                avg_a = data[n][1][0]['avg']
+                std_a = data[n][1][0]['std']
+                avg_b = data[n][t][0]['avg']
+                std_b = data[n][t][0]['std']
+
+            else:
+                # Compare two files
+
+                if len(data[n][t]) < 2:
+                    continue
+
+                avg_a = data[n][t][0]['avg']
+                std_a = data[n][t][0]['std']
+                avg_b = data[n][t][-1]['avg']
+                std_b = data[n][t][-1]['std']
+
 
             x.append(t)
             y.append(avg_a/avg_b)
@@ -141,7 +153,7 @@ data = {}
 
 for i in range(1, len(sys.argv) - 1):
     path = sys.argv[i]
-    
+
     if path == "result_summary.json":
         average = False
         multiplier = 1.0
