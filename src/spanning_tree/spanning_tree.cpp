@@ -129,7 +129,7 @@ namespace spanning_tree
         }
     }
 
-    void generate_prallel_internal(const Graph &graph, const std::function<int(const Graph &tree)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end)
+    void generate_parallel_internal(const Graph &graph, const std::function<int(const Graph &tree)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end)
     {
         auto candidate = Graph(n);
 
@@ -197,7 +197,7 @@ namespace spanning_tree
 
             workload(n, m, i, num_threads, &start, &end);
 
-            generate_prallel_internal(graph, callback, abort, lower_bound, n, m, edges, start, end);
+            generate_parallel_internal(graph, callback, abort, lower_bound, n, m, edges, start, end);
         }
     }
 }
