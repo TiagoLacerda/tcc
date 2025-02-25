@@ -48,6 +48,11 @@
 #include "src/util/util.hpp"
 #endif
 
+#ifndef JSON
+#define JSON
+#include "include/json.hpp"
+#endif
+
 /// @brief Validates CLI arguments.
 std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> validate_arguments(int argc, char **argv)
 {
@@ -210,8 +215,6 @@ int main(int argc, char **argv)
 
     auto paths = get_paths(i_path);
 
-    std::ofstream file(o_path);
-
     std::chrono::_V2::system_clock::time_point t0, t1;
 
     std::chrono::microseconds duration;
@@ -248,27 +251,25 @@ int main(int argc, char **argv)
 
     //
 
-    file << "[";
+    {
+        std::ofstream file(o_path);
+        file << "[";
+    }
 
     for (int i = 0; i < static_cast<int>(paths.size()); i++)
     {
+        nlohmann::ordered_json data;
+
         auto path = paths[i];
+
+        data["path"] = path;
 
         // Graph construction
 
         graph = Graph::load(path);
 
-        file << "{";
-        file << "\"path\":\"" << path << "\",";
-        file << "\"n\":" << graph.get_n() << ",";
-        file << "\"m\":" << graph.get_m() << ",";
-
-        if (debug)
-        {
-            std::cout << "path: " << path << std::endl;
-            std::cout << "  n: " << graph.get_n() << std::endl;
-            std::cout << "  m: " << graph.get_m() << std::endl;
-        }
+        data["n"] = graph.get_n();
+        data["m"] = graph.get_m();
 
         // Girth
 
@@ -280,14 +281,8 @@ int main(int argc, char **argv)
 
         duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-        file << "\"girth\":" << girth << ",";
-        file << "\"girth_elapsed\":" << duration.count() << ",";
-
-        if (debug)
-        {
-            std::cout << "  girth: " << girth << std::endl;
-            std::cout << "  girth_elapsed: " << duration.count() << std::endl;
-        }
+        data["girth"] = girth;
+        data["girth_elapsed"] = duration.count();
 
         // Smallest e-cycle
 
@@ -299,20 +294,20 @@ int main(int argc, char **argv)
 
         duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-        file << "\"smallest_e_cycle\":" << smallest_e_cycle << ",";
-        file << "\"smallest_e_cycle_elapsed\":" << duration.count() << ",";
+        data["smallest_e_cycle"] = smallest_e_cycle;
+        data["smallest_e_cycle_elapsed"] = duration.count();
 
         if (debug)
         {
-            std::cout << "  smallest_e_cycle: " << smallest_e_cycle << std::endl;
-            std::cout << "  smallest_e_cycle_elapsed: " << duration.count() << std::endl;
+            for (auto &[key, value] : data.items())
+            {
+                std::cout << key << ": " << value << std::endl;
+            }
         }
 
         // Tree generation
 
-        file << "\"executions\":";
-        file << "[";
-        file.flush();
+        data["executions"] = nlohmann::json::array();
 
         lower_bound = std::max(girth, smallest_e_cycle) - 1;
 
@@ -341,39 +336,44 @@ int main(int argc, char **argv)
 
                 duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-                file << "{";
-                file << "\"elapsed\":" << duration.count() << ",";
-                file << "\"spanning_trees\":" << count << ",";
-                file << "\"stretch_index\":" << stretch_index << ",";
-                file << "\"threads\":" << t;
-                file << "}";
-                file.flush();
+                nlohmann::ordered_json execution = {
+                    {"elapsed", duration.count()},
+                    {"spanning_trees", count},
+                    {"stretch_index", stretch_index},
+                    {"threads", t},
+                };
 
-                if (!(t == threads.back() && s == samples - 1))
-                {
-                    file << ",";
-                }
+                data["executions"].emplace_back(std::move(execution));
 
                 if (debug)
                 {
-                    std::cout << "    elapsed: " << duration.count() << std::endl;
-                    std::cout << "    spanning_trees: " << count << std::endl;
-                    std::cout << "    stretch_index: " << stretch_index << std::endl;
-                    std::cout << "    threads: " << t << std::endl;
+                    std::cout << std::endl;
+
+                    for (auto &[key, value] : execution.items())
+                    {
+                        std::cout << key << ": " << value << std::endl;
+                    }
+
                     std::cout << std::endl;
                 }
             }
         }
 
-        file << "]";
-        file << "}";
-
-        if (i < static_cast<int>(paths.size()) - 1)
         {
-            file << ",";
+            std::ofstream file(o_path, std::ios::app);
+
+            file << data.dump();
+
+            if (i < static_cast<int>(paths.size()) - 1)
+            {
+                file << ",";
+            }
         }
     }
 
-    file << "]";
-    file.close();
+    {
+        std::ofstream file(o_path, std::ios::app);
+
+        file << "]";
+    }
 }
