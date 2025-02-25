@@ -81,20 +81,32 @@ def plot(data, ax):
         y = []
         e = []
 
+        # if n > 15:
+        #     continue
+
         for t in data[n]:
             if (t == 1):
                 continue
 
-            avg_1 = data[n][1][0]['avg']
-            std_1 = data[n][1][0]['std']
-            avg_t = data[n][t][0]['avg']
-            std_t = data[n][t][0]['std']
+            # if t > 12:
+            #     continue
+
+            if len(data[n][t]) < 2:
+                continue
+
+            avg_a = data[n][t][0]['avg']
+            std_a = data[n][t][0]['std']
+            avg_b = data[n][t][-1]['avg']
+            std_b = data[n][t][-1]['std']
 
             x.append(t)
-            y.append(avg_1/avg_t)
-            e.append(std_a_over_b(avg_1, avg_t, std_1, std_t))
+            y.append(avg_a/avg_b)
+            e.append(std_a_over_b(avg_a, avg_b, std_a, std_b))
 
-        ax.errorbar(x, y, linewidth=1.0, marker='.', label=f'N = {n}', color=cmap(cind[i]))
+        if len(x) == 0:
+            continue
+
+        ax.errorbar(x, y, e, linewidth=1.0, marker='.', label=f'N = {n}', color=cmap(cind[i]))
         i += 1
 
 
@@ -128,7 +140,16 @@ fig, ax = setup(
 data = {}
 
 for i in range(1, len(sys.argv) - 1):
-    load(sys.argv[i], data, 10 ** -6, True)
+    path = sys.argv[i]
+    
+    if path == "result_summary.json":
+        average = False
+        multiplier = 1.0
+    else:
+        average = True
+        multiplier = 10 ** -6
+
+    load(sys.argv[i], data, multiplier, average)
 
 print(json.dumps(data))
 
