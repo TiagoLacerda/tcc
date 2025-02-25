@@ -21,6 +21,7 @@ clean:
 	del tools/cycle_detection.png
 
 clean-linux:
+	-rm main.exe
 	-rm graph.txt
 	-rm results.json
 	-rm tests.exe
