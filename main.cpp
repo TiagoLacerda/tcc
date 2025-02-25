@@ -33,6 +33,11 @@
 #include <algorithm>
 #endif
 
+#ifndef OMP
+#define OMP
+#include <omp.h>
+#endif
+
 #ifndef GRAPH
 #define GRAPH
 #include "src/graph/graph.hpp"
@@ -219,35 +224,7 @@ int main(int argc, char **argv)
 
     std::chrono::microseconds duration;
 
-    std::mutex mutex;
-
-    int stretch_index;
-
-    int count;
-
-    int lower_bound;
-
-    bool abort;
-
-    Graph graph;
-
-    auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
-    {
-        auto stretch_factor = stretch(graph, tree);
-
-        mutex.lock();
-
-        count++;
-
-        if (stretch_factor < stretch_index)
-        {
-            stretch_index = stretch_factor;
-        }
-
-        mutex.unlock();
-
-        return stretch_factor;
-    };
+    std::cout << "This machine supports at most " << omp_get_max_threads() << "threads. " << std::endl;
 
     //
 
@@ -266,7 +243,7 @@ int main(int argc, char **argv)
 
         // Graph construction
 
-        graph = Graph::load(path);
+        Graph graph = Graph::load(path);
 
         data["n"] = graph.get_n();
         data["m"] = graph.get_m();
@@ -309,17 +286,37 @@ int main(int argc, char **argv)
 
         data["executions"] = nlohmann::json::array();
 
-        lower_bound = std::max(girth, smallest_e_cycle) - 1;
-
         for (auto t : threads)
         {
             for (int s = 0; s < samples; ++s)
             {
-                stretch_index = graph.get_n() - 1;
+                std::mutex mutex;
 
-                count = 0;
+                int stretch_index = graph.get_n() - 1;
 
-                abort = false;
+                int count = 0;
+
+                int lower_bound = std::max(girth, smallest_e_cycle) - 1;
+
+                bool abort = false;
+
+                auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
+                {
+                    auto stretch_factor = stretch(graph, tree);
+
+                    mutex.lock();
+
+                    count++;
+
+                    if (stretch_factor < stretch_index)
+                    {
+                        stretch_index = stretch_factor;
+                    }
+
+                    mutex.unlock();
+
+                    return stretch_factor;
+                };
 
                 t0 = std::chrono::high_resolution_clock::now();
 
@@ -343,8 +340,6 @@ int main(int argc, char **argv)
                     {"threads", t},
                 };
 
-                data["executions"].emplace_back(std::move(execution));
-
                 if (debug)
                 {
                     std::cout << std::endl;
@@ -356,6 +351,8 @@ int main(int argc, char **argv)
 
                     std::cout << std::endl;
                 }
+
+                data["executions"].emplace_back(std::move(execution));
             }
         }
 
