@@ -38,6 +38,11 @@
 #include <omp.h>
 #endif
 
+#ifndef THREAD
+#define THREAD
+#include <thread>
+#endif
+
 #ifndef GRAPH
 #define GRAPH
 #include "src/graph/graph.hpp"
@@ -229,8 +234,23 @@ int main(int argc, char **argv)
     //
 
     {
-        std::ofstream file(o_path);
-        file << "[";
+        for (int attempt = 1; attempt <= 3; ++attempt)
+        {
+            try
+            {
+                std::ofstream file(o_path);
+
+                file << "[";
+
+                break;
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << "File write attempt " << attempt << " failed: " << e.what() << std::endl;
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+        }
     }
 
     for (int i = 0; i < static_cast<int>(paths.size()); i++)
@@ -357,20 +377,48 @@ int main(int argc, char **argv)
         }
 
         {
-            std::ofstream file(o_path, std::ios::app);
-
-            file << data.dump();
-
-            if (i < static_cast<int>(paths.size()) - 1)
+            for (int attempt = 1; attempt <= 3; ++attempt)
             {
-                file << ",";
+                try
+                {
+                    std::ofstream file(o_path, std::ios::app);
+
+                    file << data.dump();
+
+                    if (i < static_cast<int>(paths.size()) - 1)
+                    {
+                        file << ",";
+                    }
+
+                    break;
+                }
+                catch (const std::exception &e)
+                {
+                    std::cerr << "File write attempt " << attempt << " failed: " << e.what() << std::endl;
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                }
             }
         }
     }
 
     {
-        std::ofstream file(o_path, std::ios::app);
+        for (int attempt = 1; attempt <= 3; ++attempt)
+        {
+            try
+            {
+                std::ofstream file(o_path, std::ios::app);
 
-        file << "]";
+                file << "]";
+
+                break;
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << "File write attempt " << attempt << " failed: " << e.what() << std::endl;
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+        }
     }
 }
