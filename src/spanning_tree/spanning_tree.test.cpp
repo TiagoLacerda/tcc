@@ -3,90 +3,90 @@
 #include "../../include/doctest.h"
 #endif
 
+#ifndef GRAPH
+#define GRAPH
+#include "../graph/graph.hpp"
+#endif
+
 #ifndef SPANNING_TREE
 #define SPANNING_TREE
 #include "spanning_tree.hpp"
 #endif
 
-TEST_SUITE("spanning_tree::workload(int n, int m, int i, int *start, int *end)")
+TEST_SUITE("spanning_tree::get_workload(const Graph &graph, const int num_threads)")
 {
-    TEST_CASE("Invalid parameters")
+    TEST_CASE("Invalid parameters (n == 0)")
     {
-        int start, end;
+        auto graph = Graph();
 
-        spanning_tree::workload(0, 0, 0, 0, &start, &end);
+        auto [threads, start, end] = spanning_tree::get_workload(graph, 1);
 
-        REQUIRE(start == 0);
-        REQUIRE(end == 0);
+        REQUIRE(threads == 0);
+    }
+
+    TEST_CASE("Invalid parameters (m == 0)")
+    {
+        auto graph = Graph(3);
+
+        auto [threads, start, end] = spanning_tree::get_workload(graph, 1);
+
+        REQUIRE(threads == 0);
+    }
+
+    TEST_CASE("Invalid parameters (m < n - 1)")
+    {
+        auto graph = Graph(3);
+
+        graph.insert_edge(0, 1);
+
+        auto [threads, start, end] = spanning_tree::get_workload(graph, 1);
+
+        REQUIRE(threads == 0);
+    }
+
+    TEST_CASE("Invalid parameters (num_threads == 0)")
+    {
+        auto graph = Graph::complete(3);
+
+        auto [threads, start, end] = spanning_tree::get_workload(graph, 0);
+
+        REQUIRE(threads == 0);
     }
 
     TEST_CASE("There is only one thread")
     {
-        int start, end;
+        auto graph = Graph::complete(3);
 
-        spanning_tree::workload(5, 10, 0, 1, &start, &end);
+        auto [threads, start, end] = spanning_tree::get_workload(graph, 1);
 
-        REQUIRE(start == 0);
-        REQUIRE(end == 7);
+        REQUIRE(threads == 1);
+        REQUIRE(start[0] == 0);
+        REQUIRE(end[0] == 2);
     }
 
-    TEST_CASE("There is more work than threads")
+    TEST_CASE("There is work enough for all threads")
     {
-        int start, end;
+        auto graph = Graph::complete(5);
 
-        spanning_tree::workload(5, 10, 0, 2, &start, &end);
+        auto [threads, start, end] = spanning_tree::get_workload(graph, 2);
 
-        REQUIRE(start == 0);
-        REQUIRE(end == 3);
-
-        spanning_tree::workload(5, 10, 1, 2, &start, &end);
-
-        REQUIRE(start == 3);
-        REQUIRE(end == 7);
+        REQUIRE(threads == 2);
+        REQUIRE(start[0] == 0);
+        REQUIRE(end[0] == 3);
+        REQUIRE(start[1] == 3);
+        REQUIRE(end[1] == 7);
     }
 
     TEST_CASE("There are more threads than work")
     {
-        int start, end;
+        auto graph = Graph::complete(3);
 
-        spanning_tree::workload(5, 10, 0, 8, &start, &end);
+        auto [threads, start, end] = spanning_tree::get_workload(graph, 5);
 
-        REQUIRE(start == 0);
-        REQUIRE(end == 1);
-
-        spanning_tree::workload(5, 10, 1, 8, &start, &end);
-
-        REQUIRE(start == 1);
-        REQUIRE(end == 2);
-
-        spanning_tree::workload(5, 10, 2, 8, &start, &end);
-
-        REQUIRE(start == 2);
-        REQUIRE(end == 3);
-
-        spanning_tree::workload(5, 10, 3, 8, &start, &end);
-
-        REQUIRE(start == 3);
-        REQUIRE(end == 4);
-
-        spanning_tree::workload(5, 10, 4, 8, &start, &end);
-
-        REQUIRE(start == 4);
-        REQUIRE(end == 5);
-
-        spanning_tree::workload(5, 10, 5, 8, &start, &end);
-
-        REQUIRE(start == 5);
-        REQUIRE(end == 6);
-
-        spanning_tree::workload(5, 10, 6, 8, &start, &end);
-
-        REQUIRE(start == 6);
-        REQUIRE(end == 7);
-
-        spanning_tree::workload(5, 10, 7, 8, &start, &end);
-
-        REQUIRE(start == 11);
-        REQUIRE(end == 10);
+        REQUIRE(threads == 2);
+        REQUIRE(start[0] == 0);
+        REQUIRE(end[0] == 1);
+        REQUIRE(start[1] == 1);
+        REQUIRE(end[1] == 2);
     }
 }

@@ -1,3 +1,13 @@
+#ifndef IOSTREAM
+#define IOSTREAM
+#include <iostream>
+#endif
+
+#ifndef IOMANIP
+#define IOMANIP
+#include <iomanip>
+#endif
+
 #ifndef FUNCTIONAL
 #define FUNCTIONAL
 #include <functional>
@@ -95,38 +105,44 @@ namespace spanning_tree
         }
     }
 
-    void workload(const int n, const int m, const int i, const int num_threads, int *start, int *end)
+    std::tuple<int, std::vector<int>, std::vector<int>> get_workload(const Graph &graph, const int num_threads)
     {
-        if (n == 0 || m == 0 || m > n * (n - 1) / 2 || num_threads == 0 || i >= num_threads) // Invalid parameters.
-        {
-            *start = m;
-            *end = m;
-        }
-        else
-        {
-            int total = m - (n - 1) + 1; // If search started here, there woudldn't be enough edges to make a spanning tree.
+        auto n = graph.get_n();
+        auto m = graph.get_m();
 
-            if (num_threads > total) // There are more threads than work available.
-            {
-                if (i < total) // First threads are busy.
-                {
-                    *start = i;
-                    *end = *start + 1;
-                }
-                else // Last threads are idle.
-                {
-                    *start = m + 1;
-                    *end = m;
-                }
-            }
-            else // There is more work than threads.
-            {
-                int chunk = total / num_threads;
+        // Graph has no vertices
+        // Graph has no edges
+        // Graph doesn't have enough vertices to be connected
+        // Graph has more edges than a complete graph with [n] nodes (multigraph, not supported)
+        // Can't have 0 worker threads
 
-                *start = chunk * i;
-                *end = (i == num_threads - 1) ? total : *start + chunk;
-            }
+        if (n == 0 || m == 0 || m < n - 1 || m > n * (n - 1) / 2 || num_threads == 0)
+        {
+// TODO: Break up each criterion and provide a specific message as to why work was aborted.
+#ifdef DEBUG
+            std::cout << "There was no work to be done by any thread." << std::endl;
+#endif
+            return std::tuple<int, std::vector<int>, std::vector<int>>(0, {}, {});
         }
+
+        auto threshold = m - (n - 1) + 1; // If search started here, there woudldn't be enough edges to make a spanning tree.
+
+        // TODO: Binary search to more threshold as close as possible to the start of the edge vector;
+
+        int threads = std::min(num_threads, threshold); // If there are less edges to the left of [threshold], some threads would be idle.
+
+        int chunk = threshold / threads;
+
+        std::vector<int> start(threads);
+        std::vector<int> end(threads);
+
+        for (int i = 0; i < threads; ++i)
+        {
+            start[i] = (chunk * i);
+            end[i] = (i == threads - 1 ? threshold : chunk * (i + 1));
+        }
+
+        return std::tuple<int, std::vector<int>, std::vector<int>>(threads, start, end);
     }
 
     void generate_parallel_internal(const Graph &graph, const std::function<int(const Graph &tree)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end)
@@ -181,23 +197,26 @@ namespace spanning_tree
 
     void generate_parallel(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads)
     {
+        auto [threads, start, end] = get_workload(graph, num_threads);
+
         auto n = graph.get_n();
         auto m = graph.get_m();
-
-        if (m < n - 1)
-        {
-            return; // Not enough edges in the graph to construct a spanning tree.
-        }
-
         auto edges = graph.get_edges();
 
-#pragma omp parallel num_threads(num_threads)
+#ifdef DEBUG
+        std::cout << "There will be " << threads << " worker threads." << std::endl;
+
+        for (int k = 0; k < threads; k++)
         {
-            int i = omp_get_thread_num(), start, end;
+            std::cout << " " << k << ": " << start[k] << " to " << end[k] << std::endl;
+        }
+#endif
 
-            workload(n, m, i, num_threads, &start, &end);
+#pragma omp parallel num_threads(threads)
+        {
+            int i = omp_get_thread_num();
 
-            generate_parallel_internal(graph, callback, abort, lower_bound, n, m, edges, start, end);
+            generate_parallel_internal(graph, callback, abort, lower_bound, n, m, edges, start[i], end[i]);
         }
     }
 }

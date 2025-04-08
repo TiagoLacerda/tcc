@@ -222,7 +222,9 @@ int main(int argc, char **argv)
 
     std::chrono::microseconds duration;
 
-    std::cout << "This machine supports at most " << omp_get_max_threads() << " threads. " << std::endl;
+    std::cout << "This machine supports at most " << omp_get_max_threads() << " threads." << std::endl;
+
+    std::cout << std::fixed << std::setprecision(2);
 
     //
 
@@ -318,9 +320,9 @@ int main(int argc, char **argv)
 
                 bool abort = false;
 
-                auto threshold = 0.0;
+                int last_progress = 0;
 
-                auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort, &total, &threshold](const Graph &tree)
+                auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort, &total, &last_progress](const Graph &tree)
                 {
                     auto stretch_factor = stretch(graph, tree);
 
@@ -336,13 +338,13 @@ int main(int argc, char **argv)
                     mutex.unlock();
 
 #ifdef DEBUG
-                    auto progress = (static_cast<double>(count) / total) * 100;
+                    int progress = count * 100 / total;
 
-                    if (progress >= threshold + 1.0)
+                    if (progress >= last_progress + 1)
                     {
-                        threshold = progress;
+                        last_progress = progress;
 
-                        std::cout << "Progress: " << progress << "%" << std::endl;
+                        std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
                     }
 #endif
 
