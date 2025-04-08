@@ -15,6 +15,8 @@ https://google.github.io/styleguide/cppguide.html
 
 + [doctest](https://github.com/doctest/doctest)
 
++ [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) 
+
 ### Useful links
 
 + [Graph visualization](https://csacademy.com/app/graph_editor/)

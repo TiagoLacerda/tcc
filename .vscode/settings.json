@@ -74,7 +74,9 @@
         "any": "cpp",
         "forward_list": "cpp",
         "ranges": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "complex": "cpp",
+        "list": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"
@@ -86,5 +88,4 @@
 
     ],
     "terminal.integrated.scrollback": 10000,
-    "C_Cpp.default.compilerPath": "C:\\Users\\tiago\\Documents\\Tools\\mingw64\\bin\\g++.exe"
 }

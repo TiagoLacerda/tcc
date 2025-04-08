@@ -64,13 +64,12 @@
 #endif
 
 /// @brief Validates CLI arguments.
-std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> validate_arguments(int argc, char **argv)
+std::tuple<std::string, std::string, bool, bool, std::vector<int>, int> validate_arguments(int argc, char **argv)
 {
     std::vector<std::string> args(argv, argv + argc);
 
     std::string i_path;             // Input file path.
     std::string o_path;             // (Optional) Output file path.
-    bool debug = false;             // Enable debug mode (outputs to console).
     bool early_halt = false;        // Stop tree generation at lower bound (default: false).
     bool stretch_factor = true;     // Evaluate stretch factor (default: true).
     std::vector<int> threads = {1}; // Number of threads for evaluation (default: [1]).
@@ -86,7 +85,6 @@ std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> va
         "-h, --help                 Show this help message.                                               \n"
         "-i, --input                Input file path.                                                      \n"
         "-o, --output               Output file path.                                                     \n"
-        "-d, --debug                Enable debug mode (outputs to console) (default: false).              \n"
         "--early-halt               Tree generation will stop once the lower-bound is reached.            \n"
         "--no-early-halt            Tree generation will go on until all trees are generated. (default)   \n"
         "--stretch-factor           Will evaluate the strech factor of every generated tree. (default)    \n"
@@ -112,11 +110,6 @@ std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> va
             if (args[i] == "-o" || args[i] == "--output")
             {
                 o_path = args[i + 1];
-            }
-
-            if (args[i] == "-d" || args[i] == "--debug")
-            {
-                debug = true;
             }
 
             if (args[i] == "--early-halt")
@@ -192,7 +185,7 @@ std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int> va
         std::exit(0); // TODO: See the implications of this function.
     }
 
-    return std::tuple<std::string, std::string, bool, bool, bool, std::vector<int>, int>(i_path, o_path, debug, early_halt, stretch_factor, threads, samples);
+    return std::tuple<std::string, std::string, bool, bool, std::vector<int>, int>(i_path, o_path, early_halt, stretch_factor, threads, samples);
 }
 
 /// @brief Load a collection of paths from a file.
@@ -221,7 +214,7 @@ std::vector<std::string> get_paths(const std::string &path)
 
 int main(int argc, char **argv)
 {
-    auto [i_path, o_path, debug, early_halt, stretch_factor, threads, samples] = validate_arguments(argc, argv);
+    auto [i_path, o_path, early_halt, stretch_factor, threads, samples] = validate_arguments(argc, argv);
 
     auto paths = get_paths(i_path);
 
@@ -229,7 +222,7 @@ int main(int argc, char **argv)
 
     std::chrono::microseconds duration;
 
-    std::cout << "This machine supports at most " << omp_get_max_threads() << "threads. " << std::endl;
+    std::cout << "This machine supports at most " << omp_get_max_threads() << " threads. " << std::endl;
 
     //
 
@@ -294,17 +287,22 @@ int main(int argc, char **argv)
         data["smallest_e_cycle"] = smallest_e_cycle;
         data["smallest_e_cycle_elapsed"] = duration.count();
 
-        if (debug)
+#ifdef DEBUG
+        for (auto &[key, value] : data.items())
         {
-            for (auto &[key, value] : data.items())
-            {
-                std::cout << key << ": " << value << std::endl;
-            }
+            std::cout << key << ": " << value << std::endl;
         }
+#endif
 
         // Tree generation
 
         data["executions"] = nlohmann::json::array();
+
+        auto total = kirchoff(graph);
+
+#ifdef DEBUG
+        std::cout << "Kirchoff says there should be " << total << " trees in total." << std::endl;
+#endif
 
         for (auto t : threads)
         {
@@ -320,7 +318,9 @@ int main(int argc, char **argv)
 
                 bool abort = false;
 
-                auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort](const Graph &tree)
+                auto threshold = 0.0;
+
+                auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort, &total, &threshold](const Graph &tree)
                 {
                     auto stretch_factor = stretch(graph, tree);
 
@@ -334,6 +334,17 @@ int main(int argc, char **argv)
                     }
 
                     mutex.unlock();
+
+#ifdef DEBUG
+                    auto progress = (static_cast<double>(count) / total) * 100;
+
+                    if (progress >= threshold + 1.0)
+                    {
+                        threshold = progress;
+
+                        std::cout << "Progress: " << progress << "%" << std::endl;
+                    }
+#endif
 
                     return stretch_factor;
                 };
@@ -353,6 +364,8 @@ int main(int argc, char **argv)
 
                 duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
+                std::cout << std::endl;
+
                 nlohmann::ordered_json execution = {
                     {"elapsed", duration.count()},
                     {"spanning_trees", count},
@@ -360,17 +373,16 @@ int main(int argc, char **argv)
                     {"threads", t},
                 };
 
-                if (debug)
+#ifdef DEBUG
+                std::cout << std::endl;
+
+                for (auto &[key, value] : execution.items())
                 {
-                    std::cout << std::endl;
-
-                    for (auto &[key, value] : execution.items())
-                    {
-                        std::cout << key << ": " << value << std::endl;
-                    }
-
-                    std::cout << std::endl;
+                    std::cout << key << ": " << value << std::endl;
                 }
+
+                std::cout << std::endl;
+#endif
 
                 data["executions"].emplace_back(std::move(execution));
             }

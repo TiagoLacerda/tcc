@@ -28,6 +28,11 @@
 #include <sstream>
 #endif
 
+#ifndef EIGEN
+#define EIGEN
+#include <Eigen/Dense>
+#endif
+
 #ifndef GRAPH
 #define GRAPH
 #include "../graph/graph.hpp"
@@ -140,4 +145,39 @@ std::string now()
     stream << std::put_time(now_tm, "%FT%T%z");
 
     return stream.str();
+}
+
+int kirchoff(const Graph &graph)
+{
+    auto n = graph.get_n();
+
+    if (n < 2)
+    {
+        return 0;
+    }
+
+    auto matrix = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(n - 1, n - 1);
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - 1; j++)
+        {
+            if (i == j)
+            {
+                matrix(i, j) = graph.get_degree(i);
+            }
+            else if (graph.has_edge(i, j))
+            {
+                matrix(i, j) = -1.0;
+            }
+            else
+            {
+                matrix(i, j) = 0.0;
+            }
+        }
+    }
+
+    auto determinant = matrix.determinant();
+
+    return static_cast<int>(std::round(determinant));
 }

@@ -2,8 +2,13 @@ SOURCE := $(wildcard *.cpp */*.cpp */*/*.cpp)
 
 FLAGS := -Wall -O3 -Wno-unused-variable -fopenmp
 
+INCLUDES := -I /usr/include/eigen3
+
 build:
-	g++ -g main.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o main.exe $(FLAGS)
+	g++ -g main.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o main.exe $(FLAGS) $(INCLUDES)
+
+debug:
+	g++ -g main.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o main.exe $(FLAGS) $(INCLUDES) -DDEBUG
 
 tests:
 	g++ -g src/graph/graph.test.cpp src/disjoint_sets/disjoint_sets.test.cpp src/spanning_tree/spanning_tree.test.cpp src/util/util.test.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp include/doctest.h -o tests.exe $(FLAGS)

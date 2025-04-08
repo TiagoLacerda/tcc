@@ -17,3 +17,11 @@ int stretch(const Graph &graph, const Graph &tree);
 /// For more info, see https://en.cppreference.com/w/cpp/io/manip/put_time.
 /// @return a string representing the current date and time.
 std::string now();
+
+
+/// @brief Determine the number of spanning trees of a graph by leveraging Kirchoff's matrix tree theorem.
+///
+/// For more info, see https://en.wikipedia.org/wiki/Kirchhoff%27s_theorem.
+/// @param graph A graph.
+/// @return The number of spanning trees of [graph].
+int kirchoff(const Graph &graph);
