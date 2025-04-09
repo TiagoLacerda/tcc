@@ -27,7 +27,7 @@ https://google.github.io/styleguide/cppguide.html
 + ~~Import graphs from other repository~~
 + ~~Implement smallest-e-cycle lower bound evaluation~~
 + ~~Implement an option to halt tree generation once lower-bound is reached~~
-+ Implement binary search to improve workload threshold accuracy
++ ~~Implement search to improve workload threshold accuracy~~
 + Implement stop condition given a time-limit.
 + Implement parallelism with MPI
 + Implement GUI that updates progress for every graph processed (Flutter) (low-priority)

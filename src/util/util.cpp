@@ -147,7 +147,7 @@ std::string now()
     return stream.str();
 }
 
-int kirchoff(const Graph &graph)
+long long kirchoff(const Graph &graph)
 {
     auto n = graph.get_n();
 
@@ -179,5 +179,5 @@ int kirchoff(const Graph &graph)
 
     auto determinant = matrix.determinant();
 
-    return static_cast<int>(std::round(determinant));
+    return static_cast<long long>(std::round(determinant));
 }

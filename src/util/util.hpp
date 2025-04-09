@@ -24,4 +24,4 @@ std::string now();
 /// For more info, see https://en.wikipedia.org/wiki/Kirchhoff%27s_theorem.
 /// @param graph A graph.
 /// @return The number of spanning trees of [graph].
-int kirchoff(const Graph &graph);
+long long kirchoff(const Graph &graph);

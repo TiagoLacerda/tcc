@@ -122,12 +122,47 @@ namespace spanning_tree
 #ifdef DEBUG
             std::cout << "There was no work to be done by any thread." << std::endl;
 #endif
+
             return std::tuple<int, std::vector<int>, std::vector<int>>(0, {}, {});
         }
 
         auto threshold = m - (n - 1) + 1; // If search started here, there woudldn't be enough edges to make a spanning tree.
 
-        // TODO: Binary search to more threshold as close as possible to the start of the edge vector;
+        auto edges = graph.get_edges();
+
+        auto candidate = Graph(n);
+
+        for (int k = threshold; k < m; ++k)
+        {
+            auto [u, v] = edges[k];
+
+            candidate.insert_edge(u, v);
+        }
+
+        while (!candidate.is_connected() && threshold > 0)
+        {
+            auto [u, v] = edges[threshold - 1];
+
+            candidate.insert_edge(u, v);
+
+            if (!candidate.is_connected())
+            {
+                --threshold;
+
+#ifdef DEBUG
+                std::cout << "Threshold was moved to the left" << std::endl;
+#endif
+            }
+        }
+
+        if (threshold == 0)
+        {
+#ifdef DEBUG
+            std::cout << "There was no work to be done by any thread." << std::endl;
+#endif
+
+            return std::tuple<int, std::vector<int>, std::vector<int>>(0, {}, {});
+        }
 
         int threads = std::min(num_threads, threshold); // If there are less edges to the left of [threshold], some threads would be idle.
 
@@ -198,6 +233,11 @@ namespace spanning_tree
     void generate_parallel(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads)
     {
         auto [threads, start, end] = get_workload(graph, num_threads);
+
+        if (threads < 1)
+        {
+            return;
+        }
 
         auto n = graph.get_n();
         auto m = graph.get_m();
