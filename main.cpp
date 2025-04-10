@@ -65,26 +65,6 @@
 #include "include/json.hpp"
 #endif
 
-void progress_indicator(const volatile int &count, const int &total, const bool &abort)
-{
-    int progress;
-
-    while (!abort)
-    {
-        progress = count * 100 / total;
-
-        std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(250));
-    }
-
-    progress = count * 100 / total;
-
-    std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
-
-    std::cout << std::endl;
-}
-
 /// @brief Validates CLI arguments.
 std::tuple<std::string, std::string, bool, bool, std::vector<int>, int> validate_arguments(int argc, char **argv)
 {
@@ -330,8 +310,6 @@ int main(int argc, char **argv)
         {
             for (int s = 0; s < samples; ++s)
             {
-                std::mutex mutex;
-
                 int stretch_index = graph.get_n() - 1;
 
                 int count = 0;
@@ -340,30 +318,44 @@ int main(int argc, char **argv)
 
                 bool abort = false;
 
-                auto callback = [&](const Graph &tree)
-                {
-                    auto stretch_factor = stretch(graph, tree);
-
-                    mutex.lock();
-
-                    count++;
-
-                    if (stretch_factor < stretch_index)
-                    {
-                        stretch_index = stretch_factor;
-                    }
-
-                    mutex.unlock();
-
-                    return stretch_factor;
-                };
-
-                DEBUG_ONLY(std::thread progress_indicator_thread;)
+                DEBUG_ONLY(std::thread progress_thread;)
 
                 if (t == 1)
                 {
+                    auto callback = [&](const Graph &tree)
+                    {
+                        auto stretch_factor = stretch(graph, tree);
+
+                        count++;
+
+                        if (stretch_factor < stretch_index)
+                        {
+                            stretch_index = stretch_factor;
+                        }
+                    };
+
                     DEBUG_ONLY_BLOCK({
-                        progress_indicator_thread = std::thread(progress_indicator, std::ref(count), std::ref(total), std::ref(abort));
+                        auto progress_callback = [](const int &count, const int &total, const bool &abort)
+                        {
+                            int progress;
+
+                            while (!abort)
+                            {
+                                progress = count * 100 / total;
+
+                                std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+                                std::this_thread::sleep_for(std::chrono::milliseconds(250));
+                            }
+
+                            progress = count * 100 / total;
+
+                            std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+                            std::cout << std::endl;
+                        };
+
+                        progress_thread = std::thread(progress_callback, std::ref(count), std::ref(total), std::ref(abort));
                     });
 
                     t0 = std::chrono::high_resolution_clock::now();
@@ -376,8 +368,51 @@ int main(int argc, char **argv)
                 {
                     auto [num_threads, start, end] = spanning_tree::get_workload(graph, t);
 
+                    std::vector<int> counts(num_threads, 0);
+
+                    std::mutex mutex;
+
+                    auto callback = [&](const Graph &tree, const int thread_num)
+                    {
+                        auto stretch_factor = stretch(graph, tree);
+
+                        counts[thread_num]++;
+
+                        mutex.lock();
+
+                        if (stretch_factor < stretch_index)
+                        {
+                            stretch_index = stretch_factor;
+                        }
+
+                        mutex.unlock();
+                    };
+
                     DEBUG_ONLY_BLOCK({
-                        progress_indicator_thread = std::thread(progress_indicator, std::ref(count), std::ref(total), std::ref(abort));
+                        auto progress_callback = [](const std::vector<int> &counts, const int &total, const bool &abort)
+                        {
+                            int count;
+                            int progress;
+
+                            while (!abort)
+                            {
+                                count = std::accumulate(counts.begin(), counts.end(), 0);
+                                progress = count * 100 / total;
+
+                                std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+                                std::this_thread::sleep_for(std::chrono::milliseconds(250));
+                            }
+
+                            count = std::accumulate(counts.begin(), counts.end(), 0);
+                            progress = count * 100 / total;
+
+                            std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+                            std::cout << std::endl;
+                        };
+
+                        progress_thread = std::thread(progress_callback, std::ref(counts), std::ref(total), std::ref(abort));
                     });
 
                     t0 = std::chrono::high_resolution_clock::now();
@@ -385,15 +420,15 @@ int main(int argc, char **argv)
                     spanning_tree::generate_parallel(graph, callback, &abort, lower_bound, num_threads, start, end);
 
                     t1 = std::chrono::high_resolution_clock::now();
+
+                    count = std::accumulate(counts.begin(), counts.end(), 0);
                 }
 
                 duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
                 abort = true;
 
-                DEBUG_ONLY_BLOCK({
-                    progress_indicator_thread.join();
-                });
+                DEBUG_ONLY(progress_thread.join();)
 
                 nlohmann::ordered_json execution = {
                     {"elapsed", duration.count()},

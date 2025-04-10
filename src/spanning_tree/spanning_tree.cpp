@@ -43,7 +43,7 @@
 namespace spanning_tree
 {
 
-    void generate_sequential(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound)
+    void generate_sequential(const Graph &graph, const std::function<void(const Graph &tree)> &callback, const bool *abort, const int lower_bound)
     {
         int n = graph.get_n();
         int u;
@@ -104,6 +104,85 @@ namespace spanning_tree
                     tree.remove_edge(v, u);
                 }
             }
+        }
+    }
+
+    void generate_parallel_internal(const Graph &graph, const std::function<void(const Graph &tree, const int thread_num)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end, const int thread_num)
+    {
+        auto candidate = Graph(n);
+
+        int pointers[n - 1];
+
+        int p = 0;
+
+        int count = 0;
+
+        pointers[p] = start - 1;
+
+        while (pointers[0] < end && !(*abort))
+        {
+            pointers[p]++;
+
+            if (pointers[p] < m)
+            {
+                auto u = std::get<0>(edges[pointers[p]]);
+                auto v = std::get<1>(edges[pointers[p]]);
+                candidate.insert_edge(u, v);
+
+                if (p == n - 2) // Has n - 1 edges.
+                {
+                    if (!candidate.is_cyclic_disjoint_sets()) // Is acyclic
+                    {
+                        callback(candidate, thread_num);
+                    }
+
+                    candidate.remove_edge(u, v);
+                }
+                else
+                {
+                    p++;
+                    pointers[p] = pointers[p - 1];
+                }
+            }
+            else
+            {
+                p--;
+                if (p >= 0)
+                {
+                    auto u = std::get<0>(edges[pointers[p]]);
+                    auto v = std::get<1>(edges[pointers[p]]);
+                    candidate.remove_edge(u, v);
+                }
+            }
+        }
+    }
+
+    void generate_parallel(const Graph &graph, const std::function<void(const Graph &tree, const int thread_num)> &callback, const bool *abort, const int lower_bound, const int num_threads, const std::vector<int> start, const std::vector<int> end)
+    {
+
+        if (num_threads < 1)
+        {
+            return;
+        }
+
+        auto n = graph.get_n();
+        auto m = graph.get_m();
+        auto edges = graph.get_edges();
+
+        DEBUG_ONLY_BLOCK({
+            std::cout << "There will be " << num_threads << " worker threads." << std::endl;
+
+            for (int k = 0; k < num_threads; k++)
+            {
+                std::cout << " " << k << ": " << start[k] << " to " << end[k] << std::endl;
+            }
+        });
+
+#pragma omp parallel num_threads(num_threads)
+        {
+            int i = omp_get_thread_num();
+
+            generate_parallel_internal(graph, callback, abort, lower_bound, n, m, edges, start[i], end[i], i);
         }
     }
 
@@ -174,84 +253,5 @@ namespace spanning_tree
         }
 
         return std::tuple<int, std::vector<int>, std::vector<int>>(threads, start, end);
-    }
-
-    void generate_parallel_internal(const Graph &graph, const std::function<int(const Graph &tree)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end)
-    {
-        auto candidate = Graph(n);
-
-        int pointers[n - 1];
-
-        int p = 0;
-
-        int count = 0;
-
-        pointers[p] = start - 1;
-
-        while (pointers[0] < end && !(*abort))
-        {
-            pointers[p]++;
-
-            if (pointers[p] < m)
-            {
-                auto u = std::get<0>(edges[pointers[p]]);
-                auto v = std::get<1>(edges[pointers[p]]);
-                candidate.insert_edge(u, v);
-
-                if (p == n - 2) // Has n - 1 edges.
-                {
-                    if (!candidate.is_cyclic_disjoint_sets()) // Is acyclic
-                    {
-                        callback(candidate);
-                    }
-
-                    candidate.remove_edge(u, v);
-                }
-                else
-                {
-                    p++;
-                    pointers[p] = pointers[p - 1];
-                }
-            }
-            else
-            {
-                p--;
-                if (p >= 0)
-                {
-                    auto u = std::get<0>(edges[pointers[p]]);
-                    auto v = std::get<1>(edges[pointers[p]]);
-                    candidate.remove_edge(u, v);
-                }
-            }
-        }
-    }
-
-    void generate_parallel(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads, const std::vector<int> start, const std::vector<int> end)
-    {
-
-        if (num_threads < 1)
-        {
-            return;
-        }
-
-        auto n = graph.get_n();
-        auto m = graph.get_m();
-        auto edges = graph.get_edges();
-
-        DEBUG_ONLY_BLOCK({
-            std::cout << "There will be " << num_threads << " worker threads." << std::endl;
-
-            for (int k = 0; k < num_threads; k++)
-            {
-                std::cout << " " << k << ": " << start[k] << " to " << end[k] << std::endl;
-            }
-        });
-
-#pragma omp parallel num_threads(num_threads)
-        {
-            int i = omp_get_thread_num();
-
-            generate_parallel_internal(graph, callback, abort, lower_bound, n, m, edges, start[i], end[i]);
-        }
     }
 }
