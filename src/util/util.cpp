@@ -1,3 +1,23 @@
+#ifndef ATOMIC
+#define ATOMIC
+#include <atomic>
+#endif
+
+#ifndef ALGORITHM
+#define ALGORITHM
+#include <algorithm>
+#endif
+
+#ifndef NUMERIC
+#define NUMERIC
+#include <numeric>
+#endif
+
+#ifndef THREAD
+#define THREAD
+#include <thread>
+#endif
+
 #ifndef FILESYSTEM
 #define FILESYSTEM
 #include <filesystem>
@@ -217,4 +237,57 @@ std::vector<std::string> get_paths(const std::string &path)
     }
 
     return paths;
+}
+
+std::thread track_progress(const int &count, const int &total, const std::atomic<bool> &abort)
+{
+    auto callback = [&]()
+    {
+        int progress;
+
+        while (!abort.load())
+        {
+            progress = count * 100 / total;
+
+            std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        }
+
+        progress = count * 100 / total;
+
+        std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+        std::cout << std::endl;
+    };
+
+    return std::thread(callback);
+}
+
+std::thread track_progress(const std::vector<int> &counts, const int &total, const std::atomic<bool> &abort)
+{
+    auto callback = [&]()
+    {
+        int count;
+        int progress;
+
+        while (!abort.load())
+        {
+            count = std::accumulate(counts.begin(), counts.end(), 0);
+            progress = count * 100 / total;
+
+            std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        }
+
+        count = std::accumulate(counts.begin(), counts.end(), 0);
+        progress = count * 100 / total;
+
+        std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+        std::cout << std::endl;
+    };
+
+    return std::thread(callback);
 }

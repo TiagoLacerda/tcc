@@ -15,6 +15,11 @@
 #include <fstream>
 #endif
 
+#ifndef ATOMIC
+#define ATOMIC
+#include <atomic>
+#endif
+
 #ifndef CHRONO
 #define CHRONO
 #include <chrono>
@@ -292,7 +297,7 @@ int main(int argc, char **argv)
 
                 int lower_bound = std::max(girth, smallest_e_cycle) - 1;
 
-                bool abort = false;
+                std::atomic<bool> abort{false};
 
                 DEBUG_ONLY(std::thread progress_thread;)
 
@@ -310,35 +315,17 @@ int main(int argc, char **argv)
                         }
                     };
 
-                    DEBUG_ONLY_BLOCK({
-                        auto progress_callback = [](const int &count, const int &total, const bool &abort)
-                        {
-                            int progress;
-
-                            while (!abort)
-                            {
-                                progress = count * 100 / total;
-
-                                std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
-
-                                std::this_thread::sleep_for(std::chrono::milliseconds(250));
-                            }
-
-                            progress = count * 100 / total;
-
-                            std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
-
-                            std::cout << std::endl;
-                        };
-
-                        progress_thread = std::thread(progress_callback, std::ref(count), std::ref(total), std::ref(abort));
-                    });
+                    DEBUG_ONLY(progress_thread = track_progress(count, total, abort);)
 
                     t0 = std::chrono::high_resolution_clock::now();
 
-                    spanning_tree::generate_sequential(graph, callback, &abort, lower_bound);
+                    spanning_tree::generate_sequential(graph, callback, abort, lower_bound);
 
                     t1 = std::chrono::high_resolution_clock::now();
+
+                    abort.store(true);
+
+                    DEBUG_ONLY(progress_thread.join();)
                 }
                 else
                 {
@@ -364,47 +351,22 @@ int main(int argc, char **argv)
                         mutex.unlock();
                     };
 
-                    DEBUG_ONLY_BLOCK({
-                        auto progress_callback = [](const std::vector<int> &counts, const int &total, const bool &abort)
-                        {
-                            int count;
-                            int progress;
-
-                            while (!abort)
-                            {
-                                count = std::accumulate(counts.begin(), counts.end(), 0);
-                                progress = count * 100 / total;
-
-                                std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
-
-                                std::this_thread::sleep_for(std::chrono::milliseconds(250));
-                            }
-
-                            count = std::accumulate(counts.begin(), counts.end(), 0);
-                            progress = count * 100 / total;
-
-                            std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
-
-                            std::cout << std::endl;
-                        };
-
-                        progress_thread = std::thread(progress_callback, std::ref(counts), std::ref(total), std::ref(abort));
-                    });
+                    DEBUG_ONLY(progress_thread = track_progress(counts, total, abort);)
 
                     t0 = std::chrono::high_resolution_clock::now();
 
-                    spanning_tree::generate_parallel(graph, callback, &abort, lower_bound, num_threads, start, end);
+                    spanning_tree::generate_parallel(graph, callback, abort, lower_bound, num_threads, start, end);
 
                     t1 = std::chrono::high_resolution_clock::now();
 
                     count = std::accumulate(counts.begin(), counts.end(), 0);
+
+                    abort.store(true);
+
+                    DEBUG_ONLY(progress_thread.join();)
                 }
 
                 duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-
-                abort = true;
-
-                DEBUG_ONLY(progress_thread.join();)
 
                 nlohmann::ordered_json execution = {
                     {"elapsed", duration.count()},

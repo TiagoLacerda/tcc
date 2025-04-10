@@ -1,5 +1,10 @@
 #include "macros.h"
 
+#ifndef ATOMIC
+#define ATOMIC
+#include <atomic>
+#endif
+
 #ifndef IOSTREAM
 #define IOSTREAM
 #include <iostream>
@@ -43,7 +48,7 @@
 namespace spanning_tree
 {
 
-    void generate_sequential(const Graph &graph, const std::function<void(const Graph &tree)> &callback, const bool *abort, const int lower_bound)
+    void generate_sequential(const Graph &graph, const std::function<void(const Graph &tree)> &callback, const std::atomic<bool> &abort, const int lower_bound)
     {
         int n = graph.get_n();
         int u;
@@ -59,7 +64,7 @@ namespace spanning_tree
             last_neighbor[i] = -1;
         }
 
-        while (v >= 0 && !(*abort))
+        while (v >= 0 && !abort.load())
         {
             if (next_neighbor[v] == graph.get_degree(v))
             {
@@ -107,7 +112,7 @@ namespace spanning_tree
         }
     }
 
-    void generate_parallel_internal(const Graph &graph, const std::function<void(const Graph &tree, const int thread_num)> callback, const bool *abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end, const int thread_num)
+    void generate_parallel_internal(const Graph &graph, const std::function<void(const Graph &tree, const int thread_num)> callback, const std::atomic<bool> &abort, const int lower_bound, const int n, const int m, const std::vector<std::tuple<int, int>> edges, const int start, const int end, const int thread_num)
     {
         auto candidate = Graph(n);
 
@@ -119,7 +124,7 @@ namespace spanning_tree
 
         pointers[p] = start - 1;
 
-        while (pointers[0] < end && !(*abort))
+        while (pointers[0] < end && !abort.load())
         {
             pointers[p]++;
 
@@ -157,7 +162,7 @@ namespace spanning_tree
         }
     }
 
-    void generate_parallel(const Graph &graph, const std::function<void(const Graph &tree, const int thread_num)> &callback, const bool *abort, const int lower_bound, const int num_threads, const std::vector<int> start, const std::vector<int> end)
+    void generate_parallel(const Graph &graph, const std::function<void(const Graph &tree, const int thread_num)> &callback, const std::atomic<bool> &abort, const int lower_bound, const int num_threads, const std::vector<int> start, const std::vector<int> end)
     {
 
         if (num_threads < 1)

@@ -1,3 +1,13 @@
+#ifndef ATOMIC
+#define ATOMIC
+#include <atomic>
+#endif
+
+#ifndef THREAD
+#define THREAD
+#include <thread>
+#endif
+
 class Graph;
 
 // https://www.youtube.com/watch?v=4OQeCuLYj-4&ab_channel=MichaelSambol
@@ -29,3 +39,7 @@ long long kirchoff(const Graph &graph);
 /// @param path Path to the file.
 /// @return a collection of paths to files.
 std::vector<std::string> get_paths(const std::string &path);
+
+std::thread track_progress(const int &count, const int &total, const std::atomic<bool> &abort);
+
+std::thread track_progress(const std::vector<int> &counts, const int &total, const std::atomic<bool> &abort);

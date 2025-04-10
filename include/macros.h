@@ -1,3 +1,5 @@
+#pragma once
+
 #ifdef DEBUG
     #define DEBUG_ONLY(x) x
     #define DEBUG_ONLY_BLOCK(x) do { x } while (0)
