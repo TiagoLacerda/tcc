@@ -1,11 +1,21 @@
-#ifndef LIMITS
-#define LIMITS
-#include <limits.h>
+#ifndef FILESYSTEM
+#define FILESYSTEM
+#include <filesystem>
 #endif
 
 #ifndef IOSTREAM
 #define IOSTREAM
 #include <iostream>
+#endif
+
+#ifndef FSTREAM
+#define FSTREAM
+#include <fstream>
+#endif
+
+#ifndef LIMITS
+#define LIMITS
+#include <limits.h>
 #endif
 
 #ifndef CHRONO
@@ -180,4 +190,31 @@ long long kirchoff(const Graph &graph)
     auto determinant = matrix.determinant();
 
     return static_cast<long long>(std::round(determinant));
+}
+
+std::vector<std::string> get_paths(const std::string &path)
+{
+    std::ifstream file(path);
+
+    if (!file)
+    {
+        throw std::runtime_error("Failed to open file: " + path);
+    }
+
+    std::vector<std::string> paths;
+    std::string line;
+
+    if (std::getline(file, line) && std::filesystem::exists(line))
+    {
+        do
+        {
+            paths.emplace_back(line);
+        } while (std::getline(file, line));
+    }
+    else
+    {
+        paths.emplace_back(path);
+    }
+
+    return paths;
 }
