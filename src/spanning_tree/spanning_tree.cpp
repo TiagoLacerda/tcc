@@ -1,3 +1,5 @@
+#include "macros.h"
+
 #ifndef IOSTREAM
 #define IOSTREAM
 #include <iostream>
@@ -118,10 +120,8 @@ namespace spanning_tree
 
         if (n == 0 || m == 0 || m < n - 1 || m > n * (n - 1) / 2 || num_threads == 0)
         {
-// TODO: Break up each criterion and provide a specific message as to why work was aborted.
-#ifdef DEBUG
-            std::cout << "There was no work to be done by any thread." << std::endl;
-#endif
+            // TODO: Break up each criterion and provide a specific message as to why work was aborted.
+            DEBUG_ONLY(std::cout << "There was no work to be done by any thread." << std::endl;)
 
             return std::tuple<int, std::vector<int>, std::vector<int>>(0, {}, {});
         }
@@ -149,17 +149,13 @@ namespace spanning_tree
             {
                 --threshold;
 
-#ifdef DEBUG
-                std::cout << "Threshold was moved to the left" << std::endl;
-#endif
+                DEBUG_ONLY(std::cout << "Threshold was moved to the left" << std::endl;)
             }
         }
 
         if (threshold == 0)
         {
-#ifdef DEBUG
-            std::cout << "There was no work to be done by any thread." << std::endl;
-#endif
+            DEBUG_ONLY(std::cout << "There was no work to be done by any thread." << std::endl;)
 
             return std::tuple<int, std::vector<int>, std::vector<int>>(0, {}, {});
         }
@@ -230,11 +226,10 @@ namespace spanning_tree
         }
     }
 
-    void generate_parallel(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads)
+    void generate_parallel(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads, const std::vector<int> start, const std::vector<int> end)
     {
-        auto [threads, start, end] = get_workload(graph, num_threads);
 
-        if (threads < 1)
+        if (num_threads < 1)
         {
             return;
         }
@@ -243,16 +238,16 @@ namespace spanning_tree
         auto m = graph.get_m();
         auto edges = graph.get_edges();
 
-#ifdef DEBUG
-        std::cout << "There will be " << threads << " worker threads." << std::endl;
+        DEBUG_ONLY_BLOCK({
+            std::cout << "There will be " << num_threads << " worker threads." << std::endl;
 
-        for (int k = 0; k < threads; k++)
-        {
-            std::cout << " " << k << ": " << start[k] << " to " << end[k] << std::endl;
-        }
-#endif
+            for (int k = 0; k < num_threads; k++)
+            {
+                std::cout << " " << k << ": " << start[k] << " to " << end[k] << std::endl;
+            }
+        });
 
-#pragma omp parallel num_threads(threads)
+#pragma omp parallel num_threads(num_threads)
         {
             int i = omp_get_thread_num();
 

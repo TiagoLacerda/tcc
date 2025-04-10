@@ -16,7 +16,7 @@ namespace spanning_tree
     /// @param graph A graph.
     /// @param callback A function to be called whenever a new spanning tree is found.
     /// @param num_threads Number of threads between which to split the workload.
-    void generate_parallel(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads);
+    void generate_parallel(const Graph &graph, const std::function<int(const Graph &tree)> &callback, const bool *abort, const int lower_bound, const int num_threads, const std::vector<int> start, const std::vector<int> end);
 
     /// @brief Determine the start and end positions for the first pointer in a search for each thread, as well as the number of actual worker threads.
     /// @param graph A graph.

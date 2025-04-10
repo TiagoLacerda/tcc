@@ -2,7 +2,7 @@ SOURCE := $(wildcard *.cpp */*.cpp */*/*.cpp)
 
 FLAGS := -Wall -O3 -Wno-unused-variable -fopenmp
 
-INCLUDES := -I /usr/include/eigen3
+INCLUDES := -Iinclude -I /usr/include/eigen3
 
 build:
 	g++ -g main.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o main.exe $(FLAGS) $(INCLUDES)

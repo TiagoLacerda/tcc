@@ -1,3 +1,5 @@
+#include "macros.h"
+
 #ifndef IOSTREAM
 #define IOSTREAM
 #include <iostream>
@@ -62,6 +64,26 @@
 #define JSON
 #include "include/json.hpp"
 #endif
+
+void progress_indicator(const volatile int &count, const int &total, const bool &abort)
+{
+    int progress;
+
+    while (!abort)
+    {
+        progress = count * 100 / total;
+
+        std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+    }
+
+    progress = count * 100 / total;
+
+    std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
+
+    std::cout << std::endl;
+}
 
 /// @brief Validates CLI arguments.
 std::tuple<std::string, std::string, bool, bool, std::vector<int>, int> validate_arguments(int argc, char **argv)
@@ -289,12 +311,12 @@ int main(int argc, char **argv)
         data["smallest_e_cycle"] = smallest_e_cycle;
         data["smallest_e_cycle_elapsed"] = duration.count();
 
-#ifdef DEBUG
-        for (auto &[key, value] : data.items())
-        {
-            std::cout << key << ": " << value << std::endl;
-        }
-#endif
+        DEBUG_ONLY_BLOCK({
+            for (auto &[key, value] : data.items())
+            {
+                std::cout << key << ": " << value << std::endl;
+            }
+        });
 
         // Tree generation
 
@@ -302,9 +324,7 @@ int main(int argc, char **argv)
 
         auto total = kirchoff(graph);
 
-#ifdef DEBUG
-        std::cout << "Kirchoff says there should be " << total << " trees in total." << std::endl;
-#endif
+        DEBUG_ONLY(std::cout << "Kirchoff says there should be " << total << " trees in total." << std::endl;)
 
         for (auto t : threads)
         {
@@ -320,9 +340,7 @@ int main(int argc, char **argv)
 
                 bool abort = false;
 
-                int last_progress = 0;
-
-                auto callback = [&graph, &mutex, &stretch_index, &count, &lower_bound, &abort, &total, &last_progress](const Graph &tree)
+                auto callback = [&](const Graph &tree)
                 {
                     auto stretch_factor = stretch(graph, tree);
 
@@ -337,36 +355,45 @@ int main(int argc, char **argv)
 
                     mutex.unlock();
 
-#ifdef DEBUG
-                    int progress = count * 100 / total;
-
-                    if (progress >= last_progress + 1)
-                    {
-                        last_progress = progress;
-
-                        std::cout << "\r\033[2KProgress: " << progress << "%" << std::flush;
-                    }
-#endif
-
                     return stretch_factor;
                 };
 
-                t0 = std::chrono::high_resolution_clock::now();
+                DEBUG_ONLY(std::thread progress_indicator_thread;)
 
                 if (t == 1)
                 {
+                    DEBUG_ONLY_BLOCK({
+                        progress_indicator_thread = std::thread(progress_indicator, std::ref(count), std::ref(total), std::ref(abort));
+                    });
+
+                    t0 = std::chrono::high_resolution_clock::now();
+
                     spanning_tree::generate_sequential(graph, callback, &abort, lower_bound);
+
+                    t1 = std::chrono::high_resolution_clock::now();
                 }
                 else
                 {
-                    spanning_tree::generate_parallel(graph, callback, &abort, lower_bound, t);
-                }
+                    auto [num_threads, start, end] = spanning_tree::get_workload(graph, t);
 
-                t1 = std::chrono::high_resolution_clock::now();
+                    DEBUG_ONLY_BLOCK({
+                        progress_indicator_thread = std::thread(progress_indicator, std::ref(count), std::ref(total), std::ref(abort));
+                    });
+
+                    t0 = std::chrono::high_resolution_clock::now();
+
+                    spanning_tree::generate_parallel(graph, callback, &abort, lower_bound, num_threads, start, end);
+
+                    t1 = std::chrono::high_resolution_clock::now();
+                }
 
                 duration = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
 
-                std::cout << std::endl;
+                abort = true;
+
+                DEBUG_ONLY_BLOCK({
+                    progress_indicator_thread.join();
+                });
 
                 nlohmann::ordered_json execution = {
                     {"elapsed", duration.count()},
@@ -375,16 +402,16 @@ int main(int argc, char **argv)
                     {"threads", t},
                 };
 
-#ifdef DEBUG
-                std::cout << std::endl;
+                DEBUG_ONLY_BLOCK({
+                    std::cout << std::endl;
 
-                for (auto &[key, value] : execution.items())
-                {
-                    std::cout << key << ": " << value << std::endl;
-                }
+                    for (auto &[key, value] : execution.items())
+                    {
+                        std::cout << key << ": " << value << std::endl;
+                    }
 
-                std::cout << std::endl;
-#endif
+                    std::cout << std::endl;
+                });
 
                 data["executions"].emplace_back(std::move(execution));
             }
