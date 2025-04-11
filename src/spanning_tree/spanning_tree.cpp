@@ -223,19 +223,23 @@ namespace spanning_tree
             candidate.insert_edge(u, v);
         }
 
-        while (!candidate.is_connected() && threshold > 0)
+        int k = 0;
+
+        while (!candidate.is_connected() && threshold - k > 0)
         {
-            auto [u, v] = edges[threshold - 1];
+            auto [u, v] = edges[threshold - k - 1];
 
             candidate.insert_edge(u, v);
 
             if (!candidate.is_connected())
             {
-                --threshold;
-
-                DEBUG_ONLY(std::cout << "Threshold was moved to the left" << std::endl;)
+                ++k;
             }
         }
+
+        DEBUG_ONLY(std::cout << "Threshold was moved " << k << " positions to the left, from " << threshold << " to " << (threshold - k) << std::endl;)
+
+        threshold -= k;
 
         if (threshold == 0)
         {

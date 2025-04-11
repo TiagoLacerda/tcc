@@ -1,3 +1,8 @@
+#ifndef ATOMIC
+#define ATOMIC
+#include <atomic>
+#endif
+
 #ifndef FUNCTIONAL
 #define FUNCTIONAL
 #include <functional>
