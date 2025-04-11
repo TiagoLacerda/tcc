@@ -781,6 +781,31 @@ void Graph::to_file(const std::string &path) const
     file.close();
 };
 
+void Graph::save(const std::string &path) const
+{
+    std::ofstream file(path);
+
+    if (!file)
+    {
+        throw std::invalid_argument("Failed to open file");
+    }
+
+    file << n << std::endl;
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+        {
+
+            file << (has_edge(i, j) ? 1 : 0) << " ";
+        }
+
+        file << std::endl;
+    }
+
+    file.close();
+};
+
 Graph Graph::load(const std::string &path)
 {
     std::ifstream file(path);

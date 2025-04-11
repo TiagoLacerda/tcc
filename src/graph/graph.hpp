@@ -157,6 +157,10 @@ public:
     /// @param path The path of the file to be created.
     void to_file(const std::string &path) const;
 
+    /// @brief Generate a file at the given path with a representation of the graph. The first line represents n. The next m lines represent an adjacency matrix.
+    /// @param path The path of the file to be created.
+    void save(const std::string &path) const;
+
     /// Loads a graph from a file containing an adjacency matrix.
     /// @param path The file path.
     /// @return The constructed graph.
