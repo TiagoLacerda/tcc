@@ -322,50 +322,48 @@ int main(int argc, char **argv)
 #pragma omp parallel
             {
 
-                int tries = 10;
-
-                while (static_cast<int>(graphs.size()) < samples && tries > 0 && !abort.load())
+                while (static_cast<int>(graphs.size()) < samples && !abort.load())
                 {
                     std::optional<Graph> generated = generate(n, m, target_worker_threads, retries);
 
                     if (generated)
                     {
-                        auto graph = generated.value();
+                        std::cout << "Successfully generated a graph with n: " << n << ", m: " << m << std::endl;
 
-                        m = baseline;
+                        auto graph = generated.value();
 
                         mutex.lock();
 
                         candidates[m].push_back(graph);
 
-                        if (static_cast<int>(candidates[m].size()) == samples)
+                        if (static_cast<int>(candidates[m].size()) >= samples) // If this thread found a group...
                         {
-                            graphs = candidates[m];
+                            if (static_cast<int>(graphs.size()) >= samples) // But another thread found a group...
+                            {
+                                if (m < graphs[0].get_m()) // If this thread found smaller graphs...
+                                {
+                                    graphs = candidates[m];
+                                }
+                            }
+                            else // And no other thread found a group...
+                            {
+                                graphs = candidates[m];
+                            }
                         }
 
                         mutex.unlock();
 
-                        tries = 10;
-
-                        std::cout << "Successfully generated a graph with n: " << n << ", m: " << m << std::endl;
+                        m = baseline;
                     }
                     else
                     {
-                        --tries;
-
-                        if (tries == 0)
+                        if (m < n * (n - 1) * 0.5)
                         {
-                            if (m < n * (n - 1) * 0.5)
-                            {
-                                ++m;
-                                tries = 10;
-                            }
+                            ++m;
                         }
                     }
                 }
             }
-
-            // Once [sample] graphs are found, save each
 
             for (int i = 0; i < samples; i++)
             {
@@ -382,6 +380,8 @@ int main(int argc, char **argv)
                 graph.save(path);
 
                 count++;
+
+                std::cout << "Saved: " << path << " (with up to " << kirchoff(graph) << " spanning trees)." << std::endl;
             }
         }
     }
