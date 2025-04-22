@@ -291,3 +291,26 @@ std::thread track_progress(const std::vector<int> &counts, const int &total, con
 
     return std::thread(callback);
 }
+
+bool confirm(const std::string &prompt, const bool &value)
+{
+    std::string input;
+
+    std::cout << prompt << " [" << (value ? "Y/n" : "y/N") << "]: ";
+    std::getline(std::cin, input);
+
+    while (true)
+    {
+        if (input.empty())
+            return value;
+
+        if (input == "y" || input == "Y")
+            return true;
+
+        if (input == "n" || input == "N")
+            return false;
+
+        std::cout << "Please respond with 'y' or 'n': ";
+        std::getline(std::cin, input);
+    }
+}

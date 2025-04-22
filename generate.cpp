@@ -10,19 +10,9 @@
 #include <sstream>
 #endif
 
-#ifndef OPTIONAL
-#define OPTIONAL
-#include <optional>
-#endif
-
 #ifndef FSTREAM
 #define FSTREAM
 #include <fstream>
-#endif
-
-#ifndef THREAD
-#define THREAD
-#include <thread>
 #endif
 
 #ifndef FILESYSTEM
@@ -50,11 +40,6 @@
 #include <cmath>
 #endif
 
-#ifndef OMP
-#define OMP
-#include <omp.h>
-#endif
-
 #ifndef SPANNING_TREE
 #define SPANNING_TREE
 #include "src/spanning_tree/spanning_tree.hpp"
@@ -76,13 +61,11 @@
 #endif
 
 /// @brief Validates CLI arguments.
-std::tuple<std::vector<int>, std::vector<float>, int, int, int> validate_arguments(int argc, char **argv)
+std::tuple<int, int, int, int, int> validate_arguments(int argc, char **argv)
 {
     std::vector<std::string> args(argv, argv + argc);
 
-    std::vector<int> nodes;
-    std::vector<float> edges;
-    int samples = 1, target_worker_threads = 1, retries = 1000;
+    int nodes = 0, edges = 0, samples = 1, target_worker_threads = 1, retries = 1000;
 
     bool exit = false;
 
@@ -112,42 +95,22 @@ std::tuple<std::vector<int>, std::vector<float>, int, int, int> validate_argumen
 
             if (args[i] == "-n" || args[i] == "--nodes")
             {
-                nodes.clear();
+                nodes = std::stoi(args[i + 1]);
 
-                for (int j = i + 1; j < static_cast<int>(args.size()); ++j)
+                if (nodes < 0)
                 {
-                    try
-                    {
-                        nodes.push_back(std::stoi(args[j]));
-                    }
-                    catch (const std::invalid_argument &)
-                    {
-                        break;
-                    }
+                    throw std::out_of_range("Number of nodes cannot be lower than 0.");
                 }
-
-                // Advance index to skip processed values
-                i += static_cast<int>(nodes.size());
             }
 
             if (args[i] == "-e" || args[i] == "--edges")
             {
-                edges.clear();
+                edges = std::stoi(args[i + 1]);
 
-                for (int j = i + 1; j < static_cast<int>(args.size()); ++j)
+                if (edges < 1)
                 {
-                    try
-                    {
-                        edges.push_back(std::stof(args[j]));
-                    }
-                    catch (const std::invalid_argument &)
-                    {
-                        break;
-                    }
+                    throw std::out_of_range("Number of edges cannot be lower than 0.");
                 }
-
-                // Advance index to skip processed values
-                i += static_cast<int>(edges.size());
             }
 
             if (args[i] == "-s" || args[i] == "--samples")
@@ -156,7 +119,7 @@ std::tuple<std::vector<int>, std::vector<float>, int, int, int> validate_argumen
 
                 if (samples < 1)
                 {
-                    throw std::out_of_range("Number of samples cannot be lower than 1");
+                    throw std::out_of_range("Number of samples cannot be lower than 1.");
                 }
             }
 
@@ -166,7 +129,7 @@ std::tuple<std::vector<int>, std::vector<float>, int, int, int> validate_argumen
 
                 if (target_worker_threads < 1)
                 {
-                    throw std::out_of_range("Number of threads cannot be lower than 1");
+                    throw std::out_of_range("Number of threads cannot be lower than 1.");
                 }
             }
 
@@ -176,7 +139,7 @@ std::tuple<std::vector<int>, std::vector<float>, int, int, int> validate_argumen
 
                 if (retries < 0)
                 {
-                    throw std::out_of_range("Number of retries cannot be lower than 0");
+                    throw std::out_of_range("Number of retries cannot be lower than 0.");
                 }
             }
         }
@@ -193,86 +156,23 @@ std::tuple<std::vector<int>, std::vector<float>, int, int, int> validate_argumen
         std::exit(0); // TODO: See the implications of this function.
     }
 
-    return std::tuple<std::vector<int>, std::vector<float>, int, int, int>(nodes, edges, samples, target_worker_threads, retries);
+    return std::tuple<int, int, int, int, int>(nodes, edges, samples, target_worker_threads, retries);
 }
 
-void print(const std::vector<int> &nodes, const std::vector<float> &edges, const int &samples, const int &threads, const int &retries)
+void print(const int &nodes, const int &edges, const int &samples, const int &target_worker_threads, const int &retries)
 {
-
     std::cout << "Generation parameters:" << std::endl;
-
-    // nodes
-
-    std::cout << "  nodes.....: [";
-
-    for (int i = 0; i < static_cast<int>(nodes.size()); i++)
-    {
-        std::cout << nodes[i];
-
-        if (i < static_cast<int>(nodes.size()) - 1)
-        {
-            std::cout << ", ";
-        }
-    }
-
-    std::cout << "]" << std::endl;
-
-    // edges
-
-    std::cout << "  edges.....: [";
-
-    for (int i = 0; i < static_cast<int>(edges.size()); i++)
-    {
-        std::cout << edges[i];
-
-        if (i < static_cast<int>(edges.size()) - 1)
-        {
-            std::cout << ", ";
-        }
-    }
-
-    std::cout << "]" << std::endl;
-
-    //
-
-    std::cout << "  samples...: " << samples << std::endl;
-    std::cout << "  threads...: " << threads << std::endl;
-    std::cout << "  retries...: " << retries << std::endl;
+    std::cout << "  nodes................: " << nodes << std::endl;
+    std::cout << "  edges................: " << edges << std::endl;
+    std::cout << "  samples..............: " << samples << std::endl;
+    std::cout << "  target_worker_threads: " << target_worker_threads << std::endl;
+    std::cout << "  retries..............: " << retries << std::endl;
 }
 
-std::optional<Graph> generate(const int &n, const int &m, const int &target_worker_threads, const int &retries)
+/// @brief Creates a directory for the generated graphs and returns the path to it.
+/// @return The path to the directory.
+std::string prepare_directory()
 {
-    int tries = 1 + retries;
-
-    while (tries > 0)
-    {
-        Graph graph = Graph::random_spanning_tree(n);
-
-        graph.insert_random_edges(m - (n - 1));
-
-        auto [actual_worker_threads, _, __] = spanning_tree::get_workload(graph, target_worker_threads);
-
-        if (actual_worker_threads == target_worker_threads)
-        {
-            return graph;
-        }
-        else
-        {
-            --tries;
-        }
-    };
-
-    return std::nullopt;
-}
-
-int main(int argc, char **argv)
-{
-    auto [nodes, edges, samples, target_worker_threads, retries] = validate_arguments(argc, argv);
-
-    print(nodes, edges, samples, target_worker_threads, retries);
-
-    std::string directory, path;
-
     std::time_t t = std::time(nullptr);
 
     std::tm tm = *std::localtime(&t);
@@ -281,128 +181,174 @@ int main(int argc, char **argv)
 
     stream << "data/graphs/generated/" << std::put_time(&tm, "%Y_%m_%d_%H_%M_%S");
 
-    directory = stream.str();
+    std::string path = stream.str();
 
-    std::filesystem::create_directories(directory);
+    std::filesystem::create_directories(path);
 
-    std::vector<std::string> paths;
+    return path;
+}
 
-    int count = 0, total = nodes.size() * edges.size() * samples;
+Graph generate(const int &n, const int &m, const int &target_worker_threads, const int &target_spanning_trees, const int &retries)
+{
+    int lower = target_spanning_trees * 99 / 100;
+    int upper = target_spanning_trees * 101 / 100;
 
-    int thread_num = omp_get_thread_num();
+    Graph champion = Graph::random_spanning_tree(n);
 
-    std::atomic<bool> abort{false};
+    champion.insert_random_edges(m - (n - 1));
 
-    DEBUG_ONLY(std::thread progress_thread = track_progress(count, total, abort);)
+    int aggressiveness = 0;
 
-    for (auto n : nodes)
+    auto [best_worker_threads, _, __] = spanning_tree::get_workload(champion, target_worker_threads);
+
+    auto best_spanning_trees = kirchoff(champion);
+
+    while (true)
     {
-        for (auto e : edges)
+        aggressiveness = std::min(m, aggressiveness + 1);
+
+        int tries = 1 + retries;
+
+        while (tries > 0)
         {
-            int m = std::floor(e * n * (n - 1) * 0.5);
+            auto candidate = Graph(champion);
 
-            if (m < n - 1)
+            candidate.remove_random_edges(aggressiveness);
+
+            candidate.insert_random_edges(aggressiveness);
+
+            auto [worker_threads, _, __] = spanning_tree::get_workload(candidate, target_worker_threads);
+
+            auto spanning_trees = kirchoff(candidate);
+
+            if (worker_threads >= target_worker_threads && lower <= spanning_trees && spanning_trees <= upper)
             {
-                m = n - 1;
+                return candidate;
             }
-
-            while (target_worker_threads > m - (n - 1) && m < n * (n - 1) * 0.5)
+            else if (best_worker_threads < target_worker_threads && worker_threads > best_worker_threads)
             {
-                std::cerr << "Invalid parameters: target worker threads cannot be more than m - (n - 1), as there wouldn't be enough edges in the edge vector for the last thread." << std::endl;
-                ++m;
+                champion = candidate;
+                best_worker_threads = worker_threads;
+                best_spanning_trees = spanning_trees;
+                tries = 1 + retries;
+                aggressiveness = 1;
             }
-
-            std::vector<Graph> graphs;
-
-            std::map<int, std::vector<Graph>> candidates;
-            std::mutex mutex;
-
-            int baseline = m;
-
-#pragma omp parallel
+            else if (worker_threads >= best_worker_threads && std::abs(spanning_trees - target_spanning_trees) < std::abs(best_spanning_trees - target_spanning_trees))
             {
-
-                while (static_cast<int>(graphs.size()) < samples && !abort.load())
-                {
-                    std::optional<Graph> generated = generate(n, m, target_worker_threads, retries);
-
-                    if (generated)
-                    {
-                        std::cout << "Successfully generated a graph with n: " << n << ", m: " << m << std::endl;
-
-                        auto graph = generated.value();
-
-                        mutex.lock();
-
-                        candidates[m].push_back(graph);
-
-                        if (static_cast<int>(candidates[m].size()) >= samples) // If this thread found a group...
-                        {
-                            if (static_cast<int>(graphs.size()) >= samples) // But another thread found a group...
-                            {
-                                if (m < graphs[0].get_m()) // If this thread found smaller graphs...
-                                {
-                                    graphs = candidates[m];
-                                }
-                            }
-                            else // And no other thread found a group...
-                            {
-                                graphs = candidates[m];
-                            }
-                        }
-
-                        mutex.unlock();
-
-                        m = baseline;
-                    }
-                    else
-                    {
-                        if (m < n * (n - 1) * 0.5)
-                        {
-                            ++m;
-                        }
-                    }
-                }
+                champion = candidate;
+                best_worker_threads = worker_threads;
+                best_spanning_trees = spanning_trees;
+                tries = 1 + retries;
+                aggressiveness = 1;
             }
-
-            for (int i = 0; i < samples; i++)
+            else
             {
-                auto graph = graphs[i];
-
-                stream.str("");
-                stream.clear();
-                stream << directory << "/" << "graph_n_" << graph.get_n() << "_m_" << graph.get_m() << "_s_" << i << ".txt";
-
-                path = stream.str();
-
-                paths.emplace_back(path);
-
-                graph.save(path);
-
-                count++;
-
-                std::cout << "Saved: " << path << " (with up to " << kirchoff(graph) << " spanning trees)." << std::endl;
+                --tries;
             }
+        }
+
+        std::cout << "Failed generation, best was " << best_worker_threads << " worker threads and " << best_spanning_trees << " spanning trees. Trying again..." << std::endl;
+    }
+}
+
+int main(int argc, char **argv)
+{
+    auto [nodes, edges, samples, target_worker_threads, retries] = validate_arguments(argc, argv);
+
+    print(nodes, edges, samples, target_worker_threads, retries);
+
+    // Validate and adjust generation parameters.
+
+    int n = nodes, m = edges;
+
+    if (target_worker_threads > n * (n - 1) * 0.5)
+    {
+        throw std::invalid_argument("Cannot have more worker threads than the maximum amount of edges in the graph.");
+    }
+
+    if (m < n - 1)
+    {
+        std::cout << "There must be at least n - 1 (" << n - 1 << ") edges for the graph to be connected." << std::endl;
+        std::cout << "Would you like to proceed with " << n - 1 << " edges?" << std::endl;
+
+        if (confirm())
+        {
+            m = n - 1;
+        }
+        else
+        {
+            return 0;
         }
     }
 
-    abort.store(true);
-
-    DEBUG_ONLY(progress_thread.join();)
-
-    stream.str("");
-    stream.clear();
-
-    stream << directory << "/batch.txt";
-
-    path = stream.str();
-
-    std::ofstream file(path);
-
-    for (auto line : paths)
+    if (target_worker_threads > m - (n - 1))
     {
-        file << line << std::endl;
+        std::cout << "Cannot have more worker threads than m - (n - 1), as there wouldn't be enough edges in the edge vector for the last thread(s)." << std::endl;
+
+        auto suggestion = n - 1 + target_worker_threads;
+
+        std::cout << "Would you like to proceed with " << suggestion << " edges?" << std::endl;
+
+        if (confirm())
+        {
+            m = suggestion;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
-    file.close();
+    // Find average amount of spanning trees for a graph with [n] nodes and [m] edges.
+
+    long long target_spanning_trees = 0, lower = 0, upper = 0;
+
+    for (int k = 0; k < 10000; ++k)
+    {
+        auto graph = Graph::random_spanning_tree(n);
+
+        graph.insert_random_edges(m - (n - 1));
+
+        target_spanning_trees += kirchoff(graph) / 10000;
+    }
+
+    lower = target_spanning_trees * 99 / 100;
+    upper = target_spanning_trees * 101 / 100;
+
+    std::cout << "Targeting " << target_spanning_trees << " spanning trees with accepted variance of 1% [" << lower << ", " << upper << "]." << std::endl;
+
+    // Generate graphs
+
+    std::vector<Graph> graphs;
+
+    while (static_cast<int>(graphs.size()) < samples)
+    {
+        auto graph = generate(n, m, target_worker_threads, target_spanning_trees, retries);
+
+        auto [worker_threads, _, __] = spanning_tree::get_workload(graph, target_worker_threads);
+
+        auto spanning_trees = kirchoff(graph);
+
+        if (worker_threads >= target_worker_threads && lower <= spanning_trees && spanning_trees <= upper)
+        {
+            std::cout << "Generated a graph with " << worker_threads << " worker threads and " << kirchoff(graph) << " spanning trees." << std::endl;
+
+            graphs.emplace_back(graph);
+        }
+    }
+
+    // Save generated graphs.
+
+    std::string directory = prepare_directory(), path;
+
+    for (int s = 0; s < samples; ++s)
+    {
+        std::stringstream stream;
+
+        stream << directory << "/n_" << n << "_m_" << m << "_s_" << s << ".txt";
+
+        path = stream.str();
+
+        graphs[s].save(path);
+    }
 }

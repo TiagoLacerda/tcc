@@ -43,3 +43,5 @@ std::vector<std::string> get_paths(const std::string &path);
 std::thread track_progress(const int &count, const int &total, const std::atomic<bool> &abort);
 
 std::thread track_progress(const std::vector<int> &counts, const int &total, const std::atomic<bool> &abort);
+
+bool confirm(const std::string &prompt = "Proceed?", const bool &value = true);

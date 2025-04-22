@@ -19,6 +19,9 @@ cycle-detection:
 generate:
 	g++ -g generate.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o generate.exe $(FLAGS) $(INCLUDES)
 
+info:
+	g++ -g info.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o info.exe $(FLAGS) $(INCLUDES)
+
 clean:
 	del main.exe
 	del graph.txt
@@ -26,6 +29,7 @@ clean:
 	del tests.exe
 	del cycle_detection.exe
 	del generate.exe
+	del info.exe
 	del cycle_detection.txt
 	del tools/cycle_detection.png
 
@@ -36,5 +40,6 @@ clean-linux:
 	-rm tests.exe
 	-rm cycle_detection.exe
 	-rm generate.exe
+	-rm info.exe
 	-rm cycle_detection.txt
 	-rm tools/cycle_detection.png

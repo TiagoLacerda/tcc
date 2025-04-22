@@ -83,9 +83,6 @@
 #include <climits>
 #endif
 
-static std::random_device rd;
-static std::mt19937 rng(rd());
-
 Graph::Graph()
 {
     this->adjacencies = std::vector<std::vector<int>>();
@@ -186,6 +183,7 @@ Graph Graph::random_spanning_tree(int n)
     std::vector<int> visited;
     std::vector<int> unvisited(n);
     std::iota(unvisited.begin(), unvisited.end(), 0);
+    std::shuffle(unvisited.begin(), unvisited.end(), rng);
 
     auto u = unvisited[0];
     auto v = unvisited[1];
@@ -704,10 +702,28 @@ void Graph::insert_random_edges(int k)
 
     for (int i = 0; i < std::min(k, static_cast<int>(edges.size())); i++)
     {
-        auto u = std::get<0>(edges[i]);
-        auto v = std::get<1>(edges[i]);
+        auto [u, v] = edges[i];
 
         this->insert_edge(u, v);
+    }
+}
+
+void Graph::remove_random_edges(int k)
+{
+    if (k < 1)
+    {
+        return;
+    }
+
+    auto edges = get_edges();
+
+    std::shuffle(edges.begin(), edges.end(), rng);
+
+    for (int i = 0; i < std::min(k, static_cast<int>(edges.size())); i++)
+    {
+        auto [u, v] = edges[i];
+
+        this->remove_edge(u, v);
     }
 }
 

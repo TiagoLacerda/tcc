@@ -18,6 +18,14 @@
 #include <string>
 #endif
 
+#ifndef RANDOM
+#define RANDOM
+#include <random>
+#endif
+
+static std::random_device rd;
+static std::mt19937 rng(rd());
+
 /// @brief An implementation of undirected graphs using an adjacency list.
 class Graph
 {
@@ -80,7 +88,7 @@ public:
     int get_m() const;
 
     /// @brief Get the degree of a node.
-    /// @param u Index of a node in the graph. 
+    /// @param u Index of a node in the graph.
     /// @return The degree of the node.
     int get_degree(int u) const;
 
@@ -149,9 +157,13 @@ public:
     /// @return An std::string equivalent of the graph.
     std::string to_json() const;
 
-    /// @brief Insert up to k randomly chosen edges in the graph. S
+    /// @brief Insert up to k randomly chosen edges in the graph.
     /// @param k The number of edges to be inserted.
     void insert_random_edges(int k);
+
+    /// @brief Remove up to k randomly chosen edges in the graph.
+    /// @param k The number of edges to be removed.
+    void remove_random_edges(int k);
 
     /// @brief Generate a file at the given path with a representation of the graph. The first n lines represent each node with an index. The next m lines represent each edge with a pair of indexes.
     /// @param path The path of the file to be created.
