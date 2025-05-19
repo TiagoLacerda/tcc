@@ -1,0 +1,142 @@
+\begin{figure}[h]
+    % a
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{minipage}{0.35\textwidth}
+            \includegraphics[scale=0.5]{example_3_a.png}
+        \end{minipage}
+        \caption{}
+        \label{fig:example_3_a}
+    \end{subfigure}
+    % b
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{minipage}{0.35\textwidth}
+            \includegraphics[scale=0.5]{example_3_b.png}
+        \end{minipage}
+        \begin{minipage}{0.45\textwidth}
+            \raggedleft
+            $edges = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                0,1 & 0,3 & 1,2 & 2,3 \\
+                \hline
+            \end{tabular}
+            \\
+            $parent = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                0 & 1 & 2 & 3 \\
+                \hline
+            \end{tabular}
+            \\
+            $rank = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                0 & 0 & 0 & 0 \\
+                \hline
+            \end{tabular}
+        \end{minipage}
+        \caption{}
+        \label{fig:example_3_b}        
+    \end{subfigure}
+    % c
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{minipage}{0.35\textwidth}
+            \includegraphics[scale=0.5]{example_3_c.png}
+        \end{minipage}
+        \begin{minipage}{0.45\textwidth}
+            \raggedleft
+            $edges = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                \textbf{0,1} & 0,3 & 1,2 & 2,3 \\
+                \hline
+            \end{tabular}
+            \\
+            $parent = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                1 & 1 & 2 & 3 \\
+                \hline
+            \end{tabular}
+            \\
+            $rank = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                0 & 1 & 0 & 0 \\
+                \hline
+            \end{tabular}
+        \end{minipage}
+        \caption{}
+        \label{fig:example_3_c}        
+    \end{subfigure}
+    % d
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{minipage}{0.35\textwidth}
+            \includegraphics[scale=0.5]{example_3_d.png}
+        \end{minipage}
+        \begin{minipage}{0.45\textwidth}
+            \raggedleft
+            $edges = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                0,1 & \textbf{0,3} & 1,2 & 2,3 \\
+                \hline
+            \end{tabular}
+            \\
+            $parent = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                1 & 1 & 2 & 1 \\
+                \hline
+            \end{tabular}
+            \\
+            $rank = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                0 & 1 & 0 & 1 \\
+                \hline
+            \end{tabular}
+        \end{minipage}
+        \caption{}
+        \label{fig:example_3_d}        
+    \end{subfigure}
+    % e
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{minipage}{0.35\textwidth}
+            \includegraphics[scale=0.5]{example_3_e.png}
+        \end{minipage}
+        \begin{minipage}{0.45\textwidth}
+            \raggedleft
+            $edges = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                0,1 & 0,3 & \textbf{1,2} & 2,3 \\
+                \hline
+            \end{tabular}
+            \\
+            $parent = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                1 & 1 & 1 & 1 \\
+                \hline
+            \end{tabular}
+            \\
+            $rank = $
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                0 & 1 & 1 & 1 \\
+                \hline
+            \end{tabular}
+        \end{minipage}
+        \caption{}
+        \label{fig:example_3_e}        
+    \end{subfigure}
+    %
+    \caption{Exemplo de execução do algoritmo de detecção de ciclos}
+    \label{fig:example_3}
+\end{figure}

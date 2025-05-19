@@ -1,0 +1,34 @@
+%   Algoritmo 3:
+% 1 find(u):
+% 2     if(parent[u] == u)
+% 3     {
+% 4         return u
+% 5     }
+% 6     else{
+% 7         rep = find(parent[u])
+% 8         parent[u] = rep
+% 9         retun rep
+%10     }
+
+\begin{algorithm}[!ht]
+\begin{footnotesize}
+\SetKwInOut{Input}{entrada}
+\SetKwInOut{Output}{saída}
+\SetAlgoLined
+\Input{índice $u$ de um elemento}
+\Output{índice do elemento representativo de $u$}
+\Begin
+{
+    \eIf{$parent[u] == u$}
+    {
+        \Return{$u$}\;
+    }
+    {
+        $rep = find(parent[u])$\;
+        $parent[u] = rep$\;
+        \Return{$rep$}\;
+    }
+}
+\caption{\textsc{$find$}\label{alg:find}}
+\end{footnotesize}
+\end{algorithm}

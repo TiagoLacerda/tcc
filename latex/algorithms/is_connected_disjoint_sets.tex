@@ -1,0 +1,30 @@
+\begin{algorithm}[!ht]
+\begin{footnotesize}
+\SetKwInOut{Input}{entrada}
+\SetAlgoLined
+\Input{Grafo conexo $G(V,E)$}
+\Begin
+{
+    $edges \gets E(G)$\;
+    $djs \gets $ Conjuntos-disjuntos onde cada conjunto unitário corresponde a um vértice de $G$\;
+    
+    \For{cada $(u,v)$ em $edges$}
+    {
+        $djs.union(u, v)$\;
+    }
+
+    $rep = djs.find(0)$\;
+
+    \For{$i = 1, i < |V(G)|$}
+    {
+        \If{$djs.find(i) \neq rep$}
+        {
+            \Return{false}\;
+        }
+    }
+    
+    \Return{true}\;
+}
+\caption{\textsc{$is\_connected\_disjoint\_sets$}\label{alg:is_connected_disjoin_sets}}
+\end{footnotesize}
+\end{algorithm}

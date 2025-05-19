@@ -1,0 +1,88 @@
+@article{doi:10.1137/S0895480192237403,
+author = {Cai, Leizhen and Corneil, Derek  G.},
+title = {Tree Spanners},
+journal = {SIAM Journal on Discrete Mathematics},
+volume = {8},
+number = {3},
+pages = {359-387},
+year = {1995},
+doi = {10.1137/S0895480192237403},
+url = {https://doi.org/10.1137/S0895480192237403},
+eprint = {https://doi.org/10.1137/S0895480192237403},
+abstract = { A tree t-spanner T of a graph G is a spanning tree in which the distance between every pair of vertices is at most t times their distance in G. This notion is motivated by applications in communication networks, distributed systems, and network design.This paper studies graph-theoretic, algorithmic, and complexity issues about tree spanners. It is shown that a tree 1-spanner, if it exists, in a weighted graph with m edges and n vertices is a minimum spanning tree and can be found in \$O( m\log \beta ( m,n ) )\$ time, where \$\beta ( m,n ) = \min \{ i|\log^{( i )} n \leq m/n \}\$. On the other hand, for any fixed \$t > 1\$, the problem of determining the existence of a tree t-spanner in a weighted graph is proven to be NP-complete. For unweighted graphs, it is shown that constructing a tree 2-spanner takes linear time, whereas determining the existence of a tree t-spanner is NP-complete for any fixed \$t \geq 4\$. A theorem that captures the structure of tree 2-spanners is presented for unweighted graphs. For digraphs, an \$O( ( m + n )\alpha ( m,n ) )\$ algorithm is provided for finding a tree t-spanner with t as small as possible, where \$\alpha ( m,n )\$ is a functional inverse of Ackerman’s function. The results for tree spanners on undirected graphs are extended to “quasi-tree spanners” on digraphs. Furthermore, linear-time algorithms are derived for verifying tree spanners and quasi-tree spanners. }
+}
+
+@article{FEKETE200185,
+title = {Tree spanners in planar graphs},
+journal = {Discrete Applied Mathematics},
+volume = {108},
+number = {1},
+pages = {85-103},
+year = {2001},
+note = {Workshop on Graph Theoretic Concepts in Computer Science},
+issn = {0166-218X},
+doi = {https://doi.org/10.1016/S0166-218X(00)00226-2},
+url = {https://www.sciencedirect.com/science/article/pii/S0166218X00002262},
+author = {Sándor P. Fekete and Jana Kremer},
+keywords = {Graph spanners, Planar graphs, Distance in graphs},
+abstract = {A tree t-spanner of a graph G is a spanning subtree T of G in which the distance between every pair of vertices is at most t times their distance in G. Spanner problems have received some attention, mostly in the context of communication networks. It is known that for general unweighted graphs, the problem of deciding the existence of a tree t-spanner can be solved in polynomial time for t=2, while it is NP-hard for any t⩾4; the case t=3 is open, but has been conjectured to be hard. In this paper, we consider tree spanners in planar graphs. We show that even for planar unweighted graphs, it is NP-hard to determine the minimum t for which a tree t-spanner exists. On the other hand, we give a polynomial algorithm for any fixed t that decides for planar unweighted graphs with bounded face length whether there is a tree t-spanner. Furthermore, we prove that it can be decided in polynomial time whether a planar unweighted graph has a tree t-spanner for t=3.}
+}
+
+@article{BRANDSTADT2004329,
+title = {Tree spanners on chordal graphs: complexity and algorithms},
+journal = {Theoretical Computer Science},
+volume = {310},
+number = {1},
+pages = {329-354},
+year = {2004},
+issn = {0304-3975},
+doi = {https://doi.org/10.1016/S0304-3975(03)00424-9},
+url = {https://www.sciencedirect.com/science/article/pii/S0304397503004249},
+author = {Andreas Brandstädt and Feodor F. Dragan and Hoàng-Oanh Le and Van Bang Le},
+keywords = {Tree spanners, Spanners, Chordal graphs, Distance, Spanning trees, NP-completeness, Efficient graph algorithms},
+abstract = {A tree t-spanner T in a graph G is a spanning tree of G such that the distance in T between every pair of vertices is at most t times their distance in G. The TREE t-SPANNER problem asks whether a graph admits a tree t-spanner, given t. We substantially strengthen the hardness result of Cai and Corneil (SIAM J. Discrete Math. 8 (1995) 359–387) by showing that, for any t⩾4, TREE t-SPANNER is NP-complete even on chordal graphs of diameter at most t+1 (if t is even), respectively, at most t+2 (if t is odd). Then we point out that every chordal graph of diameter at most t−1 (respectively, t−2) admits a tree t-spanner whenever t⩾2 is even (respectively, t⩾3 is odd), and such a tree spanner can be constructed in linear time. The complexity status of TREE 3-SPANNER still remains open for chordal graphs, even on the subclass of undirected path graphs that are strongly chordal as well. For other important subclasses of chordal graphs, such as very strongly chordal graphs (containing all interval graphs), 1-split graphs (containing all split graphs) and chordal graphs of diameter at most 2, we are able to decide TREE 3-SPANNER efficiently.}
+}
+
+@article{COUTO2022106265,
+title = {Strategies for generating tree spanners: Algorithms, heuristics and optimal graph classes},
+journal = {Information Processing Letters},
+volume = {177},
+pages = {106265},
+year = {2022},
+issn = {0020-0190},
+doi = {https://doi.org/10.1016/j.ipl.2022.106265},
+url = {https://www.sciencedirect.com/science/article/pii/S0020019022000229},
+author = {Fernanda Couto and Luís Felipe I. Cunha and Daniel Juventude and Leandro Santiago},
+keywords = {Tree -spanner, Graph algorithms, Heuristics},
+abstract = {The t-admissibility problem aims to decide whether a graph G has a spanning tree T in which the distance between any two adjacent vertices of G is at most t. Regarding its optimization version, we want to determine the smallest t=σT(G) for which G is t-admissible, i.e., the stretch index of G. The t-admissibility problem is NP-complete for σT(G)≤t, t≥4. We develop strategies and implementations of two exact brute-force algorithms: sequential and parallel, in such a way that we propose parallel strategies for generating all spanning trees of a graph. We also propose two greedy heuristics to obtain solutions for the t-admissibility problem. We evaluate these implementations on random Barabási-Albert graphs, Erdös-Rényi graphs, Watts-Strogatz graphs and Bipartite graphs. Moreover, we determine graph classes for which the heuristics lead us to the stretch index value, such as split graphs, cographs and p-cycle power graphs.}
+}
+
+@article{cunha_marciano_moraes_santiago_santos,
+author = {Cunha, Luís and Marciano, Eriky and Moraes, Anderson and Santiago, Leandro and Santos, Carlos},
+year = {2024},
+month = {04},
+pages = {},
+title = {New parallelism and heuristic approaches for generating tree t‐spanners in graphs},
+volume = {36},
+journal = {Concurrency and Computation: Practice and Experience},
+doi = {10.1002/cpe.8106}
+}
+
+@inproceedings{fredman_saks,
+author = {Fredman, Michael and Saks, Michael},
+year = {1989},
+month = {01},
+pages = {345-354},
+title = {The Cell Probe Complexity of Dynamic Data Structures},
+doi = {10.1145/73007.73040}
+}
+
+@book{10.5555/2086753,
+author = {Moore, Cristopher and Mertens, Stephan},
+title = {The Nature of Computation},
+year = {2011},
+isbn = {0199233217},
+publisher = {Oxford University Press, Inc.},
+address = {USA},
+abstract = {Computational complexity is one of the most beautiful fields of modern mathematics, and it is increasingly relevant to other sciences ranging from physics to biology. But this beauty is often buried underneath layers of unnecessary formalism, and exciting recent results like interactive proofs, cryptography, and quantum computing are usually considered too "advanced" to show to the typical student. The aim of this book is to bridge both gaps by explaining the deep ideas of theoretical computer science in a clear and enjoyable fashion, making them accessible to non computer scientists and to computer scientists who finally want to understand what their formalisms are actually telling. This book gives a lucid and playful explanation of the field, starting with P and NP-completeness. The authors explain why the P vs. NP problem is so fundamental, and why it is so hard to resolve. They then lead the reader through the complexity of mazes and games; optimization in theory and practice; randomized algorithms, interactive proofs, and pseudorandomness; Markov chains and phase transitions; and the outer reaches of quantum computing. At every turn, they use a minimum of formalism, providing explanations that are both deep and accessible. The book is intended for graduates and undergraduates, scientists from other areas who have long wanted to understand this subject, and experts who want to fall in love with this field all over again.}
+}

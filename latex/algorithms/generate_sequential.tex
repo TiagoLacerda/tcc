@@ -1,0 +1,64 @@
+\begin{algorithm}[!ht]
+\SetKw{Break}{break}
+\begin{footnotesize}
+\SetKwInOut{Input}{entrada}
+\SetAlgoLined
+\Input{Grafo conexo $G(V,E)$}
+\Begin
+{
+    $n \gets |V(G)|$\;
+    $u \gets 0$\;
+    $v \gets 0$\;
+    $next\_neighbor[n]$\;
+    $last\_neighbor[n]$\;
+    $tree \gets$ Grafo vazio de tamanho $n$\;
+
+    \For{$i = 0, i < n$}
+    {
+        $next\_neighbor[i] = 0$\;
+        $last\_neighbor[i] = -1$\;
+    }
+
+    \While{$v \geq 0$}
+    {
+        \uIf{$next\_neighbor[v] == d_G(v)$}
+        {
+            $next\_neighbor[v] = 0$\;
+            $v \gets v - 1$\;
+            \If{$v < 0$}
+            {
+                \Break
+            }
+            $tree.remove\_edge(v, last\_neighbor[v])$\;
+            $last\_neighbor[v] = -1$\;
+        }
+        \Else
+        {
+            $u = graph.get\_neighbors(v)[next\_neighbor[v]]$\;
+            $next\_neighbor[v] \gets next\_neighbor[v] + 1$\;
+
+            \If{tree não contém aresta $(v, u)$}
+            {
+                $tree.insert\_edge(v, u)$\;
+                $last\_neighbor[v] = u$
+
+                \If{$tree.acyclic()$}
+                {
+                    \If{tree tem $N - 1$ arestas}
+                    {
+                        // Encontrou uma árvore-geradora
+                    }
+                    \Else
+                    {
+                        $v \gets v + 1$\;
+                    }
+                }
+
+                $tree.remove\_edge(v, u)$\;
+            }
+        }
+    }
+}
+\caption{\textsc{$generate\_sequential$}\label{alg:generate_sequential}}
+\end{footnotesize}
+\end{algorithm}

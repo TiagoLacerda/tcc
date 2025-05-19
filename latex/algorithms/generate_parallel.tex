@@ -1,0 +1,71 @@
+% algoritmo geração-paralela é
+%     entrada: Grafo G,
+%              n = |V(G)|,
+%              m = |E(G)|,
+%              índice de ínicio start,
+%              índice de fim end,
+% 
+%     candidate = Grafo vazio de tamanho N
+%     int p = 0
+%     int pointers[n - 1]
+%     pointers[p] = start - 1
+% 
+%     while pointers[0] < end:
+%         pointers[p]++
+%         if pointers[p] < m:
+%             candidate.insert(edges[pointers[p]])
+%             if p == n - 2:
+%                 if candidate.acyclic():
+%                     // Found a spanning tree
+%                 candidate.remove_edge(edges[pointers[p]])
+%             else:
+%                 p++
+%                 pointers[p] = pointers[p - 1]
+%         else:
+%             p--
+%             if p > -1:
+%                 candidate.remove_edge(edges[pointers[p]])
+
+\begin{algorithm}[!ht]
+\begin{footnotesize}
+\SetKwInOut{Input}{entrada}
+\SetKwInOut{Output}{saída}
+\SetAlgoLined
+\Input{Grafo conexo $G(V,E)$,\\$start$,\\$end$}
+\Begin
+{
+    $n \gets |V(G)|$\;
+    $m \gets |E(G)|$\;
+    $candidate \gets$ Grafo vazio de tamanho $n$\;
+    $pointers \gets$ Vetor de tamanho $n$\;
+    $edges \gets$ Vetor de arestas de $G$\;
+    $p = 0$\;
+    $pointers[p] = start - 1$\;
+    \While{$pointers[0] < end$}
+    {
+        $pointers[p] \gets pointers[p] + 1$\;
+        \uIf{$pointers[p] < m$}
+        {
+            $candidate.insert(edges[pointers[p]])$\;
+            \If{$p == n - 2$}
+            {
+                \If {$candidate.acyclic()$}
+                {
+                    // Encontrou uma árvore geradora
+                }
+                 $candidate.remove\_edge(edges[pointers[p]])$\;
+            }
+        }
+        \Else
+        {
+            $pointers[p] \gets pointers[p] - 1$\;
+            \If{$p > -1$}
+            {
+                $candidate.remove\_edge(edges[pointers[p]])$\;
+            }
+        }    
+    }
+}
+\caption{\textsc{$generate\_parallel$}\label{alg:generate_parallel}}
+\end{footnotesize}
+\end{algorithm}

@@ -1,0 +1,50 @@
+# LaTeX intermediate and output files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex.gz(busy)
+*.nav
+*.snm
+*.vrb
+
+# PDF and DVI output files (optional, if you don't want to track them)
+*.pdf
+*.dvi
+*.ps
+
+# LaTeX editor backup and auto-save files
+*~
+*.bak
+*.backup
+*.swp
+*.tmp
+*.DS_Store
+
+# VSCode LaTeX Workshop files
+*.fls
+*.auxlock
+
+# Latexmk output directory (if used)
+latex.out/
+
+# Overleaf metadata files (if syncing)
+.overleaf/

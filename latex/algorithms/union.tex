@@ -1,0 +1,43 @@
+%   Algoritmo 4:
+% 1 union(u, v):
+% 2     u = find(u)
+% 3     v = find(v)
+% 4     if (u == v) return
+% 5     if (rank[u] < rank[v]):
+% 6         parent[u] = v
+% 7     else if (rank[v] < rank[u]):
+% 8         parent[v] = u
+% 9     else:
+%10         parent[u] = v
+%11         rank[v]++
+
+\begin{algorithm}[!ht]
+\begin{footnotesize}
+\SetKwInOut{Input}{entrada}
+\SetAlgoLined
+\Input{índice $u$ de um elemento,\\índice $v$ de um elemento}
+\Begin
+{
+    $u \gets find(u)$\;
+    $v \gets find(v)$\;
+    \If{$u == v$}
+    {
+        \Return\;
+    }
+    \uIf{$rank[u] < rank[v]$}
+    {
+        $parent[u] \gets v$\;
+    }
+    \uElseIf{$rank[v] < rank[u]$}
+    {
+        $parent[v] \gets u$\;
+    }
+    \Else
+    {
+        $parent[u] \gets v$\;
+        $rank[v] \gets rank[v] + 1$\;
+    }
+}
+\caption{\textsc{$union$}\label{alg:union}}
+\end{footnotesize}
+\end{algorithm}

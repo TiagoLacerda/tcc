@@ -1,0 +1,25 @@
+\begin{algorithm}[!ht]
+\begin{footnotesize}
+\SetKwInOut{Input}{entrada}
+\SetAlgoLined
+\Input{Grafo conexo $G(V,E)$}
+\Begin
+{
+    $edges \gets E(G)$\;
+    $djs \gets $ Conjuntos-disjuntos onde cada conjunto unitário corresponde a um vértice de $G$\;
+    
+    \For{cada $(u,v)$ em $edges$}
+    {
+        \If{$djs.find(u) == djs.find(v)$}
+        {
+            \Return{true}\;
+        }
+        
+        $djs.union(u, v)$\;
+    }
+    
+    \Return{false}\;
+}
+\caption{\textsc{$is\_cyclic\_disjoint\_sets$}\label{alg:is_cyclic_disjoin_sets}}
+\end{footnotesize}
+\end{algorithm}
