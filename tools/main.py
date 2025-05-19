@@ -46,27 +46,39 @@ def load(path, data, multiplier, average):
     with open(path, "r") as file:
         graphs = json.load(file)
 
+        executions = {}
+
         for graph in graphs:
             n = graph['n']
 
+            if n not in executions:
+                executions[n] = {}
+
+            for execution in graph['executions']:
+                t = execution['threads']
+
+                if t not in executions[n]:
+                    executions[n][t] = []
+
+                executions[n][t].append(execution)
+
+        for n in executions:
             if n not in data:
                 data[n] = {}
 
-            for t in {execution['threads'] for execution in graph['executions']}:
+            for t in executions[n]:
                 if t not in data[n]:
                     data[n][t] = []
 
-                executions = [execution for execution in graph['executions'] if execution['threads'] == t]
-
                 elapsed = [execution['elapsed'] *
-                           multiplier for execution in executions]
+                           multiplier for execution in executions[n][t]]
 
                 if average:
                     avg = np.average(elapsed)
                     std = np.std(elapsed)
                 else:
-                    avg = executions[0]['elapsed']
-                    std = executions[0]['standard_deviation']
+                    avg = executions[n][t][0]['elapsed']
+                    std = executions[n][t][0]['standard_deviation']
 
                 data[n][t].append({'avg': avg, 'std': std})
 
@@ -109,7 +121,6 @@ def plot(data, ax):
                 std_a = data[n][t][0]['std']
                 avg_b = data[n][t][-1]['avg']
                 std_b = data[n][t][-1]['std']
-
 
             x.append(t)
             y.append(avg_a/avg_b)
