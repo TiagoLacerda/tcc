@@ -22,6 +22,9 @@ generate:
 info:
 	g++ -g info.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o info.exe $(FLAGS) $(INCLUDES)
 
+timed:
+	g++ -g timed.cpp src/graph/graph.cpp src/disjoint_sets/disjoint_sets.cpp src/spanning_tree/spanning_tree.cpp src/util/util.cpp -o timed.exe $(FLAGS) $(INCLUDES)
+
 clean:
 	del main.exe
 	del graph.txt

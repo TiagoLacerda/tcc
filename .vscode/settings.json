@@ -76,7 +76,8 @@
         "ranges": "cpp",
         "valarray": "cpp",
         "complex": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "future": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"
