@@ -61,6 +61,12 @@
 #ifndef EIGEN
 #define EIGEN
 #include <Eigen/Dense>
+#include <Eigen/Core>
+#endif
+
+#ifndef CPP_INT
+#define CPP_INT
+#include <boost/multiprecision/cpp_int.hpp>
 #endif
 
 #ifndef GRAPH
@@ -72,6 +78,9 @@
 #define UTIL
 #include "util.hpp"
 #endif
+
+using boost::multiprecision::cpp_int;
+using Mat = Eigen::Matrix<cpp_int, Eigen::Dynamic, Eigen::Dynamic>;
 
 int **floyd_warshall(const Graph &graph)
 {
@@ -177,7 +186,7 @@ std::string now()
     return stream.str();
 }
 
-long long kirchoff(const Graph &graph)
+long long kirchhoff(const Graph &graph)
 {
     auto n = graph.get_n();
 
@@ -210,6 +219,63 @@ long long kirchoff(const Graph &graph)
     auto determinant = matrix.determinant();
 
     return static_cast<long long>(std::round(determinant));
+}
+
+// fraction-free Bareiss (exact, integer-only)
+static cpp_int determinant(Mat m)
+{
+    const int n = m.rows();
+
+    for (int k = 0; k < n - 1; ++k)
+    {
+        if (m(k, k) == 0)
+        {
+            return 0;
+        }
+        for (int i = k + 1; i < n; ++i)
+        {
+            for (int j = k + 1; j < n; ++j)
+            {
+                m(i, j) = (m(i, j) * m(k, k) - m(i, k) * m(k, j)) /
+                          (k ? m(k - 1, k - 1) : cpp_int(1));
+            }
+        }
+    }
+
+    return m(n - 1, n - 1);
+}
+
+cpp_int kirchhoff_boost(const Graph &graph)
+{
+    const int n = graph.get_n();
+
+    if (n < 2)
+    {
+        return 0;
+    }
+
+    Mat L(n - 1, n - 1); // Laplacian Matrix of [graph].
+
+    for (int i = 0; i < n - 1; ++i)
+    {
+        for (int j = 0; j < n - 1; ++j)
+        {
+            if (i == j)
+            {
+                L(i, j) = cpp_int(graph.get_degree(i));
+            }
+            else if (graph.has_edge(i, j))
+            {
+                L(i, j) = cpp_int(-1);
+            }
+            else
+            {
+                L(i, j) = cpp_int(0);
+            }
+        }
+    }
+
+    return determinant(L); // exact # spanning trees
 }
 
 std::vector<std::string> get_paths(const std::string &path)

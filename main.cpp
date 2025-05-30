@@ -283,9 +283,9 @@ int main(int argc, char **argv)
 
         data["executions"] = nlohmann::json::array();
 
-        auto total = kirchoff(graph);
+        auto total = kirchhoff(graph);
 
-        DEBUG_ONLY(std::cout << "Kirchoff says there should be " << total << " trees in total." << std::endl;)
+        DEBUG_ONLY(std::cout << "kirchhoff says there should be " << total << " trees in total." << std::endl;)
 
         for (auto t : threads)
         {

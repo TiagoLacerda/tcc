@@ -17,6 +17,8 @@ https://google.github.io/styleguide/cppguide.html
 
 + [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) 
 
++ [Boost](https://www.boost.org/) 
+
 ### Useful links
 
 + [Graph visualization](https://csacademy.com/app/graph_editor/)

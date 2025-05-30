@@ -84,7 +84,7 @@ int main(int argc, char **argv)
         std::cout << "m...............: " << m << std::endl;
         std::cout << "girth...........: " << graph.get_girth() << std::endl;
         std::cout << "smallest e-cycle: " << graph.get_smallest_e_cycle() << std::endl;
-        std::cout << "spanning trees..: " << kirchoff(graph) << std::endl;
+        std::cout << "spanning trees..: " << kirchhoff(graph) << std::endl;
 
         long long average = 0;
 
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 
             random.insert_random_edges(m - (n - 1));
 
-            average += kirchoff(random) / 1000;
+            average += kirchhoff(random) / 1000;
         }
 
         std::cout << "average spanning trees: " << average << std::endl;

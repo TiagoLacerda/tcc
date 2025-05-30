@@ -201,7 +201,7 @@ Graph generate(const int &n, const int &m, const int &target_worker_threads, con
 
     auto [best_worker_threads, _, __] = spanning_tree::get_workload(champion, target_worker_threads);
 
-    auto best_spanning_trees = kirchoff(champion);
+    auto best_spanning_trees = kirchhoff(champion);
 
     while (true)
     {
@@ -219,7 +219,7 @@ Graph generate(const int &n, const int &m, const int &target_worker_threads, con
 
             auto [worker_threads, _, __] = spanning_tree::get_workload(candidate, target_worker_threads);
 
-            auto spanning_trees = kirchoff(candidate);
+            auto spanning_trees = kirchhoff(candidate);
 
             if (worker_threads >= target_worker_threads && lower <= spanning_trees && spanning_trees <= upper)
             {
@@ -309,7 +309,7 @@ int main(int argc, char **argv)
 
         graph.insert_random_edges(m - (n - 1));
 
-        target_spanning_trees += kirchoff(graph) / 10000;
+        target_spanning_trees += kirchhoff(graph) / 10000;
     }
 
     lower = target_spanning_trees * 99 / 100;
@@ -327,11 +327,11 @@ int main(int argc, char **argv)
 
         auto [worker_threads, _, __] = spanning_tree::get_workload(graph, target_worker_threads);
 
-        auto spanning_trees = kirchoff(graph);
+        auto spanning_trees = kirchhoff(graph);
 
         if (worker_threads >= target_worker_threads && lower <= spanning_trees && spanning_trees <= upper)
         {
-            std::cout << "Generated a graph with " << worker_threads << " worker threads and " << kirchoff(graph) << " spanning trees." << std::endl;
+            std::cout << "Generated a graph with " << worker_threads << " worker threads and " << kirchhoff(graph) << " spanning trees." << std::endl;
 
             graphs.emplace_back(graph);
         }
