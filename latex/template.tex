@@ -125,7 +125,7 @@ Foram estudadas também heurísticas para o problema, sendo possível utilizá-l
 
 Uma vez que o problema é NP-completo na maioria dos casos, o estudo de abordagens paralelizadas para a obtenção de árvores-geradoras apresenta uma oportunidade de obter soluções em tempo hábil e de aferir abordagens heurísticas.
 
-Há propostos na literatura algoritmos de força bruta sequenciais e paralelizados para a obtenção das árvores-geradoras de um dado grafo \cite{COUTO2022106265} \cite{cunha_marciano_moraes_santiago_santos}, mas estas deixam algumas questões em aberto, como otimizações da distribuição de trabalho paralelizado, checagem de ciclos e de conexidade, além de implementação da estrutura de grafos como lista de arestas, ao invés de matriz de adjacências.
+Há propostos na literatura algoritmos de força bruta sequenciais e paralelizados para a obtenção das árvores-geradoras de um dado grafo \cite{COUTO2022106265} \cite{cunha_marciano_moraes_santiago_santos}, mas estas deixam algumas questões a serem estudadas, como melhorias da distribuição da carga de trabalho paralelizado entre \textit{threads}, otimizações na checagem de ciclos e de conexidade, além de implementação da estrutura de grafos através de lista de arestas, ao invés de matriz de adjacências.
 
 Assim, foram implementados um algoritmo sequencial e um algoritmo paralelizado (seções \ref{abordagem-sequencial} e \ref{abordagem-paralelizada}) para a obtenção de todas as árvores-geradoras de um grafo conexo $G$, utilizando a estrutura de lista de adjacências, além de otimizações através do uso da estrutura de conjuntos-disjuntos nas rotinas destes algoritmos (seção \ref{conjuntos-disjuntos}).
 
