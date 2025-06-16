@@ -145,9 +145,7 @@ P é uma classe de complexidade de problemas que contém todos os problemas de d
 
 Por outro lado, NP é uma classe de complexidade de problemas que contém todos os problemas de decisão cujas instâncias onde a resposta é "sim" possuem provas que podem ser verificadas em tempo polinomial. Esta classe contém muitos dos problemas ditos \textit{intratáveis}, ou seja, aqueles para os quais não se conhece um algoritmo eficiente.
 
-Um problema $x$ é dito NP-completo quando pertence a NP e qualquer outro problema $y$ em NP pode ser reduzido a $x$ em tempo polinomial.
-
-Alternativamente, um problema $x$ é dito NP-difícil quando existe algum problema NP $y$ de forma que $y$ possa ser reduzido a $x$ em tempo polinomial, ainda que $x$ não pertença a NP.
+Um problema $x$ é dito NP-difícil quando qualquer problema $y$ em NP pode ser reduzido a $x$ em tempo polinomial. Se $x$ é NP-difícil e pertence a NP, então $x$ é dito NP-completo.
 
 \begin{theorem}
 Seja $H$ um subrafo gerador de um grafo ponderado $G=(V,E,w)$. Então, as seguintes afirmações são equivalentes\cite{doi:10.1137/S0895480192237403}:
