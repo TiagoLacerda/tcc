@@ -81,12 +81,12 @@ Luís Felipe Ignácio Cunha\footnote{Orientador - Instituto de Computação - UF
 
 \vspace{-.3cm}
 
-\noindent Uma árvore $t$-geradora (\textit{tree $t$-spanner}) é um subgrafo gerador $T$ de $G$ tal que $T$ é uma árvore e a distância entre qualquer par de vértices em $T$ que são vizinhos em $G$ é no máximo $t$. O problema da $t$-admissibilidade pode ser definido como: dado um grafo conexo $G$, determinar se existe uma árvore $t$-geradora de $G$. São apresentados dois algoritmos de força-bruta para determinar árvores t-geradoras, um sequencial, outro paralelizado. É proposta também uma otimização destes algoritmos, utilizando a estrutura de conjuntos-disjuntos para detecção de ciclos. São apresentados resultados computacionais destes algoritmos, relacionando diferentes abordagens e a performance com as otimizações propostas.
+\noindent Uma árvore $t$-geradora (\textit{tree $t$-spanner}) é um subgrafo gerador $T$ de $G$ tal que $T$ é uma árvore e a distância entre qualquer par de vértices em $T$ que são vizinhos em $G$ é no máximo $t$. O problema da $t$-admissibilidade pode ser definido como: dado um grafo conexo $G$, determinar se existe uma árvore $t$-geradora de $G$. São apresentados dois algoritmos de força-bruta para determinar árvores $t$-geradoras: um sequencial, outro paralelizado. É proposta também uma otimização destes algoritmos, utilizando a estrutura de conjuntos-disjuntos para detecção de ciclos. São apresentados resultados computacionais destes algoritmos, relacionando diferentes abordagens e a performance com as otimizações propostas.
 
 \vspace{.4cm}
 
 \noindent
-\textbf{Palavras-chaves}: t-admissibilidade; árvore t-geradora; paralelismo.
+\textbf{Palavras-chaves}: $t$-admissibilidade; árvore $t$-geradora; paralelismo.
 
 \vspace{\onelineskip}
 
@@ -102,7 +102,7 @@ Luís Felipe Ignácio Cunha\footnote{Orientador - Instituto de Computação - UF
 \end{hyphenrules}
 \vspace{.4cm}
 
-\noindent \textbf{Keywords}: t-admissibility; tree t-spanner; parallelism.
+\noindent \textbf{Keywords}: $t$-admissibility; tree $t$-spanner; parallelism.
 
 \vspace{.4cm}
 
@@ -110,18 +110,18 @@ Luís Felipe Ignácio Cunha\footnote{Orientador - Instituto de Computação - UF
 
 \section{Introdução}
 
-Um gerador (\textit{spanner}) é um subgrafo de $G$ que contém todos os vértices de G$.$ Uma árvore $t$-geradora (\textit{tree $t$-spanner}) é um subgrafo gerador $T$ de $G$ tal que $T$ é uma árvore e a distância entre qualquer par de vértices em $T$ que são vizinhos em $G$ é no máximo $t$. Este parâmetro $t$ é chamado de fator de extensão (\textit{stretch-factor}), denotado por $\sigma(T)$. Se um grafo admite uma árvore $t$-geradora, então dizemos que o grafo é $t$-admissível. O menor valor de $t$ para o qual um grafo $G$ é $t$-admissível é chamado de índice de extensão (\textit{stretch-index}), denotado por $\sigma_T(G)$.
+Um gerador (\textit{spanner}) é um subgrafo de $G$ que contém todos os vértices de $G$. Uma árvore $t$-geradora (\textit{tree t-spanner}) é um subgrafo gerador $T$ de $G$ tal que $T$ é uma árvore e a distância entre qualquer par de vértices em $T$ que são vizinhos em $G$ é no máximo $t$. Este parâmetro $t$ é chamado de fator de extensão (\textit{stretch-factor}), denotado por $\sigma(T)$. Se um grafo admite uma árvore $t$-geradora, então dizemos que o grafo é $t$-admissível. O menor valor de $t$ para o qual um grafo $G$ seja $t$-admissível é chamado de índice de extensão (\textit{stretch-index}), denotado por $\sigma_T(G)$.
 
 O problema da $t$-admissibilidade pode ser definido como: dado um grafo conexo $G$, determinar se existe uma árvore geradora $T$ de $G$ tal que a distância entre qualquer par de vértices em $T$ é no máximo $t$ vezes a distância destes em $G$.
 
 Cai e Corneil \cite{doi:10.1137/S0895480192237403} provaram que, para grafos não-ponderados, o problema é NP-completo para $t\geq4$, enquanto a construção de uma árvore 2-geradora pode ser feita em tempo linear. Já a complexidade do problema para $t=3$ ainda não é conhecida.
 
-O problema da $t$-admissibilidade foi estudado também para diferentes classes de grafos. Em grafos não-ponderados planares é provado ser NP-difícil, mas é possível determinar em tempo polinomial se tal grafo é $3$-admissível\cite{cunha_marciano_moraes_santiago_santos}. Além disso, existe um algoritmo polinomial que, dado um $t$ fixo, determina se um grafo não-ponderado planar com tamanho de face limitado é $t$-admissível\cite{FEKETE200185}. O problema é provado ser NP-completo até mesmo em grafos cordais de diametro até $t + 1$, caso $t$ seja par, ou $t + 2$, caso contrário. Além disso, um grafo cordal de diametro até $t - 1$ (respectivamente, $t - 2$) admite uma árvore t-geradora caso $t\geq2$ seja par (respectivamente, $t\geq3$ seja ímpar), sendo possível construir tal árvore em tempo linear \cite{BRANDSTADT2004329}.
+O problema da $t$-admissibilidade foi estudado também para diferentes classes de grafos. Em grafos não-ponderados planares é provado ser NP-difícil, mas é possível determinar em tempo polinomial se tal grafo é $3$-admissível\cite{cunha_marciano_moraes_santiago_santos}. Além disso, existe um algoritmo polinomial que, dado um $t$ fixo, determina se um grafo não-ponderado planar com tamanho de face limitado é $t$-admissível\cite{FEKETE200185}. O problema é provado ser NP-completo até mesmo em grafos cordais de diâmetro até $t + 1$, caso $t$ seja par, ou $t + 2$, caso contrário. Além disso, um grafo cordal de diâmetro até $t - 1$ (respectivamente, $t - 2$) admite uma árvore $t$-geradora caso $t\geq2$ seja par (respectivamente, $t\geq3$ seja ímpar), sendo possível construir tal árvore em tempo linear \cite{BRANDSTADT2004329}.
 
 Foram estudadas também heurísticas para o problema, sendo possível utilizá-las para encontrar um limite superior do índice de extensão de um grafo, ou até mesmo encontrar seu valor exato para certas classes de grafos \cite{COUTO2022106265} \cite{cunha_marciano_moraes_santiago_santos}.
 
 % [ ] TODO: Expandir ou remover este parágrafo
-% A geração de t-spanners também fora amplamente estudada, tanto para o problema da t-admissibilidade quanto outros, como o da árvore-geradora mínima, para o qual diversos algoritmos foram propostos (Kruskal, Prim, Boruvka, etc).
+% A geração de $t$-spanners também fora amplamente estudada, tanto para o problema da $t$-admissibilidade quanto outros, como o da árvore-geradora mínima, para o qual diversos algoritmos foram propostos (Kruskal, Prim, Boruvka, etc).
 
 Uma vez que o problema é NP-completo na maioria dos casos, o estudo de abordagens paralelizadas para a obtenção de árvores-geradoras apresenta uma oportunidade de obter soluções em tempo hábil e de aferir abordagens heurísticas.
 
@@ -131,11 +131,11 @@ Assim, foram implementados um algoritmo sequencial e um algoritmo paralelizado (
 
 \subsection{Resultados Obtidos}
 
-Através da implementação utilizando conjuntos-disjuntos foi obtida uma melhora no desempenho do algoritmo de detecção de ciclos. No entando, foi percebida uma limitação na escalabilidade do algoritmo paralelizado de obtenção de árvores-geradoras, em que a má distribuição do trabalho entre as threads por vezes resulta em grande um número destas ficarem ociosas, pois o grafo induzido pelas arestas no seu \textit{range} de busca não é conexo. Uma tentativa de minimizar esta situação é apresentada ao final do trabalho. Foi percebido também um limite superior no desempenho médio do algoritmo paralelizado a partir de 8 threads, apesar de haver mais \textit{cores} disponíveis, deixando uma questão em aberto para próximos trabalhos.
+Através da implementação utilizando conjuntos-disjuntos foi obtida uma melhora no desempenho do algoritmo de detecção de ciclos. No entando, foi percebida uma limitação na escalabilidade do algoritmo paralelizado de obtenção de árvores-geradoras, em que a má distribuição do trabalho entre as \textit{threads}, por vezes, resulta em grande um número destas ficarem ociosas, pois o grafo induzido pelas arestas no seu \textit{range} de busca não é conexo. Uma tentativa de minimizar esta situação é apresentada ao final do trabalho. Foi percebido também um limite superior no desempenho médio do algoritmo paralelizado a partir de 8 \textit{threads}, apesar de haver mais \textit{cores} disponíveis, deixando uma questão em aberto para próximos trabalhos.
 
 \subsection{Organização do Trabalho}
 
-Na seção 2 são apresentados os conceitos de trabatabilidade e intrabatabilidade, classes de problemas P e NP, NP-completude e NP-difícil. Além disso, são apresentados a \textit{função de Ackermann} e o conceito de complexidade amortizada. A seção 3 apresenta uma abordagem sequencial e outra paralelizada para a obtenção de árvores-geradoras de um dado grafo. São apresentados na seção 4 os resultados experimentais obtidos da execução destes algoritmos e comparações feitas com implementações de outras abordagens existentes. Por fim, na seção 5 são discutidos os resultados concluídos deste trabalho e oportunidades de trabalhos futuros em cima do que foi desenvolvido.
+Na seção 2 são apresentados os conceitos de trabatabilidade e intrabatabilidade, classes de problemas P e NP, NP-completude e NP-difícil. Além disso, são apresentados a \textit{função de Ackermann} e o conceito de complexidade amortizada. A seção 3 apresenta uma abordagem sequencial e outra paralelizada para a obtenção de árvores-geradoras de um dado grafo. São apresentados na seção 4 os resultados experimentais obtidos da execução destes algoritmos e comparações feitas com implementações de outras abordagens existentes. Por fim, na seção 5 são discutidos os resultados concluídos deste trabalho e oportunidades de trabalhos futuros com base no que foi desenvolvido.
 
 \section{Preliminares}
 
@@ -150,7 +150,7 @@ Um problema $x$ é dito NP-difícil quando qualquer problema $y$ em NP pode ser 
 \begin{theorem}
 Seja $H$ um subrafo gerador de um grafo ponderado $G=(V,E,w)$. Então, as seguintes afirmações são equivalentes\cite{doi:10.1137/S0895480192237403}:
 
-    (1) $H$ é uma árvore t-geradora de $G$ (i.e., $d_H(x,y) \leq t \cdot d_G(x,y)$ para todo par $x,y \in V$).
+    (1) $H$ é uma árvore $t$-geradora de $G$ (i.e., $d_H(x,y) \leq t \cdot d_G(x,y)$ para todo par $x,y \in V$).
 
     (2) Para toda aresta $xy \in E, d_H(x,y) \leq t \cdot d_G(x,y)$.
     
@@ -197,7 +197,7 @@ Complexidade amortizada é o estudo da complexidade de tempo despendido por uma 
 
 \section{Desenvolvimento Teórico}
 
-Na seção 3.1 é apresentada uma abordagem sequencial de um algoritmo de força bruta para a obtenção das árvores-geradoras de um Grafo. Na seção 3.2 é apresentada uma abordagem paralelizada para o mesmo problema. Por fim, na seção 3.3 é apresentada a estrutura de dados Conjuntos-Disjuntos e de que forma ela pode ser aplicada para otimizar os algoritmos apresentados nas seções anteriores.
+Na seção 3.1 é apresentada uma abordagem sequencial de um algoritmo de força bruta para a obtenção das árvores-geradoras de um Grafo. Na seção 3.2 é apresentada uma abordagem paralelizada para o mesmo problema. Por fim, na seção 3.3 é apresentada a estrutura de dados conjuntos-disjuntos e de que forma ela pode ser aplicada para otimizar os algoritmos apresentados nas seções anteriores.
 
 \subsection{Abordagem Sequencial}
 \label{abordagem-sequencial}
@@ -237,9 +237,9 @@ O algoritmo inicia com $v = 0$, adicionando a primeira aresta incidente em $v$ a
 \subsection{Abordagem Paralelizada}
 \label{abordagem-paralelizada}
 
-O Algoritmo \ref{alg:generate_parallel} apresenta uma abordagem paralelizada a nível de \textit{threads} para a geração das árvores-geradoras de um grafo, baseado no algoritmo \ref{alg:generate_sequential} \cite{COUTO2022106265}. Ele consiste em listar todas as arestas de $G$ em um vetor $E$ e, em cada uma das $t$ threads, distribuir $|V|$ ponteiros distintos e subsequentes, de modo que a distribuição na thread $t_i$ comece na posição $i$. Feita a distribuição, é checado se o grafo $T$ formado pelas arestas selecionadas consiste em uma árvore-geradora de $G$. Em seguida são avançados os ponteiros, a partir do mais à direita, e checa-se novamente se o grafo formado consiste em uma árvore-geradora. O $loop$ se encerra em uma thread quando o ponteiro mais à esquerda alcança a posição inicial de outra thread, ou uma posição em que seja impossível formar uma árvore-geradora (não há arestas o suficiente a partir de $i$).
+O Algoritmo \ref{alg:generate_parallel} apresenta uma abordagem paralelizada a nível de \textit{threads} para a geração das árvores-geradoras de um grafo, baseado no algoritmo \ref{alg:generate_sequential} \cite{COUTO2022106265}. Ele consiste em listar todas as arestas de $G$ em um vetor $E$ e, em cada uma das $t$ \textit{threads}, distribuir $|V|$ ponteiros distintos e subsequentes, de modo que a distribuição na \textit{thread} $t_i$ comece na posição $i$. Feita a distribuição, é checado se o grafo $T$ formado pelas arestas selecionadas consiste em uma árvore-geradora de $G$. Em seguida são avançados os ponteiros, a partir do mais à direita, e checa-se novamente se o grafo formado consiste em uma árvore-geradora. O $loop$ se encerra em uma \textit{thread} quando o ponteiro mais à esquerda alcança a posição inicial de outra \textit{thread}, ou uma posição em que seja impossível formar uma árvore-geradora (não há arestas o suficiente a partir de $i$).
 
-É notável que a distribuição de trabalho entre threads é desbalanceada, podendo a thread final possuir uma carga de trabalho excessivamente maior que as demais. Porém, isto pode ser mitigado através de uma melhor distribuição dos índices de início e fim para cada thread.
+É notável que a distribuição de trabalho entre \textit{threads} é desbalanceada, podendo a \textit{thread} final possuir uma carga de trabalho excessivamente maior que as demais. Porém, isto pode ser mitigado através de uma melhor distribuição dos índices de início e fim para cada \textit{thread}.
 
 Além disso, de maneira similar à abordagem sequencial, podemos interromper a geração de árvores caso seja alcançado um dos limites-inferiores mencionados.
 
@@ -274,13 +274,13 @@ Note que há uma otimização na linha 8, denominada \textit{path-compression}, 
 
 Note que foi utilizado uma estrutura denominada \textbf{rank}, que é um limite-superior para a altura da árvore do elemento, inicialmente zero, que nos permite fazer uma otimização denominada \textit{union-by-rank}, que limita o crescimento da árvore de busca pelo elemento representativo.
 
-Com as otimizações vistas acima é possível obter uma implementação de Conjuntos-Disjuntos com complexidade de tempo amortizada de $O(\alpha(n))$, onde $\alpha(n)$ é a \textit{função inversa de Ackermann}\cite{Ackermann1928}, de crescimento extremamente lento \cite{fredman_saks}. Assim, é possível otimizar as etapas de detecção de ciclos e determinação de conexidade em um grafo, em comparação com implementações baseadas em busca em árvores.
+Com as otimizações vistas acima, é possível obter uma implementação de conjuntos-disjuntos com complexidade de tempo amortizada de $O(\alpha(n))$, onde $\alpha(n)$ é a \textit{função inversa de Ackermann}\cite{Ackermann1928}, de crescimento extremamente lento \cite{fredman_saks}. Assim, é possível otimizar as etapas de detecção de ciclos e determinação de conexidade em um grafo, em comparação com implementações baseadas em busca em árvores.
 
 % TODO: Explicar complexidade de tempo?
 
 \subsubsection{Detecção de Ciclos}
 
-Dada uma instância de conjuntos-disjuntos em que cada elemento é um vértice do grafo, basta iterar cada aresta $u, v$ e, caso $u$ e $v$ pertençam ao mesmo conjunto, o grafo possui ciclo, caso contrário, fazer a união dos conjuntos correspondentes.
+Dada uma instância de conjuntos-disjuntos em que cada elemento é um vértice do grafo, basta iterar cada aresta $u, v$ e, caso $u$ e $v$ pertençam ao mesmo conjunto, o grafo possui ciclo. Caso contrário, fazer a união dos conjuntos correspondentes.
 
 \input{algorithms/is_cyclic_disjoint_sets.tex}
 
@@ -343,9 +343,9 @@ A partir delas é possível concluir que, apesar do ganho significativo de perfo
     \label{fig:dfs_djs_rel}
 \end{figure}
 
-A figura \ref{fig:speedup} mostra o speedup, calculado como a relação entre o tempo decorrido da execução do algoritmo paralelizado e do sequencial, para grafos gerados da seguinte forma:
+A figura \ref{fig:speedup} mostra o \textit{speedup}, calculado como a relação entre o tempo decorrido da execução do algoritmo paralelizado e do sequencial, para grafos gerados da seguinte forma:
 
-Para cada número de vértices $N$ entre 16 e 20 foi determinado um número de arestas $M = T - 1 + (N - 1)$, onde $T$ é o maior número de threads a ser utilizado para a obtenção de árvores-geradoras, para que hajam arestas o suficiente para atribuir trabalho a cada thread.
+Para cada número de vértices $N$ entre 16 e 20 foi determinado um número de arestas $M = T - 1 + (N - 1)$, onde $T$ é o maior número de \textit{threads} a ser utilizado para a obtenção de árvores-geradoras, para que hajam arestas o suficiente para atribuir trabalho a cada \textit{thread}.
 
 Então, para cada número de vértices $N$ e número de arestas $M$ correspondente, foi calculada a média $K$ do número de árvores-geradoras entre 10000 grafos aleatórios e gerados 10 grafos aleatórios com $N$ vértices e $M$ arestas, cada um possuindo um número de árvores-geradoras com variação de até 1\% em relação a $K$.
 
@@ -358,7 +358,7 @@ O cálculo do número de árvores-geradoras possíveis para cada grafo $G$ foi r
     \label{fig:speedup}
 \end{figure}
 
-É possível observar que o algoritmo paralelizado apresentou performance inferior ao sequencial em todas as execuções, e que apesar de uma tendência a aumentar o speedup conforme o número de threads aumenta para um determinado número de vértices e arestas, é alcançado um limite a partir de 8 threads.
+É possível observar que o algoritmo paralelizado apresentou performance inferior ao sequencial em todas as execuções, e que, apesar de uma tendência a aumentar o \textit{speedup} conforme o número de \textit{threads} aumenta para um determinado número de vértices e arestas, é alcançado um limite a partir de 8 \textit{threads}.
 
 Além disso, para um determinado número de threads, o speedup é significativamente menor quanto maior o grafo.
 
@@ -366,15 +366,15 @@ Além disso, para um determinado número de threads, o speedup é significativam
 
 Foram apresentadas dois algoritmos de força bruta para a obtenção de árvores-geradoras de um grafo, um sequencial e outro paralelizado. Trabalhos anteriores implementaram estes algoritmos utilizando a estrutura de matriz de adjacências, enquanto este trabalho utilizou a estrutura de lista de adjacências.
 
-O algoritmo paralelizado se demonstrou menos eficiente do que o sequencial, apresentando tendência a melhorar o speedup conforme aumenta-se o número de threads, mas alcançando um \textit{plateau} abaixo de $1.0$ a partir de 8 threads, apesar da máquina utilizada suportar até 15 threads.
+O algoritmo paralelizado se demonstrou menos eficiente do que o sequencial, apresentando tendência a melhorar o \textit{speedup} conforme aumenta-se o número de \textit{threads}, mas alcançando um \textit{plateau} abaixo de $1.0$ a partir de 8 \textit{threads}, apesar da máquina utilizada suportar até 15 \textit{threads}.
 
-Além disso, foi apresentada uma forma de aproveitar a estrutura de dados de conjuntos-disjuntos para otimizar a detecção de ciclos que ocorre nestes algoritmos, que apesar de acelerar esta subrotina para até um vigésimo to tempo decorrido, se comparado com implementações de busca em profundidade, representa uma parte pequena do tempo decorrido do algoritmo como um todo.
+Além disso, foi apresentada uma forma de aproveitar a estrutura de dados de conjuntos-disjuntos para otimizar a detecção de ciclos que ocorre nestes algoritmos, que apesar de acelerar esta sub-rotina para até um vigésimo to tempo decorrido, se comparado com implementações de busca em profundidade, representa uma parte pequena do tempo decorrido do algoritmo como um todo.
 
-Foi percebida uma limitação na escalabilidade do algoritmo paralelizado, em que a divisão de arestas entre as threads resulta em algumas destas ficando ociosas, pois o grafo induzido não é conexo. Além disso, não há garantia da boa distribuição da carga de trabalho entre as threads.
+Foi percebida uma limitação na escalabilidade do algoritmo paralelizado, em que a divisão de arestas entre as \textit{threads} resulta em algumas destas ficando ociosas, pois o grafo induzido não é conexo. Além disso, não há garantia da boa distribuição da carga de trabalho entre as \textit{threads}.
 
-Este trabalho apresentou a obtenção de árvores-geradoras com a perspectiva do problema da t-admissibilidade, mas outros problemas poderiam ser avaliados, tais como a obtenção de árvores-geradoras com o menor diâmetro, ou com a menor altura.
+Este trabalho apresentou a obtenção de árvores-geradoras com a perspectiva do problema da $t$-admissibilidade, mas outros problemas poderiam ser avaliados, tais como a obtenção de árvores-geradoras com o menor diâmetro, ou com a menor altura.
 
-Próximos passos para este trabalho incluem investigar o \textit{plateau} encontrado no speedup dos algoritmos de obtenção de árvores-geradoras, além de avaliar novas formas de distribuição de trabalho entre as threads do algoritmo paralelizado. Uma destas se dá através do uso de um corte de arestas $M$ do grafo, dividindo-o entre o corte dois subgrafos $X$ e $Y$ de $G$, de tamanho menor que $G$, reduzindo assim o tempo decorrido do algoritmo paralelizado para $X$ e $Y$. Outra se dá através da escolha de um ciclo induzido $C$ de $G$, removendo-se $i$ arestas de $C$ e declarando as demais obrigatórias para uma determinada thread $i$\cite{cunha_marciano_moraes_santiago_santos}.
+Próximos passos para este trabalho incluem investigar o \textit{plateau} encontrado no \textit{speedup} dos algoritmos de obtenção de árvores-geradoras, além de avaliar novas formas de distribuição de trabalho entre as \textit{threads} do algoritmo paralelizado. Uma destas se dá através do uso de um corte de arestas $M$ do grafo, dividindo-o entre o corte dois subgrafos $X$ e $Y$ de $G$, de tamanho menor que $G$, reduzindo assim o tempo decorrido do algoritmo paralelizado para $X$ e $Y$. Outra se dá através da escolha de um ciclo induzido $C$ de $G$, removendo-se $i$ arestas de $C$ e declarando as demais obrigatórias para uma determinada thread $i$\cite{cunha_marciano_moraes_santiago_santos}.
 
 \clearpage
 \bibliography{references}
