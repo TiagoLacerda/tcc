@@ -81,7 +81,7 @@ Luís Felipe Ignácio Cunha\footnote{Orientador - Instituto de Computação - UF
 
 \vspace{-.3cm}
 
-\noindent Uma árvore $t$-geradora (\textit{tree $t$-spanner}) é um subgrafo gerador $T$ de $G$ tal que $T$ é uma árvore e a distância entre qualquer par de vértices em $T$ que são vizinhos em $G$ é no máximo $t$. O problema da $t$-admissibilidade pode ser definido como: dado um grafo conexo $G$, determinar se existe uma árvore $t$-geradora de $G$. São apresentados dois algoritmos de força-bruta para determinar árvores $t$-geradoras: um sequencial, outro paralelizado. É proposta também uma otimização destes algoritmos, utilizando a estrutura de conjuntos-disjuntos para detecção de ciclos. São apresentados resultados computacionais destes algoritmos, relacionando diferentes abordagens e a performance com as otimizações propostas.
+\noindent Uma árvore $t$-geradora (\textit{tree $t$-spanner}) é um subgrafo gerador $T$ de $G$ tal que $T$ é uma árvore e a distância entre qualquer par de vértices em $T$ que são vizinhos em $G$ é no máximo $t$. O problema da $t$-admissibilidade pode ser definido como: dado um grafo conexo $G$, determinar se existe uma árvore $t$-geradora de $G$. São apresentados dois algoritmos de força-bruta para determinar árvores $t$-geradoras: um sequencial, outro paralelizado. É proposta também uma otimização destes algoritmos, utilizando a estrutura de conjuntos-disjuntos para detecção de ciclos. São apresentados resultados computacionais destes algoritmos, relacionando diferentes abordagens e a \textit{performance} com as otimizações propostas.
 
 \vspace{.4cm}
 
@@ -112,30 +112,27 @@ Luís Felipe Ignácio Cunha\footnote{Orientador - Instituto de Computação - UF
 
 Um gerador (\textit{spanner}) é um subgrafo de $G$ que contém todos os vértices de $G$. Uma árvore $t$-geradora (\textit{tree t-spanner}) é um subgrafo gerador $T$ de $G$ tal que $T$ é uma árvore e a distância entre qualquer par de vértices em $T$ que são vizinhos em $G$ é no máximo $t$. Este parâmetro $t$ é chamado de fator de extensão (\textit{stretch-factor}), denotado por $\sigma(T)$. Se um grafo admite uma árvore $t$-geradora, então dizemos que o grafo é $t$-admissível. O menor valor de $t$ para o qual um grafo $G$ seja $t$-admissível é chamado de índice de extensão (\textit{stretch-index}), denotado por $\sigma_T(G)$.
 
-O problema da $t$-admissibilidade pode ser definido como: dado um grafo conexo $G$, determinar se existe uma árvore geradora $T$ de $G$ tal que a distância entre qualquer par de vértices em $T$ é no máximo $t$ vezes a distância destes em $G$.
+O problema da $t$-admissibilidade pode ser definido como: dado um grafo conexo $G$, determinar se existe uma árvore geradora $T$ de $G$ tal que a distância entre qualquer par de vértices em $T$ que são vizinhos em G é no máximo $t$.
 
 Cai e Corneil \cite{doi:10.1137/S0895480192237403} provaram que, para grafos não-ponderados, o problema é NP-completo para $t\geq4$, enquanto a construção de uma árvore 2-geradora pode ser feita em tempo linear. Já a complexidade do problema para $t=3$ ainda não é conhecida.
 
-O problema da $t$-admissibilidade foi estudado também para diferentes classes de grafos. Em grafos não-ponderados planares é provado ser NP-difícil, mas é possível determinar em tempo polinomial se tal grafo é $3$-admissível\cite{cunha_marciano_moraes_santiago_santos}. Além disso, existe um algoritmo polinomial que, dado um $t$ fixo, determina se um grafo não-ponderado planar com tamanho de face limitado é $t$-admissível\cite{FEKETE200185}. O problema é provado ser NP-completo até mesmo em grafos cordais de diâmetro até $t + 1$, caso $t$ seja par, ou $t + 2$, caso contrário. Além disso, um grafo cordal de diâmetro até $t - 1$ (respectivamente, $t - 2$) admite uma árvore $t$-geradora caso $t\geq2$ seja par (respectivamente, $t\geq3$ seja ímpar), sendo possível construir tal árvore em tempo linear \cite{BRANDSTADT2004329}.
+O problema da $t$-admissibilidade foi estudado também para diferentes classes de grafos. Em grafos não-ponderados planares é provado ser NP-difícil, mas é possível determinar em tempo polinomial se tal grafo é $3$-admissível \cite{cunha_marciano_moraes_santiago_santos}. Além disso, existe um algoritmo polinomial que, dado um $t$ fixo, determina se um grafo não-ponderado planar com tamanho de face limitado é $t$-admissível \cite{FEKETE200185}. O problema é provado ser NP-completo até mesmo em grafos cordais de diâmetro até $t + 1$, caso $t$ seja par, ou $t + 2$, caso contrário. Além disso, um grafo cordal de diâmetro até $t - 1$ (respectivamente, $t - 2$) admite uma árvore $t$-geradora caso $t\geq2$ seja par (respectivamente, $t\geq3$ seja ímpar), sendo possível construir tal árvore em tempo linear \cite{BRANDSTADT2004329}.
 
 Foram estudadas também heurísticas para o problema, sendo possível utilizá-las para encontrar um limite superior do índice de extensão de um grafo, ou até mesmo encontrar seu valor exato para certas classes de grafos \cite{COUTO2022106265} \cite{cunha_marciano_moraes_santiago_santos}.
 
-% [ ] TODO: Expandir ou remover este parágrafo
-% A geração de $t$-spanners também fora amplamente estudada, tanto para o problema da $t$-admissibilidade quanto outros, como o da árvore-geradora mínima, para o qual diversos algoritmos foram propostos (Kruskal, Prim, Boruvka, etc).
-
 Uma vez que o problema é NP-completo na maioria dos casos, o estudo de abordagens paralelizadas para a obtenção de árvores-geradoras apresenta uma oportunidade de obter soluções em tempo hábil e de aferir abordagens heurísticas.
 
-Há propostos na literatura algoritmos de força bruta sequenciais e paralelizados para a obtenção das árvores-geradoras de um dado grafo \cite{COUTO2022106265} \cite{cunha_marciano_moraes_santiago_santos}, mas estas deixam algumas questões a serem estudadas, como melhorias da distribuição da carga de trabalho paralelizado entre \textit{threads}, otimizações na checagem de ciclos e de conexidade, além de implementação da estrutura de grafos através de lista de arestas, ao invés de matriz de adjacências.
+Há propostos na literatura algoritmos de força bruta sequenciais e paralelizados para a obtenção das árvores-geradoras de um dado grafo \cite{COUTO2022106265} \cite{cunha_marciano_moraes_santiago_santos}, mas estas deixam algumas questões a serem estudadas, como melhorias da distribuição da carga de trabalho paralelizado entre \textit{threads}, otimizações na checagem de ciclos e de conexidade, além de implementação da estrutura de grafos através de lista de adjacências.
 
-Assim, foram implementados um algoritmo sequencial e um algoritmo paralelizado (seções \ref{abordagem-sequencial} e \ref{abordagem-paralelizada}) para a obtenção de todas as árvores-geradoras de um grafo conexo $G$, utilizando a estrutura de lista de adjacências, além de otimizações através do uso da estrutura de conjuntos-disjuntos nas rotinas destes algoritmos (seção \ref{conjuntos-disjuntos}).
+Assim, foram implementados um algoritmo sequencial e um algoritmo paralelizado (Seção \ref{abordagem-sequencial} e Seção \ref{abordagem-paralelizada}) para a obtenção de todas as árvores-geradoras de um grafo conexo $G$, utilizando as estruturas de lista de adjacências e lista de arestas, além de otimizações através do uso da estrutura de conjuntos-disjuntos em sub-rotinas destes algoritmos (Seção \ref{conjuntos-disjuntos}).
 
 \subsection{Resultados Obtidos}
 
-Através da implementação utilizando conjuntos-disjuntos foi obtida uma melhora no desempenho do algoritmo de detecção de ciclos. No entando, foi percebida uma limitação na escalabilidade do algoritmo paralelizado de obtenção de árvores-geradoras, em que a má distribuição do trabalho entre as \textit{threads}, por vezes, resulta em grande um número destas ficarem ociosas, pois o grafo induzido pelas arestas no seu \textit{range} de busca não é conexo. Uma tentativa de minimizar esta situação é apresentada ao final do trabalho. Foi percebido também um limite superior no desempenho médio do algoritmo paralelizado a partir de 8 \textit{threads}, apesar de haver mais \textit{cores} disponíveis, deixando uma questão em aberto para próximos trabalhos.
+Através da implementação utilizando conjuntos-disjuntos foi obtida uma melhora no desempenho do algoritmo de detecção de ciclos. No entanto, foi percebida uma limitação na escalabilidade do algoritmo paralelizado de obtenção de árvores-geradoras, em que a má distribuição do trabalho entre as \textit{threads}, por vezes, resulta na ociosidade de várias destas, pois o grafo induzido pelas arestas no seu \textit{range} de busca não é conexo. Uma tentativa de minimizar esta situação é apresentada ao final do trabalho. Foi percebido também um limite superior no desempenho médio do algoritmo paralelizado a partir de 8 \textit{threads}, apesar de haver mais \textit{cores} disponíveis, deixando uma questão em aberto para próximos trabalhos.
 
 \subsection{Organização do Trabalho}
 
-Na seção 2 são apresentados os conceitos de trabatabilidade e intrabatabilidade, classes de problemas P e NP, NP-completude e NP-difícil. Além disso, são apresentados a \textit{função de Ackermann} e o conceito de complexidade amortizada. A seção 3 apresenta uma abordagem sequencial e outra paralelizada para a obtenção de árvores-geradoras de um dado grafo. São apresentados na seção 4 os resultados experimentais obtidos da execução destes algoritmos e comparações feitas com implementações de outras abordagens existentes. Por fim, na seção 5 são discutidos os resultados concluídos deste trabalho e oportunidades de trabalhos futuros com base no que foi desenvolvido.
+Na Seção 2 são apresentados os conceitos de trabatabilidade e intrabatabilidade, classes de problemas P e NP, NP-completude e NP-difícil. Além disso, são apresentados a \textit{função de Ackermann} e o conceito de complexidade amortizada. A Seção 3 apresenta uma abordagem sequencial e outra paralelizada para a obtenção de árvores-geradoras de um dado grafo. São apresentados na Seção 4 os resultados experimentais obtidos da execução destes algoritmos e comparações feitas com implementações de outras abordagens existentes. Por fim, na Seção 5 são discutidos os resultados concluídos deste trabalho e oportunidades de trabalhos futuros com base no que foi desenvolvido.
 
 \section{Preliminares}
 
@@ -148,7 +145,7 @@ Por outro lado, NP é uma classe de complexidade de problemas que contém todos 
 Um problema $x$ é dito NP-difícil quando qualquer problema $y$ em NP pode ser reduzido a $x$ em tempo polinomial. Se $x$ é NP-difícil e pertence a NP, então $x$ é dito NP-completo.
 
 \begin{theorem}
-Seja $H$ um subrafo gerador de um grafo ponderado $G=(V,E,w)$. Então, as seguintes afirmações são equivalentes\cite{doi:10.1137/S0895480192237403}:
+Seja $H$ um subrafo gerador de um grafo ponderado  $G=(V,E,w)$, onde $V$ é o conjunto de vértices, $E$ é o conjunto de arestas e $w:E \rightarrow \mathbb{R}$ associa a cada aresta $xy \in E$ um peso $w(xy)$. Sejam ainda $d_G(x,y)$ e $d_H(x,y)$ o custo total do caminho de menor custo entre os vértices $x,y$ em $G$ e $H$, respectivamente. Então, as seguintes afirmações são equivalentes \cite{doi:10.1137/S0895480192237403}:
 
     (1) $H$ é uma árvore $t$-geradora de $G$ (i.e., $d_H(x,y) \leq t \cdot d_G(x,y)$ para todo par $x,y \in V$).
 
@@ -183,21 +180,19 @@ Uma vez que $d_G(x,y)= \sum_{e \in P}w(e)$ pela escolha de P obtemos
 
 Mais algumas definições se fazem necessárias. Uma \textit{função parcial} $f$ de um conjunto $X$ para um conjunto $Y$ é uma função definida em um subconjunto $S \subseteq X$ com valores em $Y$. Se $S = X$, ou seja, se $f$ está definida para todo elemento de $X$, então $f$ é dita uma \textit{função total}. Uma \textit{função computável} é aquela para a qual existe um algoritmo que determina o valor da função para qualquer valor de sua entrada. Uma \textit{função recursiva primitiva} é aquela para qual se conhece um limite superior para o número de iterações de qualquer \textit{loop} antes que este seja iniciado.
 
-A \textit{função de Ackermann}\cite{Ackermann1928} é um dos primeiros exemplos de uma função computável total que não é recursiva primitiva, e hoje o termo é utilizado para se referir a diferentes variações da função original, mais comumente aquela desenvolvida por Rósza Péter e Raphael Robinson, definida para $n,m \in \mathbb{Z}^*$ da seguinte forma:
+A \textit{função de Ackermann} \cite{Ackermann1928} é um dos primeiros exemplos de uma função computável total que não é recursiva primitiva, e hoje o termo é utilizado para se referir a diferentes variações da função original, mais comumente aquela desenvolvida por Rósza Péter e Raphael Robinson, definida para $p,q \in \mathbb{Z}^*$ da seguinte forma:
 
 \begin{alignat*}{2}
-    &A(0, n) &\;=\;&n + 1 \\
-    &A(m+1, 0) &\;=\;& A(m, 1) \\
-    &A(m+1, n+1) &\;=\;& A(m, A(m+1, n))
+    &A(0, p) &\;=\;&p + 1 \\
+    &A(q+1, 0) &\;=\;& A(q, 1) \\
+    &A(q+1, p+1) &\;=\;& A(q, A(q+1, p))
 \end{alignat*}
 
-% TODO: Encontrar referência para esta função?
-
-Complexidade amortizada é o estudo da complexidade de tempo despendido por uma operação considerando as configurações da estrutura antes e após a operação, examinando cada uma das operações como parte integrante de uma sequência. Assim, cada operação individual não deverá ser considerada, necessariamente, em seu pior caso\cite{szwarcfiter1994estruturas}.
+Complexidade amortizada é o estudo da complexidade de tempo despendido por uma operação considerando as configurações da estrutura antes e após a operação, examinando cada uma das operações como parte integrante de uma sequência. Assim, cada operação individual não deverá ser considerada, necessariamente, em seu pior caso \cite{szwarcfiter1994estruturas}.
 
 \section{Desenvolvimento Teórico}
 
-Na seção 3.1 é apresentada uma abordagem sequencial de um algoritmo de força bruta para a obtenção das árvores-geradoras de um Grafo. Na seção 3.2 é apresentada uma abordagem paralelizada para o mesmo problema. Por fim, na seção 3.3 é apresentada a estrutura de dados conjuntos-disjuntos e de que forma ela pode ser aplicada para otimizar os algoritmos apresentados nas seções anteriores.
+Na Seção 3.1 é apresentada uma abordagem sequencial de um algoritmo de força bruta para a obtenção das árvores-geradoras de um grafo. Na Seção 3.2 é apresentada uma abordagem paralelizada para o mesmo problema. Por fim, na Seção 3.3 é apresentada a estrutura de dados conjuntos-disjuntos e de que forma ela pode ser aplicada para otimizar os algoritmos apresentados nas seções anteriores.
 
 \subsection{Abordagem Sequencial}
 \label{abordagem-sequencial}
@@ -218,7 +213,7 @@ Assim, ao gerar as árvores-geradoras de $G$, se temos que $\sigma_T(G) = g(G) -
 
 \begin{example}
 
-Considere o grafo da Figura \ref{fig:example_1_a}, com o seguinte vetor de adjacências:
+Considere o grafo da Figura \ref{fig:example_1_a}, com a seguinte lista de adjacências:
 
 \begin{equation*}
 \begin{aligned}
@@ -237,9 +232,9 @@ O algoritmo inicia com $v = 0$, adicionando a primeira aresta incidente em $v$ a
 \subsection{Abordagem Paralelizada}
 \label{abordagem-paralelizada}
 
-O Algoritmo \ref{alg:generate_parallel} apresenta uma abordagem paralelizada a nível de \textit{threads} para a geração das árvores-geradoras de um grafo, baseado no algoritmo \ref{alg:generate_sequential} \cite{COUTO2022106265}. Ele consiste em listar todas as arestas de $G$ em um vetor $E$ e, em cada uma das $t$ \textit{threads}, distribuir $|V|$ ponteiros distintos e subsequentes, de modo que a distribuição na \textit{thread} $t_i$ comece na posição $i$. Feita a distribuição, é checado se o grafo $T$ formado pelas arestas selecionadas consiste em uma árvore-geradora de $G$. Em seguida são avançados os ponteiros, a partir do mais à direita, e checa-se novamente se o grafo formado consiste em uma árvore-geradora. O $loop$ se encerra em uma \textit{thread} quando o ponteiro mais à esquerda alcança a posição inicial de outra \textit{thread}, ou uma posição em que seja impossível formar uma árvore-geradora (não há arestas o suficiente a partir de $i$).
+O Algoritmo \ref{alg:generate_parallel} apresenta uma abordagem paralelizada a nível de \textit{threads} para a obtenção das árvores-geradoras de um grafo. Ele consiste em listar todas as arestas de $G$ em um vetor $E$ e, em cada uma das $t$ \textit{threads}, distribuir $|V|$ ponteiros distintos e subsequentes, de modo que a distribuição na \textit{thread} $t_i$ comece na posição $i$. Feita a distribuição, é checado se o grafo $T$ formado pelas arestas selecionadas consiste em uma árvore-geradora de $G$. Em seguida são avançados os ponteiros, a partir do mais à direita, e checa-se novamente se o grafo formado consiste em uma árvore-geradora. O $loop$ se encerra em uma \textit{thread} quando o ponteiro mais à esquerda alcança a posição inicial de outra \textit{thread}, ou uma posição em que seja impossível formar uma árvore-geradora (não há arestas o suficiente a partir de $i$).
 
-É notável que a distribuição de trabalho entre \textit{threads} é desbalanceada, podendo a \textit{thread} final possuir uma carga de trabalho excessivamente maior que as demais. Porém, isto pode ser mitigado através de uma melhor distribuição dos índices de início e fim para cada \textit{thread}.
+É notável que a distribuição de trabalho entre \textit{threads} é desbalanceada, dado que uma \textit{thread} $t_i$ possui mais arestas a serem avaliadas que outra \textit{thread} $t_{i+1}$. Porém, isto pode ser mitigado através de uma melhor distribuição dos índices de início e fim para cada \textit{thread}.
 
 Além disso, de maneira similar à abordagem sequencial, podemos interromper a geração de árvores caso seja alcançado um dos limites-inferiores mencionados.
 
@@ -249,9 +244,9 @@ Além disso, de maneira similar à abordagem sequencial, podemos interromper a g
 
 \begin{example}
 
-Considere o grafo da Figura \ref{fig:example_2_a}, com vetor de arestas [(0,1), (0,3), (0,4), (1,2), (2,3), (3,4)]. Em uma execução com apenas uma \textit{thread} temos como índices \textit{start} e \textit{end} 0 e 3, respectivamente, uma vez que não há arestas o suficiente a partir do índice $3$ para formar uma árvore-geradora.
+Considere o grafo da Figura \ref{fig:example_2_a}, com número de vértices $n=5$ e lista de arestas [(0,1), (0,3), (0,4), (1,2), (2,3), (3,4)]. Em uma execução com apenas uma \textit{thread} temos como índices \textit{start} e \textit{end} 0 e 3, respectivamente, uma vez que não há arestas o suficiente a partir do índice $3$ para formar uma árvore-geradora.
 
-Assim, o algoritmo inicia dispondo $n - 1$ ponteiros correspondentes aos primeiros elementos do vetor de arestas, já configurando uma árvore geradora conforme a Figura \ref{fig:example_2_b}.
+Assim, o algoritmo inicia dispondo $n - 1$ ponteiros correspondentes aos primeiros elementos da lista de arestas, já configurando uma árvore geradora conforme a Figura \ref{fig:example_2_b}.
 
 Em seguida, é movido o ponteiro mais à direita do vetor, substituindo a aresta $(1,2)$ pela $(2,3)$, configurando outra árvore-geradora (Figura \ref{fig:example_2_c}). Então, ao mover outra vez o ponteiro, substituindo $(2,3)$ por $(3,4)$, é encontrado um ciclo (Figura \ref{fig:example_2_d}).
 
@@ -268,15 +263,13 @@ Conjuntos-disjuntos são uma estrutura de dados que armazena uma coleção de co
 
 \input{algorithms/find.tex}
 
-Note que há uma otimização na linha 8, denominada \textit{path-compression}, reduzindo o número de chamadas recursivas necessárias para encontrar o elemento representativo do conjunto de $e$ em consultas futuras.
+Note que há uma otimização na linha 6 do Algoritmo \ref{alg:find}, denominada \textit{path-compression}, em que a atribuição $parent[u]=rep$ resulta na redução do número de chamadas recursivas necessárias para encontrar o elemento representativo de $u$ em consultas futuras.
 
 \input{algorithms/union.tex}
 
-Note que foi utilizado uma estrutura denominada \textbf{rank}, que é um limite-superior para a altura da árvore do elemento, inicialmente zero, que nos permite fazer uma otimização denominada \textit{union-by-rank}, que limita o crescimento da árvore de busca pelo elemento representativo.
+Note que no Algoritmo \ref{alg:union} foi utilizado uma estrutura denominada \textbf{rank}, que é um limite-superior para a altura da árvore do elemento, inicialmente zero, que nos permite fazer uma otimização denominada \textit{union-by-rank}, que limita o crescimento da árvore de busca pelo elemento representativo.
 
-Com as otimizações vistas acima, é possível obter uma implementação de conjuntos-disjuntos com complexidade de tempo amortizada de $O(\alpha(n))$, onde $\alpha(n)$ é a \textit{função inversa de Ackermann}\cite{Ackermann1928}, de crescimento extremamente lento \cite{fredman_saks}. Assim, é possível otimizar as etapas de detecção de ciclos e determinação de conexidade em um grafo, em comparação com implementações baseadas em busca em árvores.
-
-% TODO: Explicar complexidade de tempo?
+Com as otimizações vistas acima, é possível obter uma implementação de conjuntos-disjuntos com complexidade de tempo amortizada de $O(\alpha(n))$, onde $\alpha(n)$ é a \textit{função inversa de Ackermann} \cite{Ackermann1928}, de crescimento extremamente lento \cite{fredman_saks}. Assim, é possível otimizar as etapas de detecção de ciclos e determinação de conexidade em um grafo, em comparação com implementações baseadas em busca em árvores.
 
 \subsubsection{Detecção de Ciclos}
 
@@ -300,7 +293,7 @@ Dada uma instância de conjuntos-disjuntos em que cada elemento é um vértice d
 
 \section{Implementação Prática}
 
-Os experimentos foram executados em uma máquina virtual com 15 CPUs, 4 GiB de RAM e disco de inicialização de 32 GiB, hospedada em uma máquina física com CPU Intel i9-9900K (16 núcleos, 1 soquete), 31,18 GiB de RAM, 93,93 GiB de armazenamento e kernel Linux 5.15.158-2-pve.
+Os experimentos foram executados em uma máquina virtual com 15 CPUs, 4 GiB de RAM e disco de inicialização de 32 GiB, hospedada em uma máquina física com CPU Intel i9-9900K (16 núcleos, 1 soquete), 31,18 GiB de RAM, 93,93 GiB de armazenamento e \textit{kernel} Linux 5.15.158-2-pve.
 
 \subsection{Detecção de Ciclos}
 
@@ -314,7 +307,7 @@ Para cada $n=$[500, 1000, 1500, ..., 5000], com $d=$[0, 10, 20, ..., 100], foram
 
 Então, foi gerado um grafo com $n$ vértices e $n - 1$ arestas escolhidas de forma a formar uma árvore. Por fim, caso $k > n - 1$, foram adicionadas $(n - 1) - k$ arestas ao grafo de forma a obter a densidade de arestas desejada (em relação ao máximo de arestas possíveis do grafo).
 
-A Figura \ref{fig:cycle_detection_high_density} apresenta uma relação do tempo decorrido entre os algoritmos de detecção de ciclos utilizando conjuntos-disjuntos e busca em profundidade. Nela, é possível perceber que, em qualquer cenário, o algoritmo baseado em conjuntos-disjuntos possui performance muito superior àquele baseado em busca em profundidade, tomando aproximadamente um quarto do tempo para árvores-geradoras, ou ainda um vigésimo do tempo para grafos de maior densidade de arestas.
+A Figura \ref{fig:cycle_detection_high_density} apresenta uma relação do tempo decorrido entre os algoritmos de detecção de ciclos utilizando conjuntos-disjuntos e busca em profundidade. Nela, é possível perceber que, em qualquer cenário, o algoritmo baseado em conjuntos-disjuntos possui \textit{performance} muito superior àquele baseado em busca em profundidade, tomando aproximadamente um quarto do tempo para árvores-geradoras, ou ainda um vigésimo do tempo para grafos de maior densidade de arestas.
 
 \begin{figure}[h]
     \centering
@@ -325,9 +318,9 @@ A Figura \ref{fig:cycle_detection_high_density} apresenta uma relação do tempo
 
 \subsection{Obtenção de Árvores-Geradoras}
 
-Foram implementados os algoritmos \ref{alg:generate_sequential} e \ref{alg:generate_parallel}, sendo apresentados nas figuras \ref{fig:dfs_djs} e \ref{fig:dfs_djs_rel} uma comparação entre a detecção de ciclos baseada em busca em profundidade e a utilizando conjuntos-disjuntos utilizadas no algoritmo sequencial.
+Foram implementados os Algoritmos \ref{alg:generate_sequential} e \ref{alg:generate_parallel}, sendo apresentados nas Figuras \ref{fig:dfs_djs} e \ref{fig:dfs_djs_rel} uma comparação entre a detecção de ciclos baseada em busca em profundidade e a utilizando conjuntos-disjuntos utilizadas no algoritmo sequencial.
 
-A partir delas é possível concluir que, apesar do ganho significativo de performance a partir do uso de conjuntos-disjuntos na detecção de ciclos, este configura uma parcela muito pequena do tempo total de execução dos algoritmos de obtenção de árvores-geradoras, restando ainda avaliar esta afirmação para grafos maiores (tanto em número de vértices quanto em densidade de arestas).
+A partir delas é possível concluir que, apesar do ganho significativo de \textit{performance} a partir do uso de conjuntos-disjuntos na detecção de ciclos, este configura uma parcela muito pequena do tempo total de execução dos algoritmos de obtenção de árvores-geradoras, restando ainda avaliar esta afirmação para grafos maiores (tanto em número de vértices quanto em densidade de arestas).
 
 \begin{figure}[h]
     \centering
@@ -343,11 +336,11 @@ A partir delas é possível concluir que, apesar do ganho significativo de perfo
     \label{fig:dfs_djs_rel}
 \end{figure}
 
-A figura \ref{fig:speedup} mostra o \textit{speedup}, calculado como a relação entre o tempo decorrido da execução do algoritmo paralelizado e do sequencial, para grafos gerados da seguinte forma:
+A Figura \ref{fig:speedup} mostra o \textit{speedup}, calculado como a relação entre o tempo decorrido da execução do algoritmo paralelizado e do sequencial, para grafos gerados da seguinte forma:
 
-Para cada número de vértices $N$ entre 16 e 20 foi determinado um número de arestas $M = T - 1 + (N - 1)$, onde $T$ é o maior número de \textit{threads} a ser utilizado para a obtenção de árvores-geradoras, para que hajam arestas o suficiente para atribuir trabalho a cada \textit{thread}.
+Para cada número de vértices $n$ entre 16 e 20 foi determinado um número de arestas $m = T - 1 + (n - 1)$, onde $T$ é o maior número de \textit{threads} a ser utilizado para a obtenção de árvores-geradoras, para que hajam arestas o suficiente para atribuir trabalho a cada \textit{thread}.
 
-Então, para cada número de vértices $N$ e número de arestas $M$ correspondente, foi calculada a média $K$ do número de árvores-geradoras entre 10000 grafos aleatórios e gerados 10 grafos aleatórios com $N$ vértices e $M$ arestas, cada um possuindo um número de árvores-geradoras com variação de até 1\% em relação a $K$.
+Então, para cada número de vértices $n$ e número de arestas $m$ correspondente, foi calculada a média $k$ do número de árvores-geradoras entre 10000 grafos aleatórios e gerados 10 grafos aleatórios com $n$ vértices e $m$ arestas, cada um possuindo um número de árvores-geradoras com variação de até 1\% em relação a $k$.
 
 O cálculo do número de árvores-geradoras possíveis para cada grafo $G$ foi realizado com base no Teorema de Kirchhoff \cite{10.5555/2086753}, que diz que este número pode ser determinado em tempo polinomial através de qualquer cofator da Matriz Laplaciana $L$ de $G$, que por sua vez é obtido através do determinante de uma submatriz resultante da remoção de exatamente uma linha $i$ e uma coluna $j$ quaisquer de uma matriz quadrada, tal qual $L$, multiplicado por $(-1)^{i+j}$.
 
@@ -358,15 +351,15 @@ O cálculo do número de árvores-geradoras possíveis para cada grafo $G$ foi r
     \label{fig:speedup}
 \end{figure}
 
-É possível observar que o algoritmo paralelizado apresentou performance inferior ao sequencial em todas as execuções, e que, apesar de uma tendência a aumentar o \textit{speedup} conforme o número de \textit{threads} aumenta para um determinado número de vértices e arestas, é alcançado um limite a partir de 8 \textit{threads}.
+Na Figura \ref{fig:dfs_djs_rel} é possível observar que o algoritmo paralelizado apresentou \textit{performance} inferior ao sequencial em todas as execuções, e que, apesar de uma tendência a aumentar o \textit{speedup} conforme o número de \textit{threads} aumenta para um determinado número de vértices e arestas, é alcançado um limite a partir de 8 \textit{threads}.
 
 Além disso, para um determinado número de \textit{threads}, o \textit{speedup} é significativamente menor quanto maior o grafo.
 
 \section{Conclusão}
 
-Foram apresentadas dois algoritmos de força bruta para a obtenção de árvores-geradoras de um grafo, um sequencial e outro paralelizado. Trabalhos anteriores implementaram estes algoritmos utilizando a estrutura de matriz de adjacências, enquanto este trabalho utilizou a estrutura de lista de adjacências.
+Foram apresentadas dois algoritmos de força bruta para a obtenção de árvores-geradoras de um grafo, um sequencial e outro paralelizado.
 
-O algoritmo paralelizado se demonstrou menos eficiente do que o sequencial, apresentando tendência a melhorar o \textit{speedup} conforme aumenta-se o número de \textit{threads}, mas alcançando um \textit{plateau} abaixo de $1.0$ a partir de 8 \textit{threads}, apesar da máquina utilizada suportar até 15 \textit{threads}.
+O algoritmo paralelizado demonstrou-se menos eficiente que o sequencial para os grafos avaliados. No entanto, apresentou tendência a aumentar o \textit{speedup} de maneira proporcional ao número de \textit{threads}, mas alcançando um \textit{plateau} abaixo de $1.0$ a partir de 8 \textit{threads}, apesar da máquina utilizada suportar até 15 \textit{threads}.
 
 Além disso, foi apresentada uma forma de aproveitar a estrutura de dados de conjuntos-disjuntos para otimizar a detecção de ciclos que ocorre nestes algoritmos, que apesar de acelerar esta sub-rotina para até um vigésimo to tempo decorrido, se comparado com implementações de busca em profundidade, representa uma parte pequena do tempo decorrido do algoritmo como um todo.
 
@@ -374,7 +367,7 @@ Foi percebida uma limitação na escalabilidade do algoritmo paralelizado, em qu
 
 Este trabalho apresentou a obtenção de árvores-geradoras com a perspectiva do problema da $t$-admissibilidade, mas outros problemas poderiam ser avaliados, tais como a obtenção de árvores-geradoras com o menor diâmetro, ou com a menor altura.
 
-Próximos passos para este trabalho incluem investigar o \textit{plateau} encontrado no \textit{speedup} dos algoritmos de obtenção de árvores-geradoras, além de avaliar novas formas de distribuição de trabalho entre as \textit{threads} do algoritmo paralelizado. Uma destas se dá através do uso de um corte de arestas $M$ do grafo, dividindo-o entre o corte dois subgrafos $X$ e $Y$ de $G$, de tamanho menor que $G$, reduzindo assim o tempo decorrido do algoritmo paralelizado para $X$ e $Y$. Outra se dá através da escolha de um ciclo induzido $C$ de $G$, removendo-se $i$ arestas de $C$ e declarando as demais obrigatórias para uma determinada thread $i$\cite{cunha_marciano_moraes_santiago_santos}.
+Próximos passos para este trabalho incluem investigar o \textit{plateau} encontrado no \textit{speedup} dos algoritmos de obtenção de árvores-geradoras, além de avaliar novas formas de distribuição de trabalho entre as \textit{threads} do algoritmo paralelizado. Uma destas se dá através do uso de um corte de arestas $M$ do grafo, dividindo-o entre o corte dois subgrafos $X$ e $Y$ de $G$, de tamanho menor que $G$, reduzindo assim o tempo decorrido do algoritmo paralelizado para $X$ e $Y$. Outra se dá através da escolha de um ciclo induzido $C$ de $G$, removendo-se $i$ arestas de $C$ e declarando as demais obrigatórias para uma determinada thread $i$ \cite{cunha_marciano_moraes_santiago_santos}.
 
 \clearpage
 \bibliography{references}
