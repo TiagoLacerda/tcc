@@ -1,5 +1,4 @@
 \documentclass[article,a4paper,12pt,brazil,sumario=tradicional]{abntex2}
-
 \usepackage{titlesec}
 
 \setcounter{secnumdepth}{4}
@@ -7,24 +6,17 @@
 \titleformat{\paragraph}
 {\normalfont\normalsize}{\theparagraph}{1em}{}
 
-\usepackage[linesnumbered,ruled,vlined,portuguese,onelanguage]{algorithm2e}
 \usepackage{array}
-\usepackage{subcaption}
-\usepackage{graphicx}
+% \usepackage{subfig}
 \usepackage[utf8]{inputenc}
 \usepackage{indentfirst}
 \usepackage{hyperref}
 \usepackage[hyphenbreaks]{breakurl}
 \usepackage[num,abnt-etal-text=it,abnt-etal-cite=0,abnt-etal-list=0]{abntex2cite}
-\citebrackets[]
 \usepackage[brazil]{babel}
 \usepackage[space]{grffile}
 \graphicspath{{./images/}{./images/example_1/}{./images/example_2/}{./images/example_3/}}
 \setlength{\parindent}{3em}
-\usepackage{float}
-\usepackage{amsthm}
-\usepackage{amsmath}
-\usepackage{amsfonts}
 
 \newcolumntype{C}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
 
@@ -45,25 +37,117 @@
     pdfborder = {0 0 0}
 }
 
+
+% ---------- ADDED BY ME ---------- 
+
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+
+\usepackage[linesnumbered,ruled,vlined,portuguese,onelanguage]{algorithm2e}
+\usepackage{subcaption}
+
 \newtheorem{theorem}{Teorema}
 
 \theoremstyle{definition} % This style uses upright text
 \newtheorem{example}{Exemplo}
 
-\title{ {\Large Paralelismos para o Problema da t-Adminissibilidade em Grafos\footnote{Trabalho de conclusão de curso apresentado ao curso de Bacharelado em Ciência da Computação da Universidade Federal Fluminense como requisito parcial para conclusão do curso.}\\\\
-\vspace{.2}
-\textit{Parallelisms for the t-Admissibility Problem in Graphs}\\}}
+\citebrackets[]
 
-\date{ }
+% --------------------------------- 
+
+% \title{ {\Large Paralelismos para o Problema da t-Admissibilidade em Grafos\footnote{Trabalho de conclusão de curso apresentado ao curso de Bacharelado em Ciência da Computação da Universidade Federal Fluminense como requisito parcial para conclusão do curso.}\\\\
+% \vspace{.2}
+% \textit{Parallelisms for the t-Admissibility Problem in Graphs}\\}}
+
+% \date{ }
+
+\renewcommand{\imprimircapa}{%
+\begin{capa}%
+ \center
+  \ABNTEXchapterfont\large\imprimirinstituicao
+   \vfill
+    \ABNTEXchapterfont\large\imprimirautor
+    \vfill
+    \begin{center}
+    \ABNTEXchapterfont\bfseries\LARGE\imprimirtitulo
+    \vfill
+    \end{center}
+    
+    \large\imprimirlocal
+    
+    \large\imprimirdata
+\end{capa}
+}
+\makeatletter
+\renewcommand{\folhaderostocontent}{
+    \begin{center}
+      {\abntex@ifnotempty{\imprimirinstituicao}{\imprimirinstituicao
+        \vspace*{\fill}}}
+        
+        {\imprimirautor}
+        \vspace*{\fill}\vspace*{\fill}
+        \begin{center}
+            \imprimirtitulo
+        \end{center}
+        \vspace*{\fill}
+        \abntex@ifnotempty{\imprimirpreambulo}{%
+            \hspace{.45\textwidth}
+            \begin{minipage}{.5\textwidth}
+                \SingleSpacing
+                \imprimirpreambulo
+            \end{minipage}%
+            \vspace*{\fill}
+        }%  
+        %{\abntex@ifnotempty{\imprimirinstituicao}{\imprimirinstituicao
+        %\vspace*{\fill}}}
+        
+        \vspace*{\fill}
+        {\large\imprimirlocal}
+        \par
+        {\large\imprimirdata}
+        \vspace*{1cm}
+    \end{center}
+}
+\makeatother
+
+\titulo{PARALELISMOS PARA O PROBLEMA DA t-ADMISSIBILIDADE EM GRAFOS}
+\autor{TIAGO MAIA DE LACERDA BRASIL}
+\local{Niterói}
+\data{2025}
+\orientador[Orientador: ]{Luís Felipe Ignácio Cunha}
+\instituicao{%
+  UNIVERSIDADE FEDERAL FLUMINENSE
+  \par
+  INSTITUTO DE COMPUTAÇÃO
+  \par
+  DEPARTAMENTO DE CIÊNCIA DA COMPUTAÇÃO}
+\tipotrabalho{Trabalho de Conclusão de Curso}
+% O preambulo deve conter o tipo do trabalho, o objetivo, 
+% o nome da instituição e a área de concentração 
+\preambulo{Trabalho de Conclusão de Curso submetido ao Departamento de Ciência da Computação da Universidade Federal Fluminense como requisito parcial para a obtenção do título de Bacharel em Ciência da Computação.}
 
 \begin{document}
+
+%\imprimircapa
+
+\imprimirfolhaderosto*
+
+%\input{elementos-pretextuais/errata}
+\input{elementos-pretextuais/folha-aprovacao}
+
+\input{elementos-pretextuais/ficha-catalografica}
+\pagebreak
 
 \textual
 
 \begin{center}
-{\Large Paralelismos para o Problema da t-Admissibilidade em Grafos\footnote{Trabalho de conclusão de curso apresentado ao curso de Bacharelado em Ciência da Computação da Universidade Federal Fluminense como requisito parcial para conclusão do curso.}
+\Large Paralelismos para o Problema da t-Admissibilidade em Grafos
 
-\textit{Parallelisms for the t-Admissibility Problem in Graphs}\\}
+\textit{Parallelisms for the t-Admissibility Problem in Graphs}
 \end{center}
 \vspace{.2cm}
 
@@ -106,7 +190,7 @@ Luís Felipe Ignácio Cunha\footnote{Orientador - Instituto de Computação - UF
 
 \vspace{.4cm}
 
-\noindent \textbf{Aprovado em:} dd/mm/aaaa.~~~\textbf{Versão Final em:} dd/mm/aaaa
+\noindent \textbf{Aprovado em:} 02/07/2025.~~~\textbf{Versão Final em:} 07/07/2025
 
 \section{Introdução}
 
